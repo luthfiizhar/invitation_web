@@ -20,29 +20,82 @@ class FooterInviteWeb extends StatelessWidget {
           ),
           color: eerieBlack),
       // color: eerieBlack,
-      child: Row(
+      child: Stack(
         children: [
-          Expanded(
-            flex: 10,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SvgPicture.asset(
-                  'assets/KLG_logo_white.svg',
-                  // color: Colors.white,
-                ),
-              ],
+          Positioned(
+            left: 20,
+            top: 10,
+            child: Container(
+              width: 270,
+              height: 75,
+              child: SvgPicture.asset(
+                'assets/KLG_logo_white.svg',
+                // color: Colors.white,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Text(
-              'CopyRight',
-              style: TextStyle(color: Colors.white),
-            ),
-          )
+          Positioned(
+            right: 30,
+            top: 30,
+            child: Container(
+                height: 50,
+                width: 90,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Copyright',
+                      style: TextStyle(
+                        color: Color(0xFFF5F5F5),
+                      ),
+                    ),
+                    Text(
+                      'NIP',
+                      style: TextStyle(
+                        color: Color(0xFFF5F5F5),
+                      ),
+                    ),
+                  ],
+                )),
+          ),
         ],
       ),
+      // Row(
+      //   children: [
+      //     Expanded(
+      //       flex: 10,
+      //       child: Container(
+      //         // color: Colors.blue,
+      //         child: Row(
+      //           mainAxisAlignment: MainAxisAlignment.start,
+      //           children: [
+      //             Expanded(
+      //               flex: 2,
+      //               child: Container(
+      //                 padding: EdgeInsets.zero,
+      //                 // margin: EdgeInsets.only(left: 30, top: 10),
+      //                 // color: Colors.amber,
+      // child: SvgPicture.asset(
+      //   'assets/KLG_logo_white.svg',
+      //   // color: Colors.white,
+      // ),
+      //               ),
+      //             ),
+      //             Expanded(flex: 10, child: SizedBox())
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //     Expanded(
+      //       flex: 2,
+      //       child: Text(
+      //         'CopyRight',
+      //         style: TextStyle(color: Colors.white),
+      //       ),
+      //     )
+      //   ],
+      // ),
     );
   }
 }

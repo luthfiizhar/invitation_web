@@ -8,6 +8,7 @@ import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
+import 'package:navigation_example/widgets/footer.dart';
 import 'package:navigation_example/widgets/navigation_bar.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
@@ -83,9 +84,9 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
+    return CustomScrollView(slivers: [
+      SliverList(
+        delegate: SliverChildListDelegate([
           NavigationBarWeb(
             index: 0,
           ),
@@ -204,9 +205,138 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                   ]),
             ),
           ),
-        ],
+        ]),
       ),
-    );
+      SliverFillRemaining(
+        hasScrollBody: false,
+        child:
+            Align(alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
+      )
+    ]);
+    // return SingleChildScrollView(
+    //   child: Column(
+    //     children: [
+    //       NavigationBarWeb(
+    //         index: 0,
+    //       ),
+    //       Padding(
+    //         padding: EdgeInsets.only(top: 20, left: 500, right: 500),
+    //         child: Container(
+    //           child: Column(
+    //               crossAxisAlignment: CrossAxisAlignment.start,
+    //               children: [
+    //                 Container(
+    //                   child: Text(
+    //                     'Confirm Invitation',
+    //                     style: pageTitle,
+    //                   ),
+    //                 ),
+    //                 Container(
+    //                   padding: EdgeInsets.only(top: 20),
+    //                   child: Text(
+    //                     'Please confirm visitor data before send invitation.',
+    //                     style: pageSubtitle,
+    //                   ),
+    //                 ),
+    //                 Container(
+    //                   padding: EdgeInsets.only(top: 30),
+    //                   child: Row(
+    //                     children: [
+    //                       Text(
+    //                         'Visit Date: ',
+    //                         style: pageSubtitle,
+    //                       ),
+    //                       Text(
+    //                         '$startDate - $endDate',
+    //                         style: pageSubtitle,
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //                 Container(
+    //                   // color: Colors.blue,
+    //                   // height: 450,
+    //                   padding: EdgeInsets.only(top: 30),
+    //                   child: ListView.builder(
+    //                     shrinkWrap: true,
+    //                     scrollDirection: Axis.vertical,
+    //                     itemCount: list!.length,
+    //                     itemBuilder: (context, index) {
+    //                       var no = index + 1;
+    //                       return Column(
+    //                         children: [
+    //                           confirmList(
+    //                               no,
+    //                               list![index]['FirstName'],
+    //                               list![index]['LastName'],
+    //                               list![index]['Email']),
+    //                           index != list!.length - 1
+    //                               ? Padding(
+    //                                   padding: const EdgeInsets.only(
+    //                                       top: 20, bottom: 20),
+    //                                   child: Divider(
+    //                                     thickness: 2,
+    //                                     color: spanishGray,
+    //                                   ),
+    //                                 )
+    //                               : SizedBox(),
+    //                         ],
+    //                       );
+    //                     },
+    //                   ),
+    //                 ),
+    //                 Container(
+    //                   padding: EdgeInsets.only(top: 50, bottom: 50),
+    //                   child: Row(
+    //                     mainAxisAlignment: MainAxisAlignment.center,
+    //                     children: [
+    //                       SizedBox(
+    //                         width: 200,
+    //                         height: 60,
+    //                         child: CustTextButon(
+    //                           label: 'Cancel',
+    //                           onTap: () {
+    //                             setState(() {
+    //                               list!.clear();
+    //                             });
+
+    //                             Navigator.pop(context);
+    //                           },
+    //                         ),
+    //                       ),
+    //                       SizedBox(width: 20, height: 60),
+    //                       SizedBox(
+    //                         width: 200,
+    //                         height: 60,
+    //                         child: RegularButton(
+    //                           title: 'Confirm',
+    //                           sizeFont: 20,
+    //                           onTap: () {
+    //                             // print('aaa');
+    //                             confirmDialog(context,
+    //                                     'Are you sure the data is correct?')
+    //                                 .then((value) {
+    //                               if (value) {
+    //                                 saveInvitation().then((value) {
+    //                                   // Navigator.pushReplacementNamed(
+    //                                   //   context, routeInvite);
+    //                                 });
+    //                               } else {
+    //                                 print('cancel');
+    //                               }
+    //                             });
+    //                           },
+    //                         ),
+    //                       )
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ]),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   Widget confirmList(int no, String firstName, String lastName, String email) {

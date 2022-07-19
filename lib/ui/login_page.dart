@@ -8,7 +8,9 @@ import 'package:hive/hive.dart';
 import 'dart:html';
 import 'package:http/http.dart' as http;
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/my_app.dart';
+import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/input_field.dart';
@@ -17,7 +19,7 @@ import 'package:navigation_example/widgets/regular_button.dart';
 class WelcomePage extends StatelessWidget {
   // const WelcomePage({Key? key}) : super(key: key);
   Future login() async {
-    var url = Uri.http('192.168.186.4:8500', '/api/login-hcplus');
+    var url = Uri.http(apiUrl, '/api/login-hcplus');
     Map<String, String> requestHeader = {
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
       'Content-Type': 'application/json'
@@ -53,9 +55,19 @@ class WelcomePage extends StatelessWidget {
 
   FocusNode userNameNode = FocusNode();
   FocusNode passNode = FocusNode();
+  final _formKey = new GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Responsive.isDesktop(context)
+          ? desktopLayout(context)
+          : phoneLayout(context),
+    );
+  }
+
+  Widget desktopLayout(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
@@ -221,7 +233,9 @@ class WelcomePage extends StatelessWidget {
                                                     focusNode: userNameNode,
                                                     hintText:
                                                         'Username here...',
-                                                    onSaved: (value) {},
+                                                    onSaved: (value) {
+                                                      userName = value;
+                                                    },
                                                     obsecureText: false,
                                                   ),
                                                 ),
@@ -252,21 +266,30 @@ class WelcomePage extends StatelessWidget {
                                             child: SizedBox(
                                                 width: 140,
                                                 height: 50,
+                                                //Tombol Login Desktop Layout
                                                 child: RegularButton(
                                                   title: 'Login',
                                                   sizeFont: 20,
                                                   onTap: () {
-                                                    // login().then((value) {
-                                                    //   if (value == '200') {
-                                                    //     Navigator.of(context)
-                                                    //         .pushReplacementNamed(
-                                                    //             routeInvite);
-                                                    //   } else {
-                                                    //     print('Login Failed');
-                                                    //   }
-                                                    // });
-                                                    Navigator.of(context).push(
-                                                        NotifProcessDialog());
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      _formKey.currentState!
+                                                          .save();
+
+                                                      // print(userName);
+                                                      // Navigator.of(context).push(
+                                                      //     NotifProcessDialog());
+                                                      // login().then((value) {
+                                                      //   if (value == '200') {
+                                                      Navigator.of(context)
+                                                          .pushReplacementNamed(
+                                                              routeInvite);
+                                                      //   } else {
+                                                      //     print('Login Failed');
+                                                      //   }
+                                                      // });
+                                                    }
+
                                                     // Navigator.pushNamed(context,
                                                     //     '/invite_page');
                                                     // Navigator
@@ -292,6 +315,87 @@ class WelcomePage extends StatelessWidget {
             );
           }),
         ],
+      ),
+    );
+  }
+
+  Widget phoneLayout(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: 250,
+              left: 50,
+              right: 50,
+            ),
+            child: Column(
+              children: [
+                InputField(
+                  controller: _username,
+                  label: 'Username',
+                  focusNode: userNameNode,
+                  hintText: 'Username here...',
+                  onSaved: (value) {
+                    userName = value;
+                  },
+                  obsecureText: false,
+                  validator: (value) =>
+                      value == "" ? "Please insert your username" : null,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: InputField(
+                    controller: _password,
+                    label: 'Password',
+                    focusNode: passNode,
+                    hintText: 'Password here...',
+                    onSaved: (value) {
+                      password = value;
+                    },
+                    obsecureText: true,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: SizedBox(
+                      width: 175,
+                      height: 50,
+                      child: RegularButton(
+                        title: 'Login',
+                        sizeFont: 24,
+                        onTap: () {
+                          // login().then((value) {
+                          //   if (value == '200') {
+                          // Navigator.of(context)
+                          //     .pushReplacementNamed(
+                          //         routeInvite);
+                          //   } else {
+                          //     print('Login Failed');
+                          //   }
+                          // });
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            print(userName);
+                            print(password);
+                            Navigator.of(context)
+                                .pushReplacementNamed(routeInvite);
+                            // Navigator.of(context).push(NotifProcessDialog());
+                          }
+
+                          // Navigator.pushNamed(context,
+                          //     '/invite_page');
+                          // Navigator
+                          //     .pushReplacementNamed(
+                          //         context,
+                          //         routeMyApp);
+                        },
+                      )),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

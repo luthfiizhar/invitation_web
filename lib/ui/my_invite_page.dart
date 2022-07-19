@@ -11,6 +11,7 @@ import 'package:navigation_example/advance_my_invite_source.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/myinvite_source.dart';
+import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/change_visit_time_dialog.dart';
 import 'package:navigation_example/widgets/footer.dart';
@@ -220,8 +221,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(jwt);
 
-    final url =
-        Uri.http('192.168.186.4:8500', '/api/invitation/invitation-list-all');
+    final url = Uri.http(apiUrl, '/api/invitation/invitation-list-all');
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -277,139 +277,9 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              NavigationBarWeb(
-                index: 1,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 30, left: 300, right: 300),
-                child: Container(
-                  // color: Colors.blue,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        // color: Colors.blue,
-                        padding: EdgeInsets.only(left: 350),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'My Invitation',
-                                  style: TextStyle(
-                                      fontSize: 48,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: 20),
-                                  child: Text(
-                                    'All of your booking listing can be found here.',
-                                    style: pageSubtitle,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 40),
-                            child: Container(
-                              width: 600,
-                              height: 60,
-                              // color: Colors.blue,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: myInviteMenu.length,
-                                itemBuilder: (context, index) {
-                                  var menuName = myInviteMenu[index]['menu'];
-                                  var selected = myInviteMenu[index]['id'];
-                                  return MyInviteMenu(
-                                    menuName: menuName,
-                                    selected: selectedMenu == selected,
-                                    onHighlight: onHighlight,
-                                    index: index + 1,
-                                  );
-                                },
-                              ),
-                              // child: Row(
-                              //   children: [
-                              //     MyInviteMenu(
-                              //       menuName: 'Active Invitation',
-                              //       onHighlight: onHighlight,
-                              //       selected: selectedMenu == 1,
-                              //       index: 1,
-                              //     ),
-                              //     MyInviteMenu(
-                              //       menuName: 'Past Invitation',
-                              //       onHighlight: onHighlight,
-                              //       selected: selectedMenu == 2,
-                              //       index: 2,
-                              //     ),
-                              //     MyInviteMenu(
-                              //       menuName: 'Canceled',
-                              //       onHighlight: onHighlight,
-                              //       selected: selectedMenu == 3,
-                              //       index: 3,
-                              //     ),
-                              // ],
-                              // ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 40),
-                          child: Container(
-                            // height: 600,
-                            width: 1000,
-                            // color: Colors.black,
-                            child: Builder(
-                              builder: (context) {
-                                if (selectedMenu == 1) {
-                                  return activeInvitation(contohData);
-                                }
-                                if (selectedMenu == 2) {
-                                  return serverSideTable();
-                                }
-                                if (selectedMenu == 3) {
-                                  return Text('Canceled');
-                                }
-                                return SizedBox();
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Align(
-              alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
-        )
-      ],
-    );
+    return Responsive.isDesktop(context)
+        ? desktopLayoutMyInvitePage(context)
+        : mobileLayoutMyInvitePage(context);
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Column(
@@ -537,6 +407,302 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     );
   }
 
+  Widget desktopLayoutMyInvitePage(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              NavigationBarWeb(
+                index: 1,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 30, left: 300, right: 300),
+                child: Container(
+                  // color: Colors.blue,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        // color: Colors.blue,
+                        // padding: EdgeInsets.only(left: 350),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: SizedBox(),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'My Invitation',
+                                      style: TextStyle(
+                                          fontSize: 48,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 20),
+                                      child: Text(
+                                        'All of your booking listing can be found here.',
+                                        style: pageSubtitle,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: SizedBox(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 40),
+                            child: Container(
+                              width: 600,
+                              height: 60,
+                              // color: Colors.blue,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: myInviteMenu.length,
+                                itemBuilder: (context, index) {
+                                  var menuName = myInviteMenu[index]['menu'];
+                                  var selected = myInviteMenu[index]['id'];
+                                  return MyInviteMenu(
+                                    menuName: menuName,
+                                    selected: selectedMenu == selected,
+                                    onHighlight: onHighlight,
+                                    index: index + 1,
+                                  );
+                                },
+                              ),
+                              // child: Row(
+                              //   children: [
+                              //     MyInviteMenu(
+                              //       menuName: 'Active Invitation',
+                              //       onHighlight: onHighlight,
+                              //       selected: selectedMenu == 1,
+                              //       index: 1,
+                              //     ),
+                              //     MyInviteMenu(
+                              //       menuName: 'Past Invitation',
+                              //       onHighlight: onHighlight,
+                              //       selected: selectedMenu == 2,
+                              //       index: 2,
+                              //     ),
+                              //     MyInviteMenu(
+                              //       menuName: 'Canceled',
+                              //       onHighlight: onHighlight,
+                              //       selected: selectedMenu == 3,
+                              //       index: 3,
+                              //     ),
+                              // ],
+                              // ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 40),
+                          child: Container(
+                            // height: 600,
+                            width: 1000,
+                            // color: Colors.black,
+                            child: Builder(
+                              builder: (context) {
+                                if (selectedMenu == 1) {
+                                  return activeInvitation(contohData);
+                                }
+                                if (selectedMenu == 2) {
+                                  return serverSideTable();
+                                }
+                                if (selectedMenu == 3) {
+                                  return Text('Canceled');
+                                }
+                                return SizedBox();
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Align(
+              alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
+        )
+      ],
+    );
+  }
+
+  Widget mobileLayoutMyInvitePage(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              NavigationBarMobile(),
+              Padding(
+                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
+                child: Container(
+                  // color: Colors.blue,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        // color: Colors.blue,
+                        // padding: EdgeInsets.only(left: 350),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: SizedBox(),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'My Invitation',
+                                      style: TextStyle(
+                                          fontSize: 48,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 20),
+                                      child: Text(
+                                        'All of your booking listing can be found here.',
+                                        style: pageSubtitle,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: SizedBox(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 40),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              height: 60,
+                              // color: Colors.blue,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: myInviteMenu.length,
+                                itemBuilder: (context, index) {
+                                  var menuName = myInviteMenu[index]['menu'];
+                                  var selected = myInviteMenu[index]['id'];
+                                  return MyInviteMenu(
+                                    menuName: menuName,
+                                    selected: selectedMenu == selected,
+                                    onHighlight: onHighlight,
+                                    index: index + 1,
+                                  );
+                                },
+                              ),
+                              // child: Row(
+                              //   children: [
+                              //     MyInviteMenu(
+                              //       menuName: 'Active Invitation',
+                              //       onHighlight: onHighlight,
+                              //       selected: selectedMenu == 1,
+                              //       index: 1,
+                              //     ),
+                              //     MyInviteMenu(
+                              //       menuName: 'Past Invitation',
+                              //       onHighlight: onHighlight,
+                              //       selected: selectedMenu == 2,
+                              //       index: 2,
+                              //     ),
+                              //     MyInviteMenu(
+                              //       menuName: 'Canceled',
+                              //       onHighlight: onHighlight,
+                              //       selected: selectedMenu == 3,
+                              //       index: 3,
+                              //     ),
+                              // ],
+                              // ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 40),
+                          child: Container(
+                            // height: 600,
+                            width: 1000,
+                            // color: Colors.black,
+                            child: Builder(
+                              builder: (context) {
+                                if (selectedMenu == 1) {
+                                  return activeInvitation(contohData);
+                                }
+                                if (selectedMenu == 2) {
+                                  return serverSideTable();
+                                }
+                                if (selectedMenu == 3) {
+                                  return Text('Canceled');
+                                }
+                                return SizedBox();
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Align(
+              alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
+        )
+      ],
+    );
+  }
+
   int? _sortColumnIndex;
   bool _sortAscending = true;
 
@@ -552,6 +718,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     final DataTableSource _data = MyInviteDataSource(dataSource: data);
     return Theme(
       data: ThemeData(
+          dataTableTheme: DataTableThemeData(),
           fontFamily: 'Helvetica',
           cardColor: scaffoldBg,
           cardTheme: CardTheme(
@@ -582,7 +749,8 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
           ),
         ],
         source: _data,
-        columnSpacing: 100,
+        columnSpacing:
+            Responsive.isDesktop(navKey.currentState!.context) ? 100 : 20,
         horizontalMargin: 10,
         rowsPerPage: _rowPerPages,
         onRowsPerPageChanged: (value) {

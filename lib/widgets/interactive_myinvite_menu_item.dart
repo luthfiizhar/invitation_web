@@ -22,3 +22,23 @@ class InteractiveMyInviteMenuItem extends MouseRegion {
           child: InteractiveMyInviteMenu(text: text!, selected: selected!),
         );
 }
+
+class InteractiveMyInviteMenuItemMobile extends MouseRegion {
+  static final appContainer =
+      html.window.document.querySelectorAll('flt-glass-pane')[0];
+
+  // bool selected;
+
+  InteractiveMyInviteMenuItemMobile(
+      {Widget? child, String? text, bool? selected, String? routeName})
+      : super(
+          onHover: (PointerHoverEvent evt) {
+            appContainer.style.cursor = 'pointer';
+          },
+          onExit: (PointerExitEvent evt) {
+            appContainer.style.cursor = 'default';
+          },
+          child:
+              InteractiveMyInviteMenuMobile(text: text!, selected: selected!),
+        );
+}

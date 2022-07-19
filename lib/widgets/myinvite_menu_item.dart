@@ -29,3 +29,33 @@ class MyInviteMenu extends StatelessWidget {
     );
   }
 }
+
+class MyInviteMenuMobile extends StatelessWidget {
+  const MyInviteMenuMobile({
+    Key? key,
+    this.menuName,
+    this.selected,
+    this.onHighlight,
+    this.index,
+  }) : super(key: key);
+
+  final String? menuName;
+  final bool? selected;
+  final Function? onHighlight;
+  final int? index;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        onHighlight!(index);
+      },
+      child: Container(
+        decoration: BoxDecoration(),
+        padding: EdgeInsets.all(10),
+        child: InteractiveMyInviteMenuItemMobile(
+            text: menuName, selected: selected),
+      ),
+    );
+  }
+}

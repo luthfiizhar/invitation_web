@@ -11,3 +11,4 @@ const String routeLogin = '/login';
 const String routeMyApp = '/myapp';
 
 final navKey = new GlobalKey<NavigatorState>();
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

@@ -71,74 +71,66 @@ class _InputFieldState extends State<InputField> {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 15),
-          child: Container(
-            height: 50,
-            padding: EdgeInsets.zero,
-            child: TextFormField(
-              obscureText: widget.obsecureText!,
-              key: widget.key,
-              keyboardType: widget.keyboardType,
-              cursorColor: onyxBlack,
-              focusNode: widget.focusNode,
-              controller: widget.controller,
-              onTap: () {
-                if (widget.focusNode!.hasFocus) {
-                  widget.focusNode!.unfocus();
-                } else {
-                  FocusScope.of(context).requestFocus(widget.focusNode);
-                }
-              },
-              onSaved: widget.onSaved,
-              validator: widget.validator,
-              // textAlignVertical: TextAlignVertical.center,
-              decoration: InputDecoration(
-                isDense: true,
-                isCollapsed: true,
-                hintText: widget.hintText,
-                hintStyle: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ),
-                alignLabelWithHint: true,
-                contentPadding:
-                    EdgeInsets.only(top: 21, bottom: 17, left: 30, right: 30),
-                // isCollapsed: true,
-                focusColor: onyxBlack,
-                focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: eerieBlack,
-                      width: 2.5,
-                    )),
-                focusedBorder: OutlineInputBorder(
+          child: TextFormField(
+            obscureText: widget.obsecureText!,
+            key: widget.key,
+            keyboardType: widget.keyboardType,
+            cursorColor: onyxBlack,
+            focusNode: widget.focusNode,
+            controller: widget.controller,
+            onTap: () {
+              if (widget.focusNode!.hasFocus) {
+                widget.focusNode!.unfocus();
+              } else {
+                FocusScope.of(context).requestFocus(widget.focusNode);
+              }
+            },
+            onSaved: widget.onSaved,
+            validator: widget.validator,
+            // textAlignVertical: TextAlignVertical.center,
+            decoration: InputDecoration(
+              isDense: true,
+              isCollapsed: true,
+              hintText: widget.hintText,
+              hintStyle: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+              ),
+              alignLabelWithHint: true,
+              contentPadding:
+                  EdgeInsets.only(top: 21, bottom: 17, left: 30, right: 30),
+              // isCollapsed: true,
+              focusColor: onyxBlack,
+              focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(
                     color: eerieBlack,
                     width: 2.5,
-                  ),
+                  )),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: eerieBlack,
+                  width: 2.5,
                 ),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide:
-                        BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-                fillColor: graySand,
-                filled: true,
-                errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: eerieBlack, width: 2.5)),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide:
-                        BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-                errorStyle: widget.focusNode!.hasFocus
-                    ? TextStyle(fontSize: 0, height: 0)
-                    : TextStyle(color: silver, fontSize: 18),
               ),
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF393E46)),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+              fillColor: graySand,
+              filled: true,
+              errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: eerieBlack, width: 2.5)),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+              errorStyle: TextStyle(color: silver, fontSize: 18),
             ),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                color: Color(0xFF393E46)),
           ),
           // ),
         ),

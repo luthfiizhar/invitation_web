@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/routes/routes.dart';
+import 'package:navigation_example/widgets/drawer.dart';
 import 'package:navigation_example/widgets/navigation_item.dart';
 
 class NavigationBarWeb extends StatefulWidget {
@@ -111,6 +112,40 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class NavigationBarMobile extends StatelessWidget {
+  NavigationBarMobile({this.index});
+  int? index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: scaffoldBg,
+      height: 75.0,
+      child: Row(
+        children: [
+          TextButton.icon(
+            onPressed: () {
+              // _scaffoldKey
+              Scaffold.of(context).openEndDrawer();
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => CustomDrawer(index: index),
+              //   ),
+              // );
+            },
+            icon: Icon(
+              Icons.menu,
+              color: eerieBlack,
+            ),
+            label: Text(''),
+          )
         ],
       ),
     );
