@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/responsive.dart';
 
 class InteractiveMyInviteMenu extends StatefulWidget {
   final String? text;
@@ -39,10 +40,16 @@ class InteractiveMyInviteMenuState extends State<InteractiveMyInviteMenu> {
                         : Colors.transparent),
             child: Text(widget.text!,
                 style: _hovering
-                    ? kPageTitleStyle.copyWith(color: Colors.white)
-                    : (widget.selected!)
+                    ? Responsive.isDesktop(context)
                         ? kPageTitleStyle.copyWith(color: Colors.white)
-                        : kPageTitleStyle),
+                        : myInviteMenuMobile.copyWith(color: Colors.white)
+                    : (widget.selected!)
+                        ? Responsive.isDesktop(context)
+                            ? kPageTitleStyle.copyWith(color: Colors.white)
+                            : myInviteMenuMobile.copyWith(color: Colors.white)
+                        : Responsive.isDesktop(context)
+                            ? kPageTitleStyle
+                            : myInviteMenuMobile),
           ),
         ),
       ),

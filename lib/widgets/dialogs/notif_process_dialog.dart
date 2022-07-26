@@ -4,7 +4,8 @@ import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 
 class NotifProcessDialog extends ModalRoute<void> {
-  bool isSuccess = true;
+  NotifProcessDialog({this.isSuccess});
+  bool? isSuccess;
   String? message;
   @override
   // TODO: implement barrierColor
@@ -84,14 +85,14 @@ class NotifProcessDialog extends ModalRoute<void> {
                       ),
                       height: 320,
                       width: 300,
-                      child: isSuccess
+                      child: isSuccess!
                           ? SvgPicture.asset('assets/Email confirmed.svg')
-                          : SvgPicture.asset('assets/Email failed.svg'),
+                          : SvgPicture.asset('assets/email failed.svg'),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 60),
                       child: Text(
-                        isSuccess ? 'Success' : 'Failed',
+                        isSuccess! ? 'Success' : 'Failed',
                         style: TextStyle(
                           fontSize: 48,
                           fontWeight: FontWeight.w700,
@@ -102,7 +103,9 @@ class NotifProcessDialog extends ModalRoute<void> {
                       padding: EdgeInsets.only(top: 20),
                       child: Container(
                         child: Text(
-                          'Message',
+                          isSuccess!
+                              ? 'Add invitation success'
+                              : 'Something wrong!',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w300,
@@ -119,7 +122,9 @@ class NotifProcessDialog extends ModalRoute<void> {
                         child: RegularButton(
                           sizeFont: 24,
                           title: 'OK',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
                         ),
                       ),
                     ),

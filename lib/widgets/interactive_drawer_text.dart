@@ -40,10 +40,10 @@ class InteractiveDrawerTextState extends State<InteractiveDrawerText> {
             child: Text(
               widget.text!,
               style: _hovering
-                  ? kPageTitleStyle.copyWith(color: eerieBlack)
+                  ? kPageTitleStyleMobile.copyWith(color: eerieBlack)
                   : (widget.selected!)
-                      ? kPageTitleStyle.copyWith(color: eerieBlack)
-                      : kPageTitleStyle.copyWith(color: Colors.white),
+                      ? kPageTitleStyleMobile.copyWith(color: eerieBlack)
+                      : kPageTitleStyleMobile.copyWith(color: Colors.white),
             ),
           ),
         ),

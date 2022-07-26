@@ -18,7 +18,7 @@ import 'package:navigation_example/widgets/regular_button.dart';
 
 class WelcomePage extends StatelessWidget {
   // const WelcomePage({Key? key}) : super(key: key);
-  Future login() async {
+  Future loginAuth() async {
     var url = Uri.http(apiUrl, '/api/login-hcplus');
     Map<String, String> requestHeader = {
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -26,8 +26,8 @@ class WelcomePage extends StatelessWidget {
     };
     var bodySend = """ 
       {
-          "Username" : "164369",
-          "Password" : "test123"
+          "Username" : "$userName",
+          "Password" : "$password"
       }
     """;
 
@@ -36,14 +36,36 @@ class WelcomePage extends StatelessWidget {
     print(data);
     if (data['Status'] == '200') {
       var box = await Hive.openBox('userLogin');
-      box.put('name', data['Data']['NIP'] != null ? data['Data']['NIP'] : "");
-      box.put('nip', data['Data']['Name'] != null ? data['Data']['Name'] : "");
+      box.put('nip', data['Data']['NIP'] != null ? data['Data']['NIP'] : "");
+      box.put('name', data['Data']['Name'] != null ? data['Data']['Name'] : "");
       box.put('jwtToken',
           data['Data']['Token'] != null ? data['Data']['Token'] : "");
 
       return data['Status'];
     } else {
       return data['Status'];
+    }
+  }
+
+  login(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      loginAuth().then((value) {
+        if (value == '200') {
+          Navigator.of(context).pushReplacementNamed(routeInvite);
+        }
+      });
+      // print(userName);
+      // Navigator.of(context).push(
+      //     NotifProcessDialog());
+      // login().then((value) {
+      //   if (value == '200') {
+
+      //   } else {
+      //     print('Login Failed');
+      //   }
+      // });
     }
   }
 
@@ -109,6 +131,7 @@ class WelcomePage extends StatelessWidget {
                 child: Container(
                   height: MediaQuery.of(context).size.height,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Text('${window.screen?.width}   ${window.screen?.height}'),
                       Container(
@@ -120,29 +143,31 @@ class WelcomePage extends StatelessWidget {
                               //     image: AssetImage('assets/welcome_page_image.png')),
                               ),
                           child: Padding(
-                            padding: EdgeInsets.only(
-                                top: 100, left: 100, right: 100),
+                            padding:
+                                EdgeInsets.only(top: 100, left: 0, right: 0),
                             child: Container(
                               // color: Colors.blue,
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                // mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
                                       Container(
                                         // color: Colors.amber,
-                                        padding:
-                                            EdgeInsets.only(right: 70, top: 30),
+                                        // padding:
+                                        //     EdgeInsets.only(right: 70, top: 30),
                                         width: 550,
-                                        height: 480,
+                                        height: 500,
                                         child: SvgPicture.asset(
-                                            'assets/illustration.svg'),
+                                            'assets/Ilustrasi Welcome Website B.svg',
+                                            fit: BoxFit.fitHeight),
                                       ),
                                     ],
                                   ),
                                   Expanded(
-                                    // flex: 7,
+                                    // flex: 9,
                                     child: Container(
                                       // color: Colors.blue,
                                       child: Column(
@@ -155,7 +180,7 @@ class WelcomePage extends StatelessWidget {
                                             child: Container(
                                               // color: Colors.yellow,
                                               // height: 200,
-                                              width: 620,
+                                              // width: 620,
                                               padding: EdgeInsets.zero,
                                               child: Column(
                                                 crossAxisAlignment:
@@ -174,29 +199,32 @@ class WelcomePage extends StatelessWidget {
                                                   SizedBox(
                                                     height: 10,
                                                   ),
-                                                  Wrap(
-                                                    children: [
-                                                      Text(
-                                                        'Kawan Lama Group',
-                                                        style: TextStyle(
-                                                          // letterSpacing: 1,
-                                                          fontSize: 48,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: eerieBlack,
+                                                  Container(
+                                                    width: 600,
+                                                    child: Wrap(
+                                                      children: [
+                                                        Text(
+                                                          'Kawan Lama Group',
+                                                          style: TextStyle(
+                                                            // letterSpacing: 1,
+                                                            fontSize: 48,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: eerieBlack,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      Text(
-                                                        'Visitor Invitation',
-                                                        style: TextStyle(
-                                                          // letterSpacing: 1,
-                                                          fontSize: 64,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: eerieBlack,
+                                                        Text(
+                                                          'Visitor Invitation',
+                                                          style: TextStyle(
+                                                            // letterSpacing: 1,
+                                                            fontSize: 64,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: eerieBlack,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -237,6 +265,10 @@ class WelcomePage extends StatelessWidget {
                                                       userName = value;
                                                     },
                                                     obsecureText: false,
+                                                    validator: (value) => value ==
+                                                            ""
+                                                        ? "This field is required"
+                                                        : null,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -250,8 +282,14 @@ class WelcomePage extends StatelessWidget {
                                                     focusNode: passNode,
                                                     hintText:
                                                         'Password here...',
-                                                    onSaved: (value) {},
+                                                    onSaved: (value) {
+                                                      password = value;
+                                                    },
                                                     obsecureText: true,
+                                                    validator: (value) => value ==
+                                                            ""
+                                                        ? "This field is required"
+                                                        : null,
                                                   ),
                                                 ),
                                               ],
@@ -264,40 +302,17 @@ class WelcomePage extends StatelessWidget {
                                                 right: 15,
                                                 bottom: 40),
                                             child: SizedBox(
-                                                width: 140,
-                                                height: 50,
-                                                //Tombol Login Desktop Layout
-                                                child: RegularButton(
-                                                  title: 'Login',
-                                                  sizeFont: 20,
-                                                  onTap: () {
-                                                    if (_formKey.currentState!
-                                                        .validate()) {
-                                                      _formKey.currentState!
-                                                          .save();
-
-                                                      // print(userName);
-                                                      // Navigator.of(context).push(
-                                                      //     NotifProcessDialog());
-                                                      // login().then((value) {
-                                                      //   if (value == '200') {
-                                                      Navigator.of(context)
-                                                          .pushReplacementNamed(
-                                                              routeInvite);
-                                                      //   } else {
-                                                      //     print('Login Failed');
-                                                      //   }
-                                                      // });
-                                                    }
-
-                                                    // Navigator.pushNamed(context,
-                                                    //     '/invite_page');
-                                                    // Navigator
-                                                    //     .pushReplacementNamed(
-                                                    //         context,
-                                                    //         routeMyApp);
-                                                  },
-                                                )),
+                                              width: 140,
+                                              height: 50,
+                                              //Tombol Login Desktop Layout
+                                              child: RegularButton(
+                                                title: 'Login',
+                                                sizeFont: 20,
+                                                onTap: () {
+                                                  login(context);
+                                                },
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -320,83 +335,191 @@ class WelcomePage extends StatelessWidget {
   }
 
   Widget phoneLayout(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: 250,
-              left: 50,
-              right: 50,
-            ),
+    return Stack(
+      children: [
+        Scaffold(
+          body: SingleChildScrollView(
             child: Column(
               children: [
-                InputField(
-                  controller: _username,
-                  label: 'Username',
-                  focusNode: userNameNode,
-                  hintText: 'Username here...',
-                  onSaved: (value) {
-                    userName = value;
-                  },
-                  obsecureText: false,
-                  validator: (value) =>
-                      value == "" ? "Please insert your username" : null,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 20, top: 20),
+                      width: 120,
+                      height: 40,
+                      // color: Colors.blue,
+                      child: SvgPicture.asset(
+                        'assets/klg_main_logo_old.svg',
+                        color: eerieBlack,
+                        fit: BoxFit.cover,
+                        // height: 100,
+                        // width: 300,
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: InputField(
-                    controller: _password,
-                    label: 'Password',
-                    focusNode: passNode,
-                    hintText: 'Password here...',
-                    onSaved: (value) {
-                      password = value;
-                    },
-                    obsecureText: true,
+                Container(
+                  // color: Colors.red,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: 50,
+                      left: 50,
+                      right: 50,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          // color: Colors.amber,
+                          // padding:
+                          //     EdgeInsets.only(right: 70, top: 30),
+                          width: 200,
+                          height: 200,
+                          child: SvgPicture.asset(
+                              'assets/Ilustrasi Welcome Website B.svg',
+                              fit: BoxFit.fitHeight),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Container(
+                                // color: Colors.yellow,
+                                // height: 200,
+                                // width: 620,
+                                padding: EdgeInsets.zero,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Welcome to',
+                                      style: TextStyle(
+                                          // letterSpacing: 1,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w300,
+                                          // fontFamily: 'Helvetica',
+                                          color: eerieBlack),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      // color: Colors.amber,
+                                      // width: 300,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Kawan Lama Group',
+                                            style: TextStyle(
+                                              // letterSpacing: 1,
+                                              fontSize: 26,
+                                              fontWeight: FontWeight.w700,
+                                              color: eerieBlack,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Visitor Invitation',
+                                            style: TextStyle(
+                                              // letterSpacing: 1,
+                                              fontSize: 26,
+                                              fontWeight: FontWeight.w700,
+                                              color: eerieBlack,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 15,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Please login using HC Plus for using the site',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                  color: onyxBlack,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 30),
+                          child: InputField(
+                            controller: _username,
+                            label: 'Username',
+                            focusNode: userNameNode,
+                            hintText: 'Username here...',
+                            onSaved: (value) {
+                              userName = value;
+                            },
+                            obsecureText: false,
+                            validator: (value) => value == ""
+                                ? "Please insert your username"
+                                : null,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30),
+                          child: InputField(
+                            controller: _password,
+                            label: 'Password',
+                            focusNode: passNode,
+                            hintText: 'Password here...',
+                            onSaved: (value) {
+                              password = value;
+                            },
+                            obsecureText: true,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 50, bottom: 30),
+                          child: SizedBox(
+                              width: 175,
+                              height: 50,
+                              child: RegularButton(
+                                title: 'Login',
+                                sizeFont: 24,
+                                onTap: () {
+                                  login(context);
+                                },
+                              )),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: SizedBox(
-                      width: 175,
-                      height: 50,
-                      child: RegularButton(
-                        title: 'Login',
-                        sizeFont: 24,
-                        onTap: () {
-                          // login().then((value) {
-                          //   if (value == '200') {
-                          // Navigator.of(context)
-                          //     .pushReplacementNamed(
-                          //         routeInvite);
-                          //   } else {
-                          //     print('Login Failed');
-                          //   }
-                          // });
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            print(userName);
-                            print(password);
-                            Navigator.of(context)
-                                .pushReplacementNamed(routeInvite);
-                            // Navigator.of(context).push(NotifProcessDialog());
-                          }
-
-                          // Navigator.pushNamed(context,
-                          //     '/invite_page');
-                          // Navigator
-                          //     .pushReplacementNamed(
-                          //         context,
-                          //         routeMyApp);
-                        },
-                      )),
+                  padding:
+                      const EdgeInsets.only(top: 100, bottom: 20, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        child: Text('Facility Management 2022'),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

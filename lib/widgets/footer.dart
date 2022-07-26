@@ -3,6 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/responsive.dart';
 
 class FooterInviteWeb extends StatelessWidget {
   const FooterInviteWeb({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class FooterInviteWeb extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.zero,
-      height: 90,
+      height: Responsive.isDesktop(context) ? 90 : 50,
       decoration: BoxDecoration(
           // border: Border()
           borderRadius: BorderRadius.only(
@@ -23,11 +24,11 @@ class FooterInviteWeb extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            left: 20,
-            top: 10,
+            left: Responsive.isDesktop(context) ? -15 : 5,
+            top: Responsive.isDesktop(context) ? 10 : 5,
             child: Container(
-              width: 270,
-              height: 75,
+              width: Responsive.isDesktop(context) ? 270 : 100,
+              height: Responsive.isDesktop(context) ? 75 : 35,
               child: SvgPicture.asset(
                 'assets/KLG_logo_white.svg',
                 // color: Colors.white,
@@ -36,23 +37,25 @@ class FooterInviteWeb extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 30,
-            top: 30,
+            right: Responsive.isDesktop(context) ? 30 : 10,
+            top: Responsive.isDesktop(context) ? 30 : 10,
             child: Container(
-                height: 50,
-                width: 90,
+                height: Responsive.isDesktop(context) ? 50 : 30,
+                width: Responsive.isDesktop(context) ? 90 : 60,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
                       'Copyright',
                       style: TextStyle(
+                        fontSize: Responsive.isDesktop(context) ? 20 : 12,
                         color: Color(0xFFF5F5F5),
                       ),
                     ),
                     Text(
                       'NIP',
                       style: TextStyle(
+                        fontSize: Responsive.isDesktop(context) ? 20 : 12,
                         color: Color(0xFFF5F5F5),
                       ),
                     ),

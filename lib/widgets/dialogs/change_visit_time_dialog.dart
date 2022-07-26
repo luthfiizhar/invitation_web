@@ -1,12 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/routes/routes.dart';
+import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
+import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
 import 'package:universal_html/html.dart' as html;
+import 'package:http/http.dart' as http;
 
 Future<bool> changeVisitDialog(BuildContext context) async {
   bool shouldPop = true;
@@ -93,6 +99,9 @@ Future<bool> changeVisitDialog(BuildContext context) async {
 }
 
 class ChangeVisitDialog extends ModalRoute<void> {
+  ChangeVisitDialog({this.eventID});
+
+  String? eventID;
   TextEditingController _startDate = TextEditingController();
   TextEditingController _endDate = TextEditingController();
 
@@ -101,6 +110,34 @@ class ChangeVisitDialog extends ModalRoute<void> {
 
   String? startDate;
   String? endDate;
+
+  Future changeVisitTime(String eventId, String start, String end) async {
+    // print('$start');
+    // print('$end');
+    // print('$eventId');
+    var box = await Hive.openBox('userLogin');
+    var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
+    final url = Uri.http(apiUrl, '/api/event/update-event-date');
+    Map<String, String> requestHeader = {
+      'Authorization': 'Bearer $jwt',
+      'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
+      'Content-Type': 'application/json'
+    };
+    var bodySend = """ 
+      {
+          "StartDate" : "$start",
+          "EndDate" : "$end",
+          "EventID" : "$eventID"
+      }
+    """;
+
+    var response = await http.post(url, headers: requestHeader, body: bodySend);
+    var data = json.decode(response.body);
+    print(data);
+    // if (data['Status'] == '200') {
+    // } else {}
+    return data['Status'];
+  }
 
   final _formKey = new GlobalKey<FormState>();
   @override
@@ -138,6 +175,32 @@ class ChangeVisitDialog extends ModalRoute<void> {
         child: child,
       ),
     );
+  }
+
+  showConfirmDialog(String eventId, String start, String end) {
+    return confirmDialog(navKey.currentState!.context,
+            'Are you sure want to change visit date?', true)
+        .then((value) {
+      if (value) {
+        changeVisitTime(eventId, start, end).then((value) {
+          if (value == '200') {
+            print('success');
+            Navigator.of(navKey.currentState!.context)
+                .push(NotifProcessDialog(isSuccess: true))
+                .then((value) {
+              Navigator.pop(navKey.currentState!.context);
+            });
+            // Navigator.pop(navKey.currentState!.context);
+          } else {
+            Navigator.of(navKey.currentState!.context)
+                .push(NotifProcessDialog(isSuccess: false))
+                .then((value) {
+              Navigator.pop(navKey.currentState!.context);
+            });
+          }
+        });
+      }
+    });
   }
 
   @override
@@ -199,9 +262,10 @@ class ChangeVisitDialog extends ModalRoute<void> {
                             height: 50,
                             child: RegularButton(
                               onTap: () {
-                                Navigator.pop(context);
+                                showConfirmDialog(
+                                    eventID!, _startDate.text, _endDate.text);
                               },
-                              title: 'OK',
+                              title: 'Confirm',
                               sizeFont: 24,
                             ),
                           ),

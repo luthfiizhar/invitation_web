@@ -10,10 +10,14 @@ import 'package:hive/hive.dart';
 import 'package:navigation_example/advance_my_invite_source.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/constant/functions.dart';
 import 'package:navigation_example/myinvite_source.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/change_visit_time_dialog.dart';
+import 'package:navigation_example/widgets/dialogs/detail_visitor_dialog.dart';
+import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
+import 'package:navigation_example/widgets/dialogs/notification_dialog.dart';
 import 'package:navigation_example/widgets/footer.dart';
 import 'package:navigation_example/widgets/interactive_myinvite_menu_item.dart';
 import 'package:navigation_example/widgets/myinvite_menu_item.dart';
@@ -30,12 +34,9 @@ class MyInvitationPage extends StatefulWidget {
 }
 
 class _MyInvitationPageState extends State<MyInvitationPage> {
-  var _rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
-  final _source = ExampleSource();
   var _sortIndex = 0;
   var _sortAsc = true;
-  final _searchController = TextEditingController();
-  var _customFooter = false;
+
   List myInviteMenu = [
     {"id": 1, "menu": "Active Invitation"},
     {"id": 2, "menu": "Past Invitation"},
@@ -43,185 +44,50 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
   ];
   int selectedMenu = 1;
 
-  final List<Map<String, dynamic>> _data = List.generate(
-      200,
-      (index) => {
-            "id": index,
-            "title": "Item $index",
-            "price": Random().nextInt(10000),
-          });
+  bool nextButtonDisabled = true;
+  bool prevButttonDisabled = true;
+  bool sortById = false;
+  bool sortByTime = false;
+  bool sortByTotal = false;
+  bool sortAscId = true;
+  bool sortAscTime = true;
+  bool sortAscTotal = true;
+  bool sortAscTemp = true;
+  String sortBy = "VisitTime";
+  int myActiveInvitePage = 1;
+  int rowPerPage = 10;
+
+  bool isLoading = false;
 
   var _rowPerPages = 5;
-  List<int> _rowPerPageList = [5, 10, 25, 50, 100];
 
-  List<dynamic> contohData = [
-    // {
-    //   "EventID": "EV-1",
-    //   "InvitationID": "8Z7E4S",
-    //   "TotalVisitor": "3",
-    //   "EmployeeName": "Dua Lima",
-    //   "VisitTime": "12 Jul - 15 Jul 2022",
-    //   "Visitors": [
-    //     {
-    //       "VisitorID": "VT-10",
-    //       "VisitorName": "Ayana Dunne",
-    //       "Email": "ayanna@gmail.com",
-    //       "Status": "CHECKED IN"
-    //     },
-    //     {
-    //       "VisitorID": "VT-11",
-    //       "VisitorName": "Sion Goulding",
-    //       "Email": "sion@gmail.com",
-    //       "Status": "APPROVED"
-    //     },
-    //     {
-    //       "VisitorID": "VT-9",
-    //       "VisitorName": "Jacques Sierra",
-    //       "Email": "jacques@gmail.com",
-    //       "Status": "CHECKED IN"
-    //     }
-    //   ]
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "EmployeeName": "Dua Lima",
-    //   "VisitTime": "21 Jul - 21 Jul 2022",
-    //   "Visitors": [
-    //     {
-    //       "VisitorID": "VT-10",
-    //       "VisitorName": "Ayana Dunne",
-    //       "Email": "ayanna@gmail.com",
-    //       "Status": "CHECKED IN"
-    //     },
-    //   ]
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "VisitTime": "21 Jul - 21 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "VisitTime": "21 Jul - 21 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "VisitTime": "21 Jul - 21 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "VisitTime": "21 Jul - 21 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "VisitTime": "21 Jul - 21 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "VisitTime": "21 Jul - 21 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "VisitTime": "21 Jul - 21 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "VisitTime": "21 Jul - 21 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "VisitTime": "21 Jul - 21 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-2",
-    //   "InvitationID": "53MI00",
-    //   "TotalVisitor": "1",
-    //   "VisitTime": "21 Jul - 21 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-1",
-    //   "InvitationID": "8Z7E4S",
-    //   "TotalVisitor": "2",
-    //   "VisitTime": "12 Jul - 15 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-1",
-    //   "InvitationID": "8Z7E4S",
-    //   "TotalVisitor": "2",
-    //   "VisitTime": "12 Jul - 15 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-1",
-    //   "InvitationID": "8Z7E4S",
-    //   "TotalVisitor": "2",
-    //   "VisitTime": "12 Jul - 15 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-1",
-    //   "InvitationID": "8Z7E4S",
-    //   "TotalVisitor": "2",
-    //   "VisitTime": "12 Jul - 15 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-1",
-    //   "InvitationID": "8Z7E4S",
-    //   "TotalVisitor": "2",
-    //   "VisitTime": "12 Jul - 15 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-1",
-    //   "InvitationID": "8Z7E4S",
-    //   "TotalVisitor": "2",
-    //   "VisitTime": "12 Jul - 15 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-1",
-    //   "InvitationID": "8Z7E4S",
-    //   "TotalVisitor": "2",
-    //   "VisitTime": "12 Jul - 15 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-1",
-    //   "InvitationID": "8Z7E4S",
-    //   "TotalVisitor": "2",
-    //   "VisitTime": "12 Jul - 15 Jul 2022"
-    // },
-    // {
-    //   "EventID": "EV-1",
-    //   "InvitationID": "8Z7E4S",
-    //   "TotalVisitor": "2",
-    //   "VisitTime": "12 Jul - 15 Jul 2022"
-    // },
-  ];
+  List visitors = [];
+  List<dynamic> contohData = [];
 
   dynamic data;
 
-  Future getActiveInvitations() async {
+  Future getActiveInvitations(
+    String page,
+    String maxPage,
+    String sortBy,
+    bool sortType,
+  ) async {
+    var type = '';
+    setState(() {
+      isLoading = true;
+      if (sortType) {
+        type = "ASC";
+      } else {
+        type = "DESC";
+      }
+    });
+
     print('hahahaha');
     var box = await Hive.openBox('userLogin');
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(jwt);
 
-    final url = Uri.http(apiUrl, '/api/invitation/invitation-list-all');
+    final url = Uri.http(apiUrl, '/api/invitation/invitation-list');
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -229,20 +95,88 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     };
     var bodySend = """ 
       {
-          "SortBy" : "VisitTime",
-          "SortDir" : "ASC"
+          "Page" : "$page",
+          "MaxPage" : "$maxPage",
+          "SortBy" : "$sortBy",
+          "SortDir" : "$type"
       }
     """;
 
     var response = await http.post(url, headers: requestHeader, body: bodySend);
     var data = json.decode(response.body);
-    print(data['Data']);
-
+    print('data active : ' + data['Data'].toString());
     // final response = await http.get(requestUri);
     if (data['Status'] == '200') {
       setState(() {
         contohData = data['Data']['Invitations'];
+        if (data['Data']['LastPage'] == false) {
+          nextButtonDisabled = false;
+        } else {
+          nextButtonDisabled = true;
+        }
+        if (int.parse(page) > 1) {
+          prevButttonDisabled = false;
+        } else {
+          prevButttonDisabled = true;
+        }
+        if (sortBy == "InvitationID") {
+          sortById = true;
+          sortByTime = false;
+          sortByTotal = false;
+        }
+        if (sortBy == "VisitTime") {
+          sortByTime = true;
+          sortById = false;
+          sortByTotal = false;
+        }
+        if (sortBy == "TotalVisitor") {
+          sortByTotal = true;
+          sortById = false;
+          sortByTime = false;
+        }
+        isLoading = false;
       });
+    } else if (data['Status'] == '401') {
+      Navigator.of(context)
+          .push(NotifProcessDialog(isSuccess: false))
+          .then((value) {
+        logout().then((value) {
+          Navigator.pushReplacementNamed(
+              navKey.currentState!.context, routeLogin);
+        });
+      });
+    }
+  }
+
+  Future getInvitationDetail(String inviteCode) async {
+    print('hahaha');
+    var box = await Hive.openBox('userLogin');
+    var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
+    // print(jwt);
+
+    final url = Uri.http(apiUrl, '/api/invitation/get-invitation-detail');
+    Map<String, String> requestHeader = {
+      'Authorization': 'Bearer $jwt',
+      'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
+      'Content-Type': 'application/json'
+    };
+    var bodySend = """ 
+      {
+          "EventID" : "$inviteCode"
+      }
+    """;
+
+    var response = await http.post(url, headers: requestHeader, body: bodySend);
+    var data = json.decode(response.body);
+    // print('data->' + data['Data'].toString());
+
+    // final response = await http.get(requestUri);
+    if (data['Status'] == '200') {
+      setState(() {
+        visitors = [data['Data']];
+        // contohData = data['Data']['Invitations'];
+      });
+      return data['Data'];
     } else {}
   }
 
@@ -270,7 +204,13 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getActiveInvitations();
+    getActiveInvitations(
+            myActiveInvitePage.toString(), rowPerPage.toString(), sortBy, true)
+        .then((value) {
+      setState(() {
+        isLoading = false;
+      });
+    });
     // _rowPerPages = contohData.length;
     // _rowPerPageList.add(_rowPerPages);
   }
@@ -280,131 +220,131 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     return Responsive.isDesktop(context)
         ? desktopLayoutMyInvitePage(context)
         : mobileLayoutMyInvitePage(context);
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          NavigationBarWeb(
-            index: 1,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 30, left: 300, right: 300),
-            child: Container(
-              // color: Colors.blue,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    // color: Colors.blue,
-                    padding: EdgeInsets.only(left: 350),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              'My Invitation',
-                              style: TextStyle(
-                                  fontSize: 48, fontWeight: FontWeight.w700),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 20),
-                              child: Text(
-                                'All of your booking listing can be found here.',
-                                style: pageSubtitle,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 40),
-                        child: Container(
-                          width: 600,
-                          height: 60,
-                          // color: Colors.blue,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: myInviteMenu.length,
-                            itemBuilder: (context, index) {
-                              var menuName = myInviteMenu[index]['menu'];
-                              var selected = myInviteMenu[index]['id'];
-                              return MyInviteMenu(
-                                menuName: menuName,
-                                selected: selectedMenu == selected,
-                                onHighlight: onHighlight,
-                                index: index + 1,
-                              );
-                            },
-                          ),
-                          // child: Row(
-                          //   children: [
-                          //     MyInviteMenu(
-                          //       menuName: 'Active Invitation',
-                          //       onHighlight: onHighlight,
-                          //       selected: selectedMenu == 1,
-                          //       index: 1,
-                          //     ),
-                          //     MyInviteMenu(
-                          //       menuName: 'Past Invitation',
-                          //       onHighlight: onHighlight,
-                          //       selected: selectedMenu == 2,
-                          //       index: 2,
-                          //     ),
-                          //     MyInviteMenu(
-                          //       menuName: 'Canceled',
-                          //       onHighlight: onHighlight,
-                          //       selected: selectedMenu == 3,
-                          //       index: 3,
-                          //     ),
-                          // ],
-                          // ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 40),
-                      child: Container(
-                        // height: 600,
-                        width: 1000,
-                        // color: Colors.black,
-                        child: Builder(
-                          builder: (context) {
-                            if (selectedMenu == 1) {
-                              return activeInvitation(contohData);
-                            }
-                            if (selectedMenu == 2) {
-                              return serverSideTable();
-                            }
-                            if (selectedMenu == 3) {
-                              return Text('Canceled');
-                            }
-                            return SizedBox();
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          FooterInviteWeb(),
-        ],
-      ),
-    );
+    // return SingleChildScrollView(
+    //   scrollDirection: Axis.vertical,
+    //   child: Column(
+    //     children: [
+    //       NavigationBarWeb(
+    //         index: 1,
+    //       ),
+    //       Padding(
+    //         padding: EdgeInsets.only(top: 30, left: 300, right: 300),
+    //         child: Container(
+    //           // color: Colors.blue,
+    //           child: Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: [
+    //               Container(
+    //                 // color: Colors.blue,
+    //                 padding: EdgeInsets.only(left: 350),
+    //                 child: Column(
+    //                   children: [
+    //                     Row(
+    //                       mainAxisAlignment: MainAxisAlignment.start,
+    //                       children: [
+    //                         Text(
+    //                           'My Invitation',
+    //                           style: TextStyle(
+    //                               fontSize: 48, fontWeight: FontWeight.w700),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                     Row(
+    //                       mainAxisAlignment: MainAxisAlignment.start,
+    //                       children: [
+    //                         Padding(
+    //                           padding: EdgeInsets.only(top: 20),
+    //                           child: Text(
+    //                             'All of your booking listing can be found here.',
+    //                             style: pageSubtitle,
+    //                           ),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   ],
+    //                 ),
+    //               ),
+    //               Row(
+    //                 mainAxisAlignment: MainAxisAlignment.center,
+    //                 children: [
+    //                   Padding(
+    //                     padding: EdgeInsets.only(top: 40),
+    //                     child: Container(
+    //                       width: 600,
+    //                       height: 60,
+    //                       // color: Colors.blue,
+    //                       child: ListView.builder(
+    //                         scrollDirection: Axis.horizontal,
+    //                         itemCount: myInviteMenu.length,
+    //                         itemBuilder: (context, index) {
+    //                           var menuName = myInviteMenu[index]['menu'];
+    //                           var selected = myInviteMenu[index]['id'];
+    //                           return MyInviteMenu(
+    //                             menuName: menuName,
+    //                             selected: selectedMenu == selected,
+    //                             onHighlight: onHighlight,
+    //                             index: index + 1,
+    //                           );
+    //                         },
+    //                       ),
+    //                       // child: Row(
+    //                       //   children: [
+    //                       //     MyInviteMenu(
+    //                       //       menuName: 'Active Invitation',
+    //                       //       onHighlight: onHighlight,
+    //                       //       selected: selectedMenu == 1,
+    //                       //       index: 1,
+    //                       //     ),
+    //                       //     MyInviteMenu(
+    //                       //       menuName: 'Past Invitation',
+    //                       //       onHighlight: onHighlight,
+    //                       //       selected: selectedMenu == 2,
+    //                       //       index: 2,
+    //                       //     ),
+    //                       //     MyInviteMenu(
+    //                       //       menuName: 'Canceled',
+    //                       //       onHighlight: onHighlight,
+    //                       //       selected: selectedMenu == 3,
+    //                       //       index: 3,
+    //                       //     ),
+    //                       // ],
+    //                       // ),
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //               Center(
+    //                 child: Padding(
+    //                   padding: EdgeInsets.only(top: 40),
+    //                   child: Container(
+    //                     // height: 600,
+    //                     width: 1000,
+    //                     // color: Colors.black,
+    //                     child: Builder(
+    //                       builder: (context) {
+    //                         if (selectedMenu == 1) {
+    //                           return activeInvitation(contohData);
+    //                         }
+    //                         if (selectedMenu == 2) {
+    //                           return serverSideTable();
+    //                         }
+    //                         if (selectedMenu == 3) {
+    //                           return Text('Canceled');
+    //                         }
+    //                         return SizedBox();
+    //                       },
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //       FooterInviteWeb(),
+    //     ],
+    //   ),
+    // );
   }
 
   Widget desktopLayoutMyInvitePage(BuildContext context) {
@@ -417,7 +357,9 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                 index: 1,
               ),
               Padding(
-                padding: EdgeInsets.only(top: 30, left: 300, right: 300),
+                padding: Responsive.isBigDesktop(context)
+                    ? EdgeInsets.only(top: 30, left: 300, right: 300)
+                    : EdgeInsets.only(top: 30, left: 100, right: 100),
                 child: Container(
                   // color: Colors.blue,
                   child: Column(
@@ -452,7 +394,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                                     Padding(
                                       padding: EdgeInsets.only(top: 20),
                                       child: Text(
-                                        'All of your booking listing can be found here.',
+                                        'All of your invitation listing can be found here.',
                                         style: pageSubtitle,
                                       ),
                                     ),
@@ -526,10 +468,11 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                             child: Builder(
                               builder: (context) {
                                 if (selectedMenu == 1) {
-                                  return activeInvitation(contohData);
+                                  return activeInvitationListViewDesktop(
+                                      contohData, visitors);
                                 }
                                 if (selectedMenu == 2) {
-                                  return serverSideTable();
+                                  return Text('past');
                                 }
                                 if (selectedMenu == 3) {
                                   return Text('Canceled');
@@ -573,43 +516,34 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                       Container(
                         // color: Colors.blue,
                         // padding: EdgeInsets.only(left: 350),
-                        child: Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              flex: 3,
-                              child: SizedBox(),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'My Invitation',
-                                      style: TextStyle(
-                                          fontSize: 48,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 20),
-                                      child: Text(
-                                        'All of your booking listing can be found here.',
-                                        style: pageSubtitle,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  'My Invitation',
+                                  style: TextStyle(
+                                      fontSize: 34,
+                                      fontWeight: FontWeight.w700),
                                 ),
                               ],
                             ),
-                            Expanded(
-                              flex: 3,
-                              child: SizedBox(),
+                            Wrap(
+                              // mainAxisAlignment: MainAxisAlignment.start,
+                              alignment: WrapAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top: 20),
+                                  child: Text(
+                                    'All of your booking listing can be found here.',
+                                    style: TextStyle(
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -620,7 +554,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                           Padding(
                             padding: EdgeInsets.only(top: 40),
                             child: Container(
-                              width: MediaQuery.of(context).size.width * 0.7,
+                              width: MediaQuery.of(context).size.width * 0.8,
                               height: 60,
                               // color: Colors.blue,
                               child: ListView.builder(
@@ -673,10 +607,11 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                             child: Builder(
                               builder: (context) {
                                 if (selectedMenu == 1) {
-                                  return activeInvitation(contohData);
+                                  return activeInvitationListViewMobile(
+                                      contohData, visitors);
                                 }
                                 if (selectedMenu == 2) {
-                                  return serverSideTable();
+                                  return Text('past');
                                 }
                                 if (selectedMenu == 3) {
                                   return Text('Canceled');
@@ -714,199 +649,644 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     });
   }
 
-  Widget activeInvitation(List data) {
-    final DataTableSource _data = MyInviteDataSource(dataSource: data);
-    return Theme(
-      data: ThemeData(
-          dataTableTheme: DataTableThemeData(),
-          fontFamily: 'Helvetica',
-          cardColor: scaffoldBg,
-          cardTheme: CardTheme(
-            elevation: 0,
-          )),
-      child: PaginatedDataTable(
-        // header: const Text('My Invitati'),
-
-        columns: [
-          DataColumn(
-              label: Text(
-            'Invitation ID',
-            style: tableHeader,
-          )),
-          DataColumn(
-              label: Text(
-            'Visit Time',
-            style: tableHeader,
-          )),
-          DataColumn(
-              label: Text(
-                'Total Visitor',
-                style: tableHeader,
-              ),
-              onSort: (int columnIndex, bool ascending) {}),
-          DataColumn(
-            label: Text(''),
-          ),
-        ],
-        source: _data,
-        columnSpacing:
-            Responsive.isDesktop(navKey.currentState!.context) ? 100 : 20,
-        horizontalMargin: 10,
-        rowsPerPage: _rowPerPages,
-        onRowsPerPageChanged: (value) {
-          setState(() {
-            _rowPerPages = value!;
-            print('changed');
-          });
-        },
-        onPageChanged: (value) {
-          print('value: $value');
-        },
-        availableRowsPerPage: _rowPerPageList,
-        showCheckboxColumn: false,
-      ),
-    );
-    // return DataTable(columns: [
-    //   DataColumn(label: Text('Invitation ID')),
-    //   DataColumn(label: Text('Visit Time')),
-    //   DataColumn(label: Text('Total Visitor')),
-    //   DataColumn(label: Text('')),
-    // ], rows: [
-    //   DataRow(cells: [
-    //     DataCell(Text('1')),
-    //     DataCell(Text('Arya')),
-    //     DataCell(Text('6')),
-    //     DataCell(Text('6')),
-    //   ]),
-    //   DataRow(cells: [
-    //     DataCell(Text('12')),
-    //     DataCell(Text('John')),
-    //     DataCell(Text('9')),
-    //     DataCell(Text('6')),
-    //   ]),
-    //   DataRow(cells: [
-    //     DataCell(Text('42')),
-    //     DataCell(Text('Tony')),
-    //     DataCell(Text('8')),
-    //     DataCell(Text('6')),
-    //   ]),
-    // ]);
-  }
-
-  void setSort(int i, bool asc) => setState(() {
-        _sortIndex = i;
-        _sortAsc = asc;
-      });
-
-  Widget serverSideTable() {
-    return AdvancedPaginatedDataTable(
-      addEmptyRows: false,
-      source: _source,
-      showHorizontalScrollbarAlways: true,
-      sortAscending: _sortAsc,
-      sortColumnIndex: _sortIndex,
-      showFirstLastButtons: true,
-      rowsPerPage: _rowsPerPage,
-      availableRowsPerPage: const [5, 10],
-      onRowsPerPageChanged: (newRowsPerPage) {
-        if (newRowsPerPage != null) {
-          setState(() {
-            _rowsPerPage = newRowsPerPage;
-          });
-        }
-      },
-      columns: [
-        DataColumn(
-          label: const Text('ID'),
-          // numeric: dalse,
-          onSort: setSort,
-        ),
-        DataColumn(
-          label: const Text('Company'),
-          onSort: setSort,
-        ),
-        DataColumn(
-          label: const Text('First name'),
-          onSort: setSort,
-        ),
-        DataColumn(
-          label: const Text('Last name'),
-          onSort: setSort,
-        ),
-        // DataColumn(
-        //   label: const Text('Phone'),
-        //   onSort: setSort,
-        // ),
-      ],
-      //Optianl override to support custom data row text / translation
-      getFooterRowText:
-          (startRow, pageSize, totalFilter, totalRowsWithoutFilter) {
-        final localizations = MaterialLocalizations.of(context);
-        var amountText = localizations.pageRowsInfoTitle(
-          startRow,
-          pageSize,
-          totalFilter ?? totalRowsWithoutFilter,
-          false,
-        );
-
-        if (totalFilter != null) {
-          //Filtered data source show addtional information
-          amountText += ' filtered from ($totalRowsWithoutFilter)';
-        }
-
-        return amountText;
-      },
-      customTableFooter: _customFooter
-          ? (source, offset) {
-              const maxPagesToShow = 6;
-              const maxPagesBeforeCurrent = 3;
-              final lastRequestDetails = source.lastDetails!;
-              final rowsForPager = lastRequestDetails.filteredRows ??
-                  lastRequestDetails.totalRows;
-              final totalPages = rowsForPager ~/ _rowsPerPage;
-              final currentPage = (offset ~/ _rowsPerPage) + 1;
-              final List<int> pageList = [];
-              if (currentPage > 1) {
-                pageList.addAll(
-                  List.generate(currentPage - 1, (index) => index + 1),
-                );
-                //Keep up to 3 pages before current in the list
-                pageList.removeWhere(
-                  (element) => element < currentPage - maxPagesBeforeCurrent,
-                );
-              }
-              pageList.add(currentPage);
-              //Add reminding pages after current to the list
-              pageList.addAll(
-                List.generate(
-                  maxPagesToShow - (pageList.length - 1),
-                  (index) => (currentPage + 1) + index,
-                ),
-              );
-              pageList.removeWhere((element) => element > totalPages);
-
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: pageList
-                    .map(
-                      (e) => TextButton(
-                        onPressed: e != currentPage
-                            ? () {
-                                //Start index is zero based
-                                source.setNextView(
-                                  startIndex: (e - 1) * _rowsPerPage,
-                                );
-                              }
-                            : null,
-                        child: Text(
-                          e.toString(),
+  Widget activeInvitationListViewDesktop(List data, List visitor) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 50),
+      width: 900,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: InkWell(
+                  onTap: () {
+                    sortAscId ? sortAscId = false : sortAscId = true;
+                    sortAscTemp = sortAscId;
+                    sortBy = "InvitationID";
+                    getActiveInvitations(myActiveInvitePage.toString(),
+                        rowPerPage.toString(), sortBy, sortAscTemp);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Invitation ID',
+                          style: tableHeader,
                         ),
+                        sortById
+                            ? sortAscId
+                                ? Icon(Icons.arrow_downward_sharp)
+                                : Icon(Icons.arrow_upward_sharp)
+                            : SizedBox(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: InkWell(
+                  onTap: () {
+                    sortAscTime ? sortAscTime = false : sortAscTime = true;
+                    sortBy = "VisitTime";
+                    sortAscTemp = sortAscTime;
+                    getActiveInvitations(myActiveInvitePage.toString(),
+                        rowPerPage.toString(), sortBy, sortAscTemp);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Visit Time',
+                          style: tableHeader,
+                        ),
+                        sortByTime
+                            ? sortAscTime
+                                ? Icon(Icons.arrow_downward_sharp)
+                                : Icon(Icons.arrow_upward_sharp)
+                            : SizedBox(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: InkWell(
+                  onTap: () {
+                    // if (sortAscTotal = true) {
+                    //   sortAscTotal = false;
+                    // } else {
+                    //   sortAscTotal == true;
+                    // }
+                    sortAscTotal ? sortAscTotal = false : sortAscTotal = true;
+                    sortAscTemp = sortAscTotal;
+                    // print(sortAscTotal);
+
+                    sortBy = "TotalVisitor";
+                    getActiveInvitations(myActiveInvitePage.toString(),
+                        rowPerPage.toString(), sortBy, sortAscTemp);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Total Visitor',
+                          style: tableHeader,
+                        ),
+                        sortByTotal
+                            ? sortAscTotal
+                                ? Icon(Icons.arrow_downward_sharp)
+                                : Icon(Icons.arrow_upward_sharp)
+                            : SizedBox(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Text(
+                    '',
+                    style: tableHeader,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Divider(
+              thickness: 2,
+              color: onyxBlack,
+            ),
+          ),
+          !isLoading
+              ? ListView.builder(
+                  itemCount: data.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: listContentDesktop(
+                          data[index]['EventID'],
+                          data[index]['InvitationID'],
+                          data[index]['VisitTime'],
+                          data[index]['TotalVisitor'].toString(),
+                          visitor,
+                          index),
+                    );
+                  },
+                )
+              : CircularProgressIndicator(color: eerieBlack),
+          Padding(
+            padding: const EdgeInsets.only(top: 15, bottom: 20),
+            child: Divider(
+              thickness: 2,
+              color: onyxBlack,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Row(
+                  children: [
+                    Text(
+                      'Showing: ',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton<int>(
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w300,
+                        ),
+                        value: rowPerPage,
+                        items: [
+                          // DropdownMenuItem(
+                          //   child: Text('5'),
+                          //   value: 5,
+                          // ),
+                          DropdownMenuItem(
+                            child: Text('10'),
+                            value: 10,
+                          ),
+                          DropdownMenuItem(
+                            child: Text('25'),
+                            value: 25,
+                          ),
+                          DropdownMenuItem(
+                            child: Text('50'),
+                            value: 50,
+                          ),
+                          DropdownMenuItem(
+                            child: Text('100'),
+                            value: 100,
+                          ),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            rowPerPage = value!;
+                          });
+
+                          getActiveInvitations(myActiveInvitePage.toString(),
+                              rowPerPage.toString(), sortBy, sortAscTemp);
+                        },
                       ),
                     )
-                    .toList(),
+                  ],
+                ),
+              ),
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onHover: (value) {},
+                      onTap: !prevButttonDisabled
+                          ? () {
+                              myActiveInvitePage = myActiveInvitePage - 1;
+                              getActiveInvitations(
+                                  myActiveInvitePage.toString(),
+                                  rowPerPage.toString(),
+                                  sortBy,
+                                  sortAscTemp);
+                            }
+                          : null,
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Icon(
+                              Icons.chevron_left,
+                              size: 26,
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Previous',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 50,
+                    ),
+                    InkWell(
+                      onHover: (value) {},
+                      onTap: !nextButtonDisabled
+                          ? () {
+                              setState(() {
+                                myActiveInvitePage = myActiveInvitePage + 1;
+                              });
+                              getActiveInvitations(
+                                      myActiveInvitePage.toString(),
+                                      rowPerPage.toString(),
+                                      sortBy,
+                                      sortAscTemp)
+                                  .then((value) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              });
+                            }
+                          : null,
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text(
+                            'Next',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Icon(
+                              Icons.chevron_right,
+                              size: 26,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget activeInvitationListViewMobile(List data, List visitor) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 50),
+      // width: 900,
+      width: MediaQuery.of(navKey.currentState!.context).size.width * 0.8,
+      child: Column(
+        children: [
+          ListView.builder(
+            itemCount: data.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Column(
+                  children: [
+                    listContentMobile(
+                        data[index]['EventID'],
+                        data[index]['InvitationID'],
+                        data[index]['VisitTime'],
+                        data[index]['TotalVisitor'].toString(),
+                        visitor,
+                        index),
+                    index != data.length - 1
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 20, bottom: 20),
+                            child: Divider(
+                              thickness: 2,
+                              color: spanishGray,
+                            ),
+                          )
+                        : SizedBox(),
+                  ],
+                ),
               );
-            }
-          : null,
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: Row(
+                    children: [
+                      Text(
+                        'Showing: ',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w300,
+                          ),
+                          value: 10,
+                          items: [
+                            // DropdownMenuItem(
+                            //   child: Text('5'),
+                            //   value: 5,
+                            // ),
+                            DropdownMenuItem(
+                              child: Text('10'),
+                              value: 10,
+                            ),
+                            DropdownMenuItem(
+                              child: Text('25'),
+                              value: 25,
+                            ),
+                            DropdownMenuItem(
+                              child: Text('50'),
+                              value: 50,
+                            ),
+                            DropdownMenuItem(
+                              child: Text('100'),
+                              value: 100,
+                            ),
+                          ],
+                          onChanged: (value) {},
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onHover: (value) {},
+                        onTap: !prevButttonDisabled
+                            ? () {
+                                // setState(() {
+                                myActiveInvitePage = myActiveInvitePage - 1;
+                                // });
+                                getActiveInvitations(
+                                  myActiveInvitePage.toString(),
+                                  rowPerPage.toString(),
+                                  sortBy,
+                                  sortAscTemp,
+                                ).then((value) {
+                                  // setState(() {
+                                  //   isLoading = false;
+                                  // });
+                                });
+                              }
+                            : null,
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Icon(
+                                Icons.chevron_left,
+                                size: 16,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Prev',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      InkWell(
+                        onHover: (value) {},
+                        onTap: !nextButtonDisabled
+                            ? () {
+                                myActiveInvitePage = myActiveInvitePage + 1;
+                                // });
+                                getActiveInvitations(
+                                  myActiveInvitePage.toString(),
+                                  rowPerPage.toString(),
+                                  sortBy,
+                                  sortAscTemp,
+                                ).then((value) {
+                                  // setState(() {
+                                  //   isLoading = false;
+                                  // });
+                                });
+                              }
+                            : null,
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              'Next',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Icon(
+                                Icons.chevron_right,
+                                size: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget listContentDesktop(
+    String eventId,
+    String inviteId,
+    String visitTime,
+    String totalVisitor,
+    List visitor,
+    int index,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: index % 2 == 0 ? scaffoldBg : silver,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Text(
+                inviteId,
+                style: tableBodyCode,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 4,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Text(
+                visitTime,
+                style: tableBody,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Text(
+                '$totalVisitor Person',
+                style: tableBody,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: CustTextButon(
+                label: 'Detail',
+                onTap: () {
+                  print(inviteId);
+                  getInvitationDetail(eventId).then((value) {
+                    // print('visitor -> ' + visitor.toString());
+                    dynamic listVisitor = value['Visitors'];
+                    print('listVisitor - >' + listVisitor.toString());
+                    Navigator.of(navKey.currentState!.overlay!.context)
+                        .push(DetailVisitorOverlay(
+                      visitorList: listVisitor,
+                      eventID: eventId,
+                      inviteCode: inviteId,
+                      totalPerson: totalVisitor,
+                      visitDate: visitTime,
+                      employeeName: value['EmployeeName'],
+                    ))
+                        .then((value) {
+                      setState(() {
+                        getActiveInvitations(
+                          myActiveInvitePage.toString(),
+                          rowPerPage.toString(),
+                          sortBy,
+                          sortAscTemp,
+                        ).then((value) {
+                          isLoading = false;
+                        });
+                      });
+                    });
+                  });
+                },
+                textStyle: textButton,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget listContentMobile(
+    String eventId,
+    String inviteId,
+    String visitTime,
+    String totalVisitor,
+    List visitor,
+    int index,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  inviteId,
+                  style: tableBodyCode,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    visitTime,
+                    style: tableBody,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    '$totalVisitor Person',
+                    style: tableBody,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: GestureDetector(
+              onTap: () {
+                getInvitationDetail(eventId).then((value) {
+                  dynamic listVisitor = value['Visitors'];
+                  Navigator.of(navKey.currentState!.overlay!.context)
+                      .push(DetailVisitorOverlay(
+                    visitorList: listVisitor,
+                    inviteCode: inviteId,
+                    totalPerson: totalVisitor,
+                    visitDate: visitTime,
+                    employeeName: value['EmployeeName'],
+                  ));
+                });
+              },
+              child: ImageIcon(
+                AssetImage('assets/Forward.png'),
+              ),
+              // Icon(
+              //   Icons.chevron_right,
+              //   size: 40,
+              //   color: onyxBlack,
+              // ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

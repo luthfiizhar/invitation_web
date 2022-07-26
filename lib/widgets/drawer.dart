@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/drawer_item.dart';
+import 'package:navigation_example/widgets/navigation_item.dart';
 
 class CustomDrawer extends StatefulWidget {
   // const CustomDrawer({Key? key}) : super(key: key);
@@ -56,75 +57,100 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: eerieBlack,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 235,
-              child: Text(
-                'Visitor Invitation',
-                style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 30),
-              child: Divider(
-                thickness: 2,
-                color: spanishGray,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 30,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustDrawerItem(
-                      title: 'New Visitor Invite',
-                      onHighlight: onHighlight,
-                      routeName: routeInvite,
-                      selected: index == 0),
+                  Container(
+                    width: 235,
+                    child: Text(
+                      'Visitor Invitation',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 30),
+                    child: Divider(
+                      thickness: 2,
+                      color: spanishGray,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 30,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CustDrawerItem(
+                            title: 'New Visitor Invite',
+                            onHighlight: onHighlight,
+                            routeName: routeInvite,
+                            selected: index == 0,
+                            indexSelected: index),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 30,
+                        ),
+                        child: CustDrawerItem(
+                            title: 'My Invitation',
+                            onHighlight: onHighlight,
+                            routeName: routeMyInvite,
+                            selected: index == 1,
+                            indexSelected: index),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 30,
+                        ),
+                        child: CustDrawerItem(
+                            title: 'Employee data',
+                            onHighlight: onHighlight,
+                            routeName: routeEmployee,
+                            selected: index == 2,
+                            indexSelected: index),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 30,
-                  ),
-                  child: CustDrawerItem(
-                      title: 'My Invitation',
-                      onHighlight: onHighlight,
-                      routeName: routeMyInvite,
-                      selected: index == 1),
-                ),
-              ],
+          ),
+          Positioned(
+            bottom: 30,
+            right: 25,
+            child: LogoutButtonMobile(
+              title: 'Logout',
+              selected: index == 3,
+              onHighlight: onHighlight,
+              onTap: () {
+                logout().then((value) {
+                  Navigator.pushReplacementNamed(
+                      navKey.currentState!.context, routeLogin);
+                });
+              },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 30,
-                  ),
-                  child: CustDrawerItem(
-                      title: 'Employee data',
-                      onHighlight: onHighlight,
-                      routeName: routeEmployee,
-                      selected: index == 2),
-                ),
-              ],
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

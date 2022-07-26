@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:navigation_example/routes/routes.dart';
+import 'package:navigation_example/widgets/interactive_drawer_item.dart';
 import 'package:navigation_example/widgets/interactive_nav_item.dart';
 
 class NavigationItem extends StatelessWidget {
@@ -45,6 +46,29 @@ class LogoutButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: InteractiveNavItem(
+          text: title,
+          selected: selected,
+          // routeName: routeName,
+        ),
+      ),
+    );
+  }
+}
+
+class LogoutButtonMobile extends StatelessWidget {
+  final String? title;
+  final VoidCallback? onTap;
+  final bool? selected;
+  final Function? onHighlight;
+  const LogoutButtonMobile(
+      {@required this.title, this.onTap, this.selected, this.onHighlight});
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: InteractiveDrawerItem(
           text: title,
           selected: selected,
           // routeName: routeName,

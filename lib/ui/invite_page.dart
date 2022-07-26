@@ -493,7 +493,7 @@ class _InvitePageState extends State<InvitePage> {
                 index: 0,
               ),
               Padding(
-                padding: EdgeInsets.only(top: 50, left: 500, right: 500),
+                padding: Responsive.isBigDesktop(context) ? EdgeInsets.only(top: 50, left: 500, right: 500) : EdgeInsets.only(top: 50, left: 300, right: 300),
                 child: Container(
                   // color: Colors.red,
                   child: Column(

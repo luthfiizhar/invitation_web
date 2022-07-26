@@ -14,7 +14,8 @@ class RegularButton extends StatelessWidget {
       this.sizeFont,
       this.height,
       this.width,
-      this.elevation});
+      this.elevation,
+      this.isDark});
 
   final String title;
   final String? routeName;
@@ -23,6 +24,7 @@ class RegularButton extends StatelessWidget {
   final double? width;
   final double? height;
   final double? elevation;
+  bool? isDark;
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +34,19 @@ class RegularButton extends StatelessWidget {
     } else {
       el = elevation!;
     }
+    if (isDark == null) {
+      isDark = false;
+    } else {
+      isDark = true;
+    }
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed
       };
       if (states.any(interactiveStates.contains)) {
-        return eerieBlack;
+        return isDark! ? scaffoldBg : eerieBlack;
       }
-      return Color(0xFFF7F7F7);
+      return isDark! ? eerieBlack : Color(0xFFF7F7F7);
     }
 
     return ElevatedButton(
@@ -55,7 +62,9 @@ class RegularButton extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: <Color>[onyxBlack, eerieBlack],
+              colors: isDark!
+                  ? <Color>[scaffoldBg, scaffoldBg]
+                  : <Color>[onyxBlack, eerieBlack],
             ),
           ),
           child: Center(
@@ -75,27 +84,28 @@ class RegularButton extends StatelessWidget {
                 fontFamily: 'Helvetica',
                 fontSize: sizeFont == null ? 30 : sizeFont,
                 fontWeight: FontWeight.w600,
-                color: eerieBlack);
+                color: isDark! ? eerieBlack : scaffoldBg);
           }
           return TextStyle(
               fontFamily: 'Helvetica',
               fontSize: sizeFont == null ? 30 : sizeFont,
               fontWeight: FontWeight.w600,
-              color: Colors.white);
+              color: isDark! ? eerieBlack : Colors.white);
         }),
         shape: MaterialStateProperty.resolveWith<OutlinedBorder?>(
             (Set<MaterialState> states) {
           if (states.contains(MaterialState.pressed))
             return RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
-                side: BorderSide(color: eerieBlack, width: 5));
+                side: BorderSide(
+                    color: isDark! ? scaffoldBg : eerieBlack, width: 5));
           return RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10));
         }),
         overlayColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.pressed))
-              return Colors.white; //<-- SEE HERE
+              return isDark! ? eerieBlack : Colors.white; //<-- SEE HERE
             return null; // Defer to the widget's default.
           },
         ),

@@ -96,18 +96,27 @@ class MyInviteDataSource extends DataTableSource {
             TextButton(
               onPressed: () {
                 // inviteDetailDialog(context);
-                getDetailInvitation(
-                  dataSource![index]['EventID'],
-                ).then((value) {
-                  Navigator.of(navKey.currentState!.overlay!.context)
-                      .push(DetailVisitorOverlay(
-                    employeeName: detailData!['EmployeeName'],
-                    inviteCode: detailData!['InvitationID'],
-                    totalPerson: detailData!['TotalVisitor'].toString(),
-                    visitDate: detailData['VisitTime'],
-                    visitorList: visitorList,
-                  ));
-                });
+                // getDetailInvitation(
+                //   dataSource![index]['EventID'],
+                // ).then((value) {
+                //   Navigator.of(navKey.currentState!.overlay!.context)
+                //       .push(DetailVisitorOverlay(
+                //     employeeName: detailData!['EmployeeName'],
+                //     inviteCode: detailData!['InvitationID'],
+                //     totalPerson: detailData!['TotalVisitor'].toString(),
+                //     visitDate: detailData['VisitTime'],
+                //     visitorList: visitorList,
+                //   ));
+                // });
+
+                Navigator.of(navKey.currentState!.overlay!.context)
+                    .push(DetailVisitorOverlay(
+                  visitorList: dataSource![index]['Visitors'],
+                  inviteCode: dataSource![index]['InvitationID'],
+                  totalPerson: dataSource![index]['TotalVisitor'],
+                  visitDate: dataSource![index]['VisitTime'],
+                  employeeName: dataSource![index]['EmployeeName'],
+                ));
 
                 // inviteDetailDialog(
                 //   navKey.currentState!.overlay!.context,

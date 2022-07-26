@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/responsive.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 class InputField extends StatefulWidget {
@@ -62,7 +63,7 @@ class _InputFieldState extends State<InputField> {
               child: Text(
                 '${widget.label}',
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: Responsive.isDesktop(context) ? 20 : 18,
                     fontWeight: FontWeight.w700,
                     color: eerieBlack),
               ),
@@ -93,7 +94,7 @@ class _InputFieldState extends State<InputField> {
               isCollapsed: true,
               hintText: widget.hintText,
               hintStyle: TextStyle(
-                fontSize: 20,
+                fontSize: Responsive.isDesktop(context) ? 20 : 18,
                 fontWeight: FontWeight.w400,
               ),
               alignLabelWithHint: true,
@@ -128,7 +129,7 @@ class _InputFieldState extends State<InputField> {
               errorStyle: TextStyle(color: silver, fontSize: 18),
             ),
             style: TextStyle(
-                fontSize: 20,
+                fontSize: Responsive.isDesktop(context) ? 20 : 18,
                 fontWeight: FontWeight.w400,
                 color: Color(0xFF393E46)),
           ),

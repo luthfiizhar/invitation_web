@@ -4,11 +4,22 @@ import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 
 final TextStyle kPageTitleStyle = TextStyle(
-    fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 18,
-    fontWeight: FontWeight.w700);
+  fontSize: 24,
+  fontWeight: FontWeight.w700,
+);
+
+final TextStyle myInviteMenu = TextStyle(
+  fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
+  fontWeight: FontWeight.w700,
+);
+
+final TextStyle myInviteMenuMobile = TextStyle(
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+);
 
 final TextStyle kPageTitleStyleMobile =
-    TextStyle(fontSize: 12, fontWeight: FontWeight.w700);
+    TextStyle(fontSize: 20, fontWeight: FontWeight.w700);
 
 final TextStyle pageTitle =
     TextStyle(fontSize: 48, fontWeight: FontWeight.w700);
@@ -19,6 +30,10 @@ final TextStyle pageSubtitle =
 final TextStyle tableBody = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 18,
     fontWeight: FontWeight.w300);
+
+final TextStyle tableBodyCode = TextStyle(
+    fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 18,
+    fontWeight: FontWeight.w700);
 
 final TextStyle tableHeader = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 18,
@@ -32,7 +47,7 @@ final TextStyle textButton = TextStyle(
     decoration: TextDecoration.underline);
 
 final TextStyle dialogTitle = TextStyle(
-  fontSize: 40,
+  fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 40 : 26,
   fontWeight: FontWeight.w700,
   color: eerieBlack,
 );
@@ -43,4 +58,4 @@ final TextStyle textButtonRegular = TextStyle(
   color: eerieBlack,
 );
 
-String apiUrl = '169.254.224.177:8500';
+String apiUrl = '172.17.155.37:8500';

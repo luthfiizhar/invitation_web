@@ -1,11 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/model/main_model.dart';
+import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/visitor.dart';
+import 'package:navigation_example/widgets/dialogs/confirm_add_new_invite_dialog.dart';
+import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
 import 'package:navigation_example/widgets/multi_form.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class AddVisitorOverlay extends ModalRoute<void> {
   AddVisitorOverlay({this.inviteCode});
@@ -54,6 +61,22 @@ class AddVisitorOverlay extends ModalRoute<void> {
   List<MultiVisitorFOrm> formList = List.empty(growable: true);
   MultiVisitorFOrm? items;
 
+  String? startDate;
+  String? endDate;
+
+  Future saveInviteVisitorData(var items) async {
+    var box = await Hive.openBox('inputvisitorBox');
+    box.put('listInvite', items != null ? items : "");
+  }
+
+  Future clearVisitorData() async {
+    var box = await Hive.openBox('visitorBox');
+    box.delete('listInvite');
+    box.delete('startDate');
+    box.delete('endDate');
+    print('deleted');
+  }
+
   onSave() {
     bool allValid = true;
 
@@ -81,135 +104,182 @@ class AddVisitorOverlay extends ModalRoute<void> {
     // }
   }
 
+  onRemove(Visitor visitor) {
+    setState(() {
+      int index =
+          formList.indexWhere((element) => element.index == visitor.number);
+
+      print(index);
+
+      if (formList != null) formList.removeAt(index);
+    });
+  }
+
+  showConfirmDialog() {
+    return confirmDialog(navKey.currentState!.context,
+            'Are you sure the data is correct?', true)
+        .then((value) {
+      if (value) {}
+    });
+  }
+
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
     // TODO: implement buildPage
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: StatefulBuilder(
-        builder: (context, setState) {
-          return Center(
-            child: Container(
-              width: 700,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: scaffoldBg,
-              ),
-              child: ScrollConfiguration(
-                behavior:
-                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 50, right: 50, top: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton.icon(
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
-                              },
-                              icon: Icon(
-                                Icons.close,
-                                color: eerieBlack,
-                              ),
-                              label: Text(''),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+    return Consumer<MainModel>(builder: (context, model, child) {
+      return Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: StatefulBuilder(
+          builder: (context, setState) {
+            return Center(
+              child: Container(
+                width: 700,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: scaffoldBg,
+                ),
+                child: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context)
+                      .copyWith(scrollbars: false),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 50, right: 50, top: 30),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                'Add Visitor',
-                                style: dialogTitle,
+                              TextButton.icon(
+                                onPressed: () {
+                                  Navigator.of(context).pop(false);
+                                },
+                                icon: Icon(
+                                  Icons.close,
+                                  color: eerieBlack,
+                                ),
+                                label: Text(''),
                               ),
                             ],
                           ),
-                        ),
-                        Form(
-                          key: _formKey,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: formList.length,
-                            itemBuilder: (context, index) {
-                              return formList[index];
-                            },
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Add Visitor',
+                                  style: dialogTitle,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, bottom: 30),
-                          child: Center(
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                setState(() {
-                                  Visitor _visitorModel =
-                                      Visitor(number: formList.length);
-
-                                  formList.add(MultiVisitorFOrm(
-                                    visitorModel: _visitorModel,
-                                    index: formList.length,
-                                  ));
-                                });
+                          Form(
+                            key: _formKey,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: formList.length,
+                              itemBuilder: (context, index) {
+                                return formList[index];
                               },
-                              icon: Icon(
-                                Icons.add_circle_outline,
-                                size: 40,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20, bottom: 30),
+                            child: Center(
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: () {
+                                  setState(() {
+                                    Visitor _visitorModel =
+                                        Visitor(number: formList.length);
+
+                                    formList.add(MultiVisitorFOrm(
+                                      visitorModel: _visitorModel,
+                                      index: formList.length,
+                                      onRemove: () {
+                                        onRemove(_visitorModel);
+                                        setState(
+                                          () {},
+                                        );
+                                      },
+                                    ));
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.add_circle_outline,
+                                  size: 40,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Center(
-                          child: SizedBox(
-                            height: 60,
-                            width: 275,
-                            child: RegularButton(
-                              title: 'Next',
-                              sizeFont: 24,
-                              onTap: () {
-                                _formKey.currentState!.save();
-                                onSave();
+                          Center(
+                            child: SizedBox(
+                              height: 60,
+                              width: 275,
+                              child: RegularButton(
+                                title: 'Next',
+                                sizeFont: 24,
+                                onTap: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    onSave();
 
-                                var json = jsonEncode(visitorList);
-                                // saveInviteVisitorData(json);
-                                print(visitorList.toList());
-                                // Navigator.pushNamed(context, routeConfiemInvite)
-                                //     .then((value) {
-                                //   setState(() {
-                                //     visitorList.clear();
-                                //     clearVisitorData();
-                                //   });
-                                // });
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (BuildContext context) =>
-                                //             ConfirmInvitePage()));
+                                    var json = jsonEncode(visitorList);
+                                    saveInviteVisitorData(json);
+                                    model.listInvite = json;
+                                    print(visitorList.toList());
 
-                                // print(json);
-                              },
+                                    Navigator.of(context)
+                                        .push(AddNewInviteConfirmDialog(
+                                            eventID: inviteCode))
+                                        .then((value) {
+                                      // model.listInvite = "";
+                                      // setState(
+                                      //   () {
+                                      visitorList.clear();
+                                      clearVisitorData();
+                                      Navigator.of(context).pop();
+                                      //   },
+                                      // );
+                                    });
+                                  } else {
+                                    print('failed');
+                                  }
+
+                                  // Navigator.pushNamed(context, routeConfiemInvite)
+                                  //     .then((value) {
+                                  //   setState(() {
+                                  //     visitorList.clear();
+                                  //     clearVisitorData();
+                                  //   });
+                                  // });
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (BuildContext context) =>
+                                  //             ConfirmInvitePage()));
+
+                                  // print(json);
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 40,
-                        ),
-                      ],
+                          SizedBox(
+                            height: 40,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
-      ),
-    );
+            );
+          },
+        ),
+      );
+    });
   }
 }

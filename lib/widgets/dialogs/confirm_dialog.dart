@@ -4,16 +4,17 @@ import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
 
-Future<bool> confirmDialog(BuildContext context, String message) async {
+Future<bool> confirmDialog(
+    BuildContext context, String message, bool isDark) async {
   bool shouldPop = true;
   return await showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
             // title:
-            backgroundColor: scaffoldBg,
+            backgroundColor: eerieBlack, //scaffoldBg,
             content: Container(
-              height: 270,
+              height: 300,
               width: 400,
               child: Column(
                 children: [
@@ -26,7 +27,7 @@ Future<bool> confirmDialog(BuildContext context, String message) async {
                         },
                         icon: Icon(
                           Icons.close,
-                          color: eerieBlack,
+                          color: scaffoldBg,
                         ),
                         label: Text(''),
                       ),
@@ -37,16 +38,30 @@ Future<bool> confirmDialog(BuildContext context, String message) async {
                     children: [
                       Text(
                         'Confirmation',
-                        style: dialogTitle,
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.w700,
+                          color: isDark ? scaffoldBg : eerieBlack,
+                        ),
                       ),
                     ],
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    child: Wrap(
                       children: [
-                        Text('$message'),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.start,
+                        //   children: [],
+                        // ),
+                        Text(
+                          '$message',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w300,
+                            color: isDark ? scaffoldBg : eerieBlack,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -56,6 +71,7 @@ Future<bool> confirmDialog(BuildContext context, String message) async {
                       height: 50,
                       width: 250,
                       child: RegularButton(
+                        isDark: isDark,
                         sizeFont: 20,
                         title: 'Confirm',
                         onTap: () {
@@ -72,6 +88,7 @@ Future<bool> confirmDialog(BuildContext context, String message) async {
                       height: 50,
                       width: 250,
                       child: CustTextButon(
+                        isDark: isDark,
                         // sizeFont: 20,
                         label: 'Cancel',
                         onTap: () {
