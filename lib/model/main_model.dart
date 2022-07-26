@@ -16,7 +16,7 @@ class MainModel extends ChangeNotifier {
 
   int get indexDrawer => _indexDrawer!;
 
-  set indexDrawer(int value) {
+  void setIndexDrawer(int value) {
     _indexDrawer = value;
     notifyListeners();
   }

@@ -53,7 +53,8 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
     var newList = json.encode(list);
     print(newList);
 
-    final url = Uri.http(apiUrl, '/api/event/save-event');
+    final url = Uri.https(
+        apiUrl, '/VisitorManagementBackend/public/api/event/save-event');
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -340,8 +341,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                           list![index]['LastName'], list![index]['Email']),
                       index != list!.length - 1
                           ? Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 20, bottom: 20),
+                              padding: EdgeInsets.only(top: 20, bottom: 20),
                               child: Divider(
                                 thickness: 2,
                                 color: spanishGray,
@@ -424,7 +424,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                 child: Text(
                   'Confirm Invitation',
                   style: TextStyle(
-                      fontSize: 36,
+                      fontSize: 24,
                       fontWeight: FontWeight.w700,
                       color: scaffoldBg),
                 ),
@@ -434,7 +434,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                 child: Text(
                   'Please confirm visitor data before send invitation.',
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 14,
                       fontWeight: FontWeight.w300,
                       color: scaffoldBg),
                 ),
@@ -446,14 +446,14 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                     Text(
                       'Visit Date: ',
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 14,
                           fontWeight: FontWeight.w300,
                           color: scaffoldBg),
                     ),
                     Text(
                       '$startDate - $endDate',
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 14,
                           fontWeight: FontWeight.w300,
                           color: scaffoldBg),
                     ),
@@ -491,59 +491,56 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
               ),
               Container(
                 padding: EdgeInsets.only(top: 50, bottom: 50),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      // crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 250,
-                          height: 60,
-                          child: RegularButton(
-                            title: 'Confirm',
-                            sizeFont: 16,
-                            onTap: () {
-                              showConfirmDialog();
-                              // print('aaa');
-                              // confirmDialog(context,
-                              //         'Are you sure the data is correct?', true)
-                              //     .then((value) {
-                              //   if (value) {
-                              //     saveInvitation().then((value) {
-                              //       // Navigator.pushReplacementNamed(
-                              //       //   context, routeInvite);
-                              //     });
-                              //   } else {
-                              //     print('cancel');
-                              //   }
-                              // });
-                            },
-                            isDark: true,
-                          ),
+                child: Center(
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        // width: 250,
+                        height: 30,
+                        child: RegularButton(
+                          title: 'Confirm',
+                          sizeFont: 16,
+                          onTap: () {
+                            showConfirmDialog();
+                            // print('aaa');
+                            // confirmDialog(context,
+                            //         'Are you sure the data is correct?', true)
+                            //     .then((value) {
+                            //   if (value) {
+                            //     saveInvitation().then((value) {
+                            //       // Navigator.pushReplacementNamed(
+                            //       //   context, routeInvite);
+                            //     });
+                            //   } else {
+                            //     print('cancel');
+                            //   }
+                            // });
+                          },
+                          isDark: true,
                         ),
-                        SizedBox(width: 20, height: 10),
-                        SizedBox(
-                          width: 250,
-                          height: 60,
-                          child: CustTextButon(
-                            fontSize: 16,
-                            isDark: true,
-                            label: 'Cancel',
-                            onTap: () {
-                              setState(() {
-                                list!.clear();
-                                clearVisitorData();
-                              });
+                      ),
+                      SizedBox(width: 20, height: 10),
+                      SizedBox(
+                        // width: 250,
+                        height: 30,
+                        child: CustTextButon(
+                          fontSize: 16,
+                          isDark: true,
+                          label: 'Cancel',
+                          onTap: () {
+                            setState(() {
+                              list!.clear();
+                              clearVisitorData();
+                            });
 
-                              Navigator.pop(context);
-                            },
-                          ),
+                            Navigator.pop(context);
+                          },
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -559,7 +556,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
       leading: Text(
         '$no',
         style: TextStyle(
-          fontSize: 48,
+          fontSize: Responsive.isDesktop(context) ? 48 : 28,
           fontWeight: FontWeight.w700,
           color: scaffoldBg,
         ),
@@ -569,7 +566,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
         child: Text(
           '$firstName $lastName',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: Responsive.isDesktop(context) ? 28 : 14,
             fontWeight: FontWeight.w700,
             color: scaffoldBg,
           ),
@@ -578,7 +575,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
       subtitle: Text(
         '$email',
         style: TextStyle(
-          fontSize: 20,
+          fontSize: Responsive.isDesktop(context) ? 20 : 12,
           fontWeight: FontWeight.w300,
           color: scaffoldBg,
         ),

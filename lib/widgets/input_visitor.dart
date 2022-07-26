@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/responsive.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 class InputVisitor extends StatefulWidget {
@@ -60,7 +61,7 @@ class _InputVisitorState extends State<InputVisitor> {
               child: Text(
                 '${widget.label}',
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: Responsive.isDesktop(context) ? 20 : 14,
                     fontWeight: FontWeight.w700,
                     color: eerieBlack),
               ),
@@ -111,7 +112,7 @@ class _InputVisitorState extends State<InputVisitor> {
                 isDense: true,
                 hintText: widget.hintText,
                 hintStyle: TextStyle(
-                  fontSize: 20,
+                  fontSize: Responsive.isDesktop(context) ? 20 : 14,
                   fontWeight: FontWeight.w400,
                 ),
                 contentPadding:
@@ -119,31 +120,38 @@ class _InputVisitorState extends State<InputVisitor> {
                 isCollapsed: true,
                 focusColor: onyxBlack,
                 focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(
+                        Responsive.isDesktop(context) ? 10 : 7),
                     borderSide: BorderSide(
                       color: eerieBlack,
                       width: 2.5,
                     )),
                 focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(
+                        Responsive.isDesktop(context) ? 10 : 7),
                     borderSide: BorderSide(color: eerieBlack, width: 2.5)),
                 enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(
+                        Responsive.isDesktop(context) ? 10 : 7),
                     borderSide:
                         BorderSide(color: Color(0xFF929AAB), width: 2.5)),
                 fillColor: graySand,
                 filled: true,
                 errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(
+                        Responsive.isDesktop(context) ? 10 : 7),
                     borderSide: BorderSide(color: eerieBlack, width: 2.5)),
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(
+                        Responsive.isDesktop(context) ? 10 : 7),
                     borderSide:
                         BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-                errorStyle: TextStyle(color: silver, fontSize: 18),
+                errorStyle: TextStyle(
+                    color: silver,
+                    fontSize: Responsive.isDesktop(context) ? 18 : 14),
               ),
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: Responsive.isDesktop(context) ? 20 : 14,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF393E46)),
             ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/constant/functions.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/add_visitor_dialog.dart';
@@ -24,7 +25,6 @@ Widget listVisitorDetailDialog(
   String visitorId,
   int index,
   int length,
-  Future<dynamic> getVisitorData,
 ) {
   return Container(
     child: Column(
@@ -33,19 +33,28 @@ Widget listVisitorDetailDialog(
           bool removeVisible = false;
           return InkWell(
             onHover: (value) {
-              print('hover');
-              // removeVisible = value;
               setState(() {
                 isHover = value;
-                print(removeVisible);
               });
             },
             onTap: () {
-              getVisitorData.then((value) {
-                dynamic listDetail = json.encode(value);
-                Navigator.of(context)
-                    .push(VisitorConfirmationOverlay(listDetail: listDetail));
-              });
+              if (verified == "APPROVED") {
+                getVisitorData(visitorId).then((value) {
+                  dynamic listDetail = json.encode(value);
+                  // print("list Detail Approved -> " + listDetail.toString());
+                  Navigator.of(context).push(
+                    VisitorDataOverlay(listDetail: listDetail),
+                  );
+                });
+              } else {
+                getVisitorData(visitorId).then((value) {
+                  dynamic listDetail = json.encode(value);
+                  print("list Detail not approved -> " + listDetail.toString());
+                  Navigator.of(context).push(
+                    VisitorConfirmationOverlay(listDetail: listDetail),
+                  );
+                });
+              }
 
               // Navigator.of(context).push(VisitorDataOverlay());
               // getVisitorData(visitorId);
@@ -124,7 +133,7 @@ Widget listVisitorDetailDialog(
                               onTap: () {
                                 setState(
                                   () {
-                                    name = 'hahahaha';
+                                    // name = 'hahahaha';
                                   },
                                 );
                               },
@@ -179,9 +188,12 @@ class DetailVisitorOverlay extends ModalRoute<void> {
         .then((value) {
       if (value) {
         cancelInvitation(eventID!).then((value) {
+          print(value);
           Navigator.of(context).pop();
         });
-      } else {}
+      } else {
+        // Navigator.of(context).pop();
+      }
     });
   }
 
@@ -212,7 +224,6 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     } else {
       isLoading = false;
     }
-    setState(() {});
     return data['Data'];
   }
 
@@ -250,35 +261,6 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     return data['Data'];
   }
 
-  Future getVisitorData(String visitorId) async {
-    var box = await Hive.openBox('userLogin');
-    var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
-    // print(jwt);
-
-    final url = Uri.http(apiUrl, '/api/visitor/get-visitor-detail-website');
-    Map<String, String> requestHeader = {
-      'Authorization': 'Bearer $jwt',
-      'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
-      'Content-Type': 'application/json'
-    };
-    var bodySend = """ 
-      {
-          "VisitorID" : "$visitorId"
-      }
-    """;
-
-    var response = await http.post(url, headers: requestHeader, body: bodySend);
-    var data = json.decode(response.body);
-
-    if (data['Status'] == '200') {
-      isLoading = false;
-    } else {
-      isLoading = false;
-    }
-    setState(() {});
-    return data['Data'];
-  }
-
   @override
   // TODO: implement barrierColor
   Color? get barrierColor => Colors.black.withOpacity(0.5);
@@ -301,7 +283,9 @@ class DetailVisitorOverlay extends ModalRoute<void> {
         //       () {},
         //     ));
         return Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: Responsive.isDesktop(context)
+              ? EdgeInsets.all(15.0)
+              : EdgeInsets.only(top: 15, bottom: 15),
           child: Center(
             child: Container(
               width: 550,
@@ -323,8 +307,10 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                           ),
                         )
                       : Padding(
-                          padding: const EdgeInsets.only(
-                              left: 50, right: 50, top: 30),
+                          padding: Responsive.isDesktop(
+                                  navKey.currentState!.context)
+                              ? EdgeInsets.only(left: 50, right: 50, top: 30)
+                              : EdgeInsets.only(left: 25, right: 25, top: 30),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -573,16 +559,17 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                       onPressed: () {
                                         Navigator.of(context)
                                             .push(AddVisitorOverlay(
-                                                inviteCode: eventID))
+                                          inviteCode: eventID,
+                                        ))
                                             .then((value) {
                                           getInvitationDetail(eventID!)
                                               .then((value) {
                                             setState(
                                               () {
                                                 isLoading = false;
-                                                print('value ->' +
-                                                    value['Visitors']
-                                                        .toString());
+                                                // print('value ->' +
+                                                //     value['Visitors']
+                                                //         .toString());
                                                 visitorList = value['Visitors'];
                                                 totalPerson = visitorList!
                                                     .length
@@ -636,8 +623,6 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                     visitorList![index]['VisitorID'],
                                     index,
                                     visitorList!.length,
-                                    getVisitorData(
-                                        visitorList![index]['VisitorID']),
                                   );
                                 },
                               ),
@@ -662,7 +647,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                               (value) {
                                                 getInvitationDetail(eventID!)
                                                     .then((value) {
-                                                  print(value);
+                                                  // print(value);
                                                   setState(() {
                                                     visitDate =
                                                         value['VisitTime'];

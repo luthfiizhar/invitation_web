@@ -71,7 +71,7 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
               width: 400,
               height: 40,
               child: Text(
-                'Visitor Invitation Website',
+                'Visitor Invitation Web',
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
               ),
             ),
@@ -81,44 +81,47 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                InkWell(
-                  onHover: (value) {},
-                  onTap: () {
-                    Navigator.of(context).push(NotificationOverlay());
-                  },
-                  child: Container(
-                    // color: Colors.amber,
-                    padding: EdgeInsets.all(2),
-                    width: 30,
-                    height: 30,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            width: 12,
-                            height: 12,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: eerieBlack),
-                            child: Center(
-                              child: Text(
-                                '',
-                                style: TextStyle(
-                                  color: scaffoldBg,
+                Padding(
+                  padding: const EdgeInsets.only(right: 35),
+                  child: InkWell(
+                    onHover: (value) {},
+                    onTap: () {
+                      Navigator.of(context).push(NotificationOverlay());
+                    },
+                    child: Container(
+                      // color: Colors.amber,
+                      padding: EdgeInsets.all(2),
+                      width: 30,
+                      height: 30,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle, color: eerieBlack),
+                              child: Center(
+                                child: Text(
+                                  '',
+                                  style: TextStyle(
+                                    color: scaffoldBg,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        // FittedBox(
-                        //   // child:
-                        //   //     Text('1'),
-                        //   child: Image.asset('assets/icon_notif.png'),
-                        //   fit: BoxFit.fitHeight,
-                        // ),
-                        Image.asset('assets/icon_notif.png')
-                      ],
+                          // FittedBox(
+                          //   // child:
+                          //   //     Text('1'),
+                          //   child: Image.asset('assets/icon_notif.png'),
+                          //   fit: BoxFit.fitHeight,
+                          // ),
+                          Image.asset('assets/icon_notif.png')
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -168,7 +171,7 @@ class NavigationBarMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: scaffoldBg,
-      height: 75.0,
+      height: 50.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,7 +182,7 @@ class NavigationBarMobile extends StatelessWidget {
               width: 300,
               height: 40,
               child: Text(
-                'Visitor Invitation Website',
+                'Visitor Invitation Web',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
               ),
             ),

@@ -76,6 +76,8 @@ class _InputFieldState extends State<InputField> {
             obscureText: widget.obsecureText!,
             key: widget.key,
             keyboardType: widget.keyboardType,
+            // cursorRadius: Radius.circular(10),
+            // cursorHeight: 50,
             cursorColor: onyxBlack,
             focusNode: widget.focusNode,
             controller: widget.controller,
@@ -88,16 +90,17 @@ class _InputFieldState extends State<InputField> {
             },
             onSaved: widget.onSaved,
             validator: widget.validator,
+            // textAlign: TextAlign.center,
             // textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
               isDense: true,
               isCollapsed: true,
               hintText: widget.hintText,
               hintStyle: TextStyle(
-                fontSize: Responsive.isDesktop(context) ? 20 : 18,
+                fontSize: Responsive.isDesktop(context) ? 20 : 14,
                 fontWeight: FontWeight.w400,
               ),
-              alignLabelWithHint: true,
+              // alignLabelWithHint: false,
               contentPadding:
                   EdgeInsets.only(top: 21, bottom: 17, left: 30, right: 30),
               // isCollapsed: true,
@@ -126,10 +129,10 @@ class _InputFieldState extends State<InputField> {
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-              errorStyle: TextStyle(color: silver, fontSize: 18),
+              errorStyle: TextStyle(color: silver, fontSize: 14),
             ),
             style: TextStyle(
-                fontSize: Responsive.isDesktop(context) ? 20 : 18,
+                fontSize: Responsive.isDesktop(context) ? 20 : 14,
                 fontWeight: FontWeight.w400,
                 color: Color(0xFF393E46)),
           ),

@@ -45,7 +45,9 @@ class NotificationOverlay extends ModalRoute<void> {
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: Responsive.isDesktop(context)
+          ? EdgeInsets.all(15.0)
+          : EdgeInsets.only(top: 15, bottom: 15),
       child: LayoutBuilder(
         builder: (context, constraints) {
           return StatefulBuilder(

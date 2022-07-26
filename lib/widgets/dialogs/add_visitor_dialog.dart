@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/model/main_model.dart';
+import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/visitor.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_add_new_invite_dialog.dart';
@@ -57,8 +58,15 @@ class AddVisitorOverlay extends ModalRoute<void> {
 
   final _formKey = new GlobalKey<FormState>();
   List<Visitor> visitorList = [];
+  Visitor? _visitorModel = Visitor(number: 1);
 
-  List<MultiVisitorFOrm> formList = List.empty(growable: true);
+  List<MultiVisitorFOrm> formList = List.filled(
+      1,
+      MultiVisitorFOrm(
+        index: 0,
+        visitorModel: Visitor(number: 1),
+      ),
+      growable: true);
   MultiVisitorFOrm? items;
 
   String? startDate;
@@ -79,6 +87,14 @@ class AddVisitorOverlay extends ModalRoute<void> {
 
   onSave() {
     bool allValid = true;
+    // formList.insert(
+    //     0,
+    //     MultiVisitorFOrm(
+    //       index: 0,
+    //       onRemove: onRemove,
+    //       visitorModel: _visitorModel,
+    //     ));
+    print(formList);
 
     //If any form validation function returns false means all forms are not valid
     // formList
@@ -129,7 +145,9 @@ class AddVisitorOverlay extends ModalRoute<void> {
     // TODO: implement buildPage
     return Consumer<MainModel>(builder: (context, model, child) {
       return Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: Responsive.isDesktop(context)
+            ? EdgeInsets.all(15.0)
+            : EdgeInsets.only(top: 15, bottom: 15),
         child: StatefulBuilder(
           builder: (context, setState) {
             return Center(
@@ -179,6 +197,7 @@ class AddVisitorOverlay extends ModalRoute<void> {
                           Form(
                             key: _formKey,
                             child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: formList.length,
                               itemBuilder: (context, index) {
@@ -193,14 +212,14 @@ class AddVisitorOverlay extends ModalRoute<void> {
                                 padding: EdgeInsets.zero,
                                 onPressed: () {
                                   setState(() {
-                                    Visitor _visitorModel =
+                                    _visitorModel =
                                         Visitor(number: formList.length);
 
                                     formList.add(MultiVisitorFOrm(
                                       visitorModel: _visitorModel,
                                       index: formList.length,
                                       onRemove: () {
-                                        onRemove(_visitorModel);
+                                        onRemove(_visitorModel!);
                                         setState(
                                           () {},
                                         );
@@ -210,7 +229,7 @@ class AddVisitorOverlay extends ModalRoute<void> {
                                 },
                                 icon: Icon(
                                   Icons.add_circle_outline,
-                                  size: 40,
+                                  size: Responsive.isDesktop(context) ? 40 : 35,
                                 ),
                               ),
                             ),
@@ -221,7 +240,8 @@ class AddVisitorOverlay extends ModalRoute<void> {
                               width: 275,
                               child: RegularButton(
                                 title: 'Next',
-                                sizeFont: 24,
+                                sizeFont:
+                                    Responsive.isDesktop(context) ? 24 : 16,
                                 onTap: () {
                                   if (_formKey.currentState!.validate()) {
                                     _formKey.currentState!.save();

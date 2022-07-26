@@ -29,7 +29,9 @@ class CustDrawerItem extends StatelessWidget {
           // Navigator.pushNamed(context, '$routeName');
           navKey.currentState!.pushReplacementNamed(routeName!);
           onHighlight!(routeName);
-          model.indexDrawer = indexSelected!;
+          model.setIndexDrawer(indexSelected!);
+          print(model.indexDrawer);
+          // Scaffold.of(navKey.currentState!.context).closeDrawer();
           // Navigator.pop(context);
         },
         child: Padding(

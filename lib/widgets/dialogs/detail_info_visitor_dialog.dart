@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/responsive.dart';
+import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
@@ -77,7 +78,9 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
     // dynamic detail = listDetail;
     // print(detail);
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: Responsive.isDesktop(context)
+          ? EdgeInsets.all(15.0)
+          : EdgeInsets.only(top: 15, bottom: 15),
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Center(
@@ -94,7 +97,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
                   child: Padding(
                     padding: Responsive.isDesktop(context)
                         ? EdgeInsets.only(left: 150, right: 150, top: 30)
-                        : EdgeInsets.only(left: 50, right: 50, top: 30),
+                        : EdgeInsets.only(left: 25, right: 25, top: 30),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -148,8 +151,14 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                height: 200,
-                                width: 200,
+                                height: Responsive.isDesktop(
+                                        navKey.currentState!.context)
+                                    ? 200
+                                    : 100,
+                                width: Responsive.isDesktop(
+                                        navKey.currentState!.context)
+                                    ? 200
+                                    : 100,
                                 child: Image.asset('assets/avatar_male.png'),
                               ),
                             ],
@@ -227,10 +236,9 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           padding: EdgeInsets.only(top: 30),
           child: phoneInfo(
             'Phone Number',
-            '-',
-            detailList!["PhoneNumber"] == null
+            detailList['PhoneNumber'] == "null"
                 ? "-"
-                : detailList!["PhoneNumber"].toString(),
+                : detailList['PhoneNumber'].toString(),
           ),
         ),
         Padding(
@@ -249,7 +257,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 40),
                 child: detailInfo(
                   'Origin Company',
-                  detailList!["CompanyName"] == null
+                  detailList["CompanyName"] == "null"
                       ? "-"
                       : detailList!["CompanyName"].toString(),
                 ),
@@ -261,7 +269,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 40),
                 child: detailInfo(
                   'Visit Reason',
-                  detailList!["VisitReason"] == null
+                  detailList["VisitReason"] == "null"
                       ? "-"
                       : detailList!["VisitReason"].toString(),
                 ),
@@ -280,7 +288,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
                 ),
                 child: detailInfo(
                   'Visit Date',
-                  detailList!["VisitTime"].toString(),
+                  detailList["VisitTime"].toString(),
                 ),
               ),
             ),
@@ -290,7 +298,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 40),
                 child: detailInfo(
                   'Meeting With',
-                  detailList!["MeetingWith"],
+                  detailList["MeetingWith"],
                 ),
               ),
             ),
@@ -304,7 +312,9 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
               child: Center(
                 child: CustTextButon(
                   label: 'Cancel',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
               ),
             ),
@@ -380,8 +390,9 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           padding: EdgeInsets.only(top: 30),
           child: phoneInfo(
             'Phone Number',
-            "",
-            "",
+            detailList['PhoneNumber'] == null
+                ? "-"
+                : detailList['PhoneNumber'].toString(),
           ),
         ),
         Padding(
@@ -459,7 +470,8 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           Text(
             '$label',
             style: TextStyle(
-              fontSize: 24,
+              fontSize:
+                  Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
               fontWeight: FontWeight.w300,
               color: onyxBlack,
             ),
@@ -469,7 +481,9 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
             child: Text(
               '$content',
               style: TextStyle(
-                fontSize: 30,
+                fontSize: Responsive.isDesktop(navKey.currentState!.context)
+                    ? 30
+                    : 16,
                 fontWeight: FontWeight.w700,
                 color: onyxBlack,
               ),
@@ -480,7 +494,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
     );
   }
 
-  Widget phoneInfo(String label, String code, String number) {
+  Widget phoneInfo(String label, String number) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -488,7 +502,8 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           Text(
             '$label',
             style: TextStyle(
-              fontSize: 24,
+              fontSize:
+                  Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
               fontWeight: FontWeight.w300,
               color: onyxBlack,
             ),
@@ -496,9 +511,11 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           Padding(
             padding: EdgeInsets.only(top: 10),
             child: Text(
-              '+$code $number',
+              '$number',
               style: TextStyle(
-                fontSize: 30,
+                fontSize: Responsive.isDesktop(navKey.currentState!.context)
+                    ? 30
+                    : 16,
                 fontWeight: FontWeight.w700,
                 color: onyxBlack,
               ),

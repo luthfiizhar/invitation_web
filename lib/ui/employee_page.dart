@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -10,6 +12,7 @@ import 'package:navigation_example/widgets/input_field.dart';
 import 'package:navigation_example/widgets/input_visitor.dart';
 import 'package:navigation_example/widgets/navigation_bar.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
+import 'package:http/http.dart' as http;
 
 class EmployeePage extends StatefulWidget {
   const EmployeePage({Key? key}) : super(key: key);
@@ -40,7 +43,44 @@ class _EmployeePageState extends State<EmployeePage> {
     setState(() {
       name = box.get('name') != "" ? box.get('name') : "";
       nip = box.get('nip') != "" ? box.get('nip') : "";
+      phoneCode = "62";
+      phoneNumber = box.get('phoneNumber') != "" ? box.get('phoneNumber') : "";
+      email = box.get('email') != "" ? box.get('email') : "";
     });
+    _phoneNumberCode.text = phoneCode;
+    _phoneNumber.text = phoneNumber.substring(1);
+    _email.text = email;
+  }
+
+  Future updateDataEmployee(String code, String number, String email) async {
+    var box = await Hive.openBox('userLogin');
+    var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
+    // print(visitorId);
+
+    final url = Uri.https(apiUrl,
+        '/VisitorManagementBackend/public/api/visitor/approve-visitor-data');
+    Map<String, String> requestHeader = {
+      'Authorization': 'Bearer $jwt',
+      'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
+      'Content-Type': 'application/json'
+    };
+    var bodySend = """ 
+      {
+          
+      }
+    """;
+
+    print(bodySend);
+    var response = await http.post(url, headers: requestHeader, body: bodySend);
+    var data = json.decode(response.body);
+    print('first name' + data['Data']['FirstName']);
+    // if (data['Status'] == '200') {
+    //   isLoading = false;
+    // } else {
+    //   isLoading = false;
+    // }
+    // setState(() {});
+    return data['Data'];
   }
 
   @override
@@ -173,7 +213,7 @@ class _EmployeePageState extends State<EmployeePage> {
                 index: 2,
               ),
               Padding(
-                padding: EdgeInsets.only(top: 60, left: 20, right: 20),
+                padding: EdgeInsets.only(top: 10, left: 20, right: 20),
                 child: Form(
                   child: Container(
                     child: Column(
@@ -184,15 +224,20 @@ class _EmployeePageState extends State<EmployeePage> {
                           children: [
                             Text(
                               'Employee',
-                              style: pageTitle,
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.w700),
                             ),
                           ],
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 20),
-                          child: Text(
-                            'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
-                            style: pageSubtitle,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w300),
+                            ),
                           ),
                         ),
                         Padding(
@@ -262,7 +307,7 @@ class _EmployeePageState extends State<EmployeePage> {
               child: Text(
                 'Full Name',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: Responsive.isDesktop(context) ? 20 : 14,
                   fontWeight: FontWeight.w700,
                   color: onyxBlack,
                 ),
@@ -280,7 +325,7 @@ class _EmployeePageState extends State<EmployeePage> {
                 child: Text(
                   name,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: Responsive.isDesktop(context) ? 20 : 14,
                     fontWeight: FontWeight.w400,
                     color: onyxBlack,
                   ),
@@ -393,31 +438,33 @@ class _EmployeePageState extends State<EmployeePage> {
         isCollapsed: true,
         focusColor: eerieBlack,
         focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
               color: eerieBlack,
               width: 2.5,
             )),
         focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: eerieBlack, width: 2.5)),
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
         fillColor: graySand,
         filled: true,
         errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: eerieBlack, width: 2.5)),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
         errorStyle: phoneNumberNode.hasFocus
             ? TextStyle(fontSize: 0, height: 0)
-            : TextStyle(color: silver, fontSize: 18),
+            : TextStyle(
+                color: silver,
+                fontSize: Responsive.isDesktop(context) ? 18 : 14),
       ),
       style: TextStyle(
-        fontSize: 20,
+        fontSize: Responsive.isDesktop(context) ? 20 : 14,
         fontWeight: FontWeight.w400,
         color: Color(0xFF393E46),
       ),
@@ -458,32 +505,36 @@ class _EmployeePageState extends State<EmployeePage> {
               isCollapsed: true,
               focusColor: eerieBlack,
               focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
                   color: eerieBlack,
                   width: 2.5,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(color: eerieBlack, width: 2.5)),
               enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
               fillColor: graySand,
               filled: true,
               errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(color: eerieBlack, width: 2.5)),
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
               errorStyle: phoneNumberNode.hasFocus
                   ? TextStyle(fontSize: 0, height: 0)
-                  : TextStyle(color: silver, fontSize: 18),
+                  : TextStyle(
+                      color: silver,
+                      fontSize: Responsive.isDesktop(context) ? 18 : 14),
             ),
             style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.w400, color: eerieBlack),
+                fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                fontWeight: FontWeight.w400,
+                color: eerieBlack),
           ),
         ),
       ],

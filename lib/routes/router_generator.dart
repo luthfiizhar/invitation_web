@@ -24,19 +24,48 @@ class RouteGenerator {
       //   return MaterialPageRoute(builder: (_) => ContactPage());
       //   break;
       case routeInvite:
-        return MaterialPageRoute(builder: (_) => InvitePage());
+        // return MaterialPageRoute(builder: (_) => InvitePage());
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => InvitePage(),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        );
         break;
       case routeMyInvite:
-        return MaterialPageRoute(builder: (_) => MyInvitationPage());
+        // return MaterialPageRoute(builder: (_) => MyInvitationPage());
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              MyInvitationPage(),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        );
         break;
       case routeConfiemInvite:
-        return MaterialPageRoute(builder: (_) => ConfirmInvitePage());
+        // return MaterialPageRoute(builder: (_) => ConfirmInvitePage());
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              ConfirmInvitePage(),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        );
         break;
       case routeEmployee:
-        return MaterialPageRoute(builder: (_) => EmployeePage());
+        // return MaterialPageRoute(builder: (_) => EmployeePage());
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              EmployeePage(),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        );
         break;
       case routeLogin:
-        return MaterialPageRoute(builder: (_) => WelcomePage());
+        // return MaterialPageRoute(builder: (_) => WelcomePage());
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              WelcomePage(),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        );
         break;
       case routeMyApp:
         return MaterialPageRoute(builder: (_) => MyApp());

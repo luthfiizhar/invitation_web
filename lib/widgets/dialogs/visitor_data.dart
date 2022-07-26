@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
@@ -7,6 +9,8 @@ import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
 
 class VisitorDataOverlay extends ModalRoute<void> {
+  VisitorDataOverlay({this.listDetail});
+  String? listDetail;
   List? visitorInfo = [
     {
       "FirstName": "Ayana",
@@ -66,6 +70,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
       padding: const EdgeInsets.all(15.0),
       child: LayoutBuilder(
         builder: (context, constraints) {
+          var detailList = json.decode(listDetail!);
           return Center(
             child: Container(
               width: Responsive.isDesktop(context) ? 1000 : 550,
@@ -80,7 +85,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                   child: Padding(
                     padding: Responsive.isDesktop(context)
                         ? EdgeInsets.only(left: 150, right: 150, top: 30)
-                        : EdgeInsets.only(left: 50, right: 50, top: 30),
+                        : EdgeInsets.only(left: 25, right: 25, top: 30),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -116,18 +121,39 @@ class VisitorDataOverlay extends ModalRoute<void> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
-                                height: 200,
-                                width: 200,
-                                child: Image.asset('assets/avatar_male.png'),
-                              ),
+                              detailList['VisitorPhoto'] == ""
+                                  ? Container(
+                                      height: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 200
+                                          : 100,
+                                      width: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 200
+                                          : 100,
+                                      child:
+                                          Image.asset('assets/avatar_male.png'),
+                                    )
+                                  : CircleAvatar(
+                                      radius: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 100
+                                          : 60,
+                                      backgroundImage: MemoryImage(
+                                        Base64Decoder().convert(
+                                            detailList['VisitorPhoto']!
+                                                .toString()
+                                                .split(',')
+                                                .last),
+                                      ),
+                                    ),
                             ],
                           ),
                         ),
                         //Content
                         Responsive.isDesktop(context)
-                            ? desktopLayout(context)
-                            : mobileLayout(),
+                            ? desktopLayout(context, listDetail!)
+                            : mobileLayout(context, listDetail!),
                       ],
                     ),
                   ),
@@ -140,7 +166,8 @@ class VisitorDataOverlay extends ModalRoute<void> {
     );
   }
 
-  Widget desktopLayout(BuildContext context) {
+  Widget desktopLayout(BuildContext context, String detail) {
+    var detailList = json.decode(detail);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -153,7 +180,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 50),
                 child: detailInfo(
                   'First Name',
-                  visitorInfo![0]["FirstName"],
+                  detailList["FirstName"],
                 ),
               ),
             ),
@@ -163,7 +190,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 50),
                 child: detailInfo(
                   'Last Name',
-                  visitorInfo![0]["LastName"],
+                  detailList["LastName"],
                 ),
               ),
             ),
@@ -173,29 +200,22 @@ class VisitorDataOverlay extends ModalRoute<void> {
           padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'Gender',
-            visitorInfo![0]["Gender"],
+            detailList["Gender"].toString(),
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'Email',
-            visitorInfo![0]["Email"],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 30),
-          child: detailInfo(
-            'Last Name',
-            visitorInfo![0]["LastName"],
+            detailList["Email"],
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 30),
           child: phoneInfo(
             'Phone Number',
-            visitorInfo![0]["PhoneCode"],
-            visitorInfo![0]["PhoneNumber"],
+            "",
+            detailList["PhoneNumber"].toString(),
           ),
         ),
         Padding(
@@ -214,7 +234,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 40),
                 child: detailInfo(
                   'Origin Company',
-                  visitorInfo![0]["Origin"],
+                  detailList["CompanyName"],
                 ),
               ),
             ),
@@ -224,7 +244,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 40),
                 child: detailInfo(
                   'Visit Reason',
-                  visitorInfo![0]["VisitReason"],
+                  detailList["VisitReason"].toString(),
                 ),
               ),
             ),
@@ -241,7 +261,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 ),
                 child: detailInfo(
                   'Visit Date',
-                  visitorInfo![0]["VisitDate"],
+                  detailList["VisitTime"],
                 ),
               ),
             ),
@@ -251,7 +271,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 40),
                 child: detailInfo(
                   'Meeting With',
-                  visitorInfo![0]["Employee"],
+                  detailList["MeetingWith"],
                 ),
               ),
             ),
@@ -269,7 +289,9 @@ class VisitorDataOverlay extends ModalRoute<void> {
                   child: RegularButton(
                     sizeFont: 24,
                     title: 'OK',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ),
               ),
@@ -283,7 +305,8 @@ class VisitorDataOverlay extends ModalRoute<void> {
     );
   }
 
-  mobileLayout() {
+  mobileLayout(BuildContext context, String detail) {
+    var detailList = json.decode(detail);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -291,43 +314,36 @@ class VisitorDataOverlay extends ModalRoute<void> {
           padding: EdgeInsets.only(top: 50),
           child: detailInfo(
             'First Name',
-            visitorInfo![0]["FirstName"],
+            detailList["FirstName"],
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'Last Name',
-            visitorInfo![0]["LastName"],
+            detailList["LastName"],
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'Gender',
-            visitorInfo![0]["Gender"],
+            detailList["Gender"],
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'Email',
-            visitorInfo![0]["Email"],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 30),
-          child: detailInfo(
-            'Last Name',
-            visitorInfo![0]["LastName"],
+            detailList["Email"],
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 30),
           child: phoneInfo(
             'Phone Number',
-            visitorInfo![0]["PhoneCode"],
-            visitorInfo![0]["PhoneNumber"],
+            "",
+            detailList["PhoneNumber"].toString(),
           ),
         ),
         Padding(
@@ -341,28 +357,28 @@ class VisitorDataOverlay extends ModalRoute<void> {
           padding: EdgeInsets.only(top: 40),
           child: detailInfo(
             'Origin Company',
-            visitorInfo![0]["Origin"],
+            detailList["CompanyName"],
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 40),
           child: detailInfo(
             'Visit Reason',
-            visitorInfo![0]["VisitReason"],
+            detailList["VisitReason"],
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 40),
           child: detailInfo(
             'Visit Date',
-            visitorInfo![0]["VisitDate"],
+            detailList["VisitTime"],
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 40),
           child: detailInfo(
             'Meeting With',
-            visitorInfo![0]["Employee"],
+            detailList["MeetingWith"],
           ),
         ),
         Padding(
@@ -374,7 +390,9 @@ class VisitorDataOverlay extends ModalRoute<void> {
               child: RegularButton(
                 sizeFont: 24,
                 title: 'OK',
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
               ),
             ),
           ),
@@ -395,7 +413,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
             '$label',
             style: TextStyle(
               fontSize:
-                  Responsive.isDesktop(navKey.currentState!.context) ? 24 : 20,
+                  Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
               fontWeight: FontWeight.w300,
               color: onyxBlack,
             ),
@@ -407,7 +425,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
               style: TextStyle(
                 fontSize: Responsive.isDesktop(navKey.currentState!.context)
                     ? 30
-                    : 24,
+                    : 16,
                 fontWeight: FontWeight.w700,
                 color: onyxBlack,
               ),
@@ -426,7 +444,8 @@ class VisitorDataOverlay extends ModalRoute<void> {
           Text(
             '$label',
             style: TextStyle(
-              fontSize: 24,
+              fontSize:
+                  Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
               fontWeight: FontWeight.w300,
               color: onyxBlack,
             ),
@@ -434,9 +453,11 @@ class VisitorDataOverlay extends ModalRoute<void> {
           Padding(
             padding: EdgeInsets.only(top: 10),
             child: Text(
-              '+$code $number',
+              '$number',
               style: TextStyle(
-                fontSize: 30,
+                fontSize: Responsive.isDesktop(navKey.currentState!.context)
+                    ? 30
+                    : 16,
                 fontWeight: FontWeight.w700,
                 color: onyxBlack,
               ),

@@ -278,7 +278,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
               children: [
                 Text(
                   'Visitor Detail ' + number.toString(),
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                 ),
                 TextButton.icon(
                   onPressed: () {

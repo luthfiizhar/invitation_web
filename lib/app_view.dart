@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class AppView extends StatelessWidget {
   final Widget? child;
-  int? index;
+  // int? index;
   AppView({@required this.child});
 
   @override
@@ -24,7 +24,7 @@ class AppView extends StatelessWidget {
       endDrawer: Responsive.isDesktop(context)
           ? null
           : Consumer<MainModel>(builder: (context, model, child) {
-              index = model.indexDrawer;
+              int index = model.indexDrawer;
               return CustomDrawer(
                 index: index,
               );

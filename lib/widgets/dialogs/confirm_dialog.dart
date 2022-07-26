@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
 
@@ -39,7 +40,7 @@ Future<bool> confirmDialog(
                       Text(
                         'Confirmation',
                         style: TextStyle(
-                          fontSize: 40,
+                          fontSize: Responsive.isDesktop(context) ? 40 : 24,
                           fontWeight: FontWeight.w700,
                           color: isDark ? scaffoldBg : eerieBlack,
                         ),
@@ -57,7 +58,7 @@ Future<bool> confirmDialog(
                         Text(
                           '$message',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: Responsive.isDesktop(context) ? 24 : 18,
                             fontWeight: FontWeight.w300,
                             color: isDark ? scaffoldBg : eerieBlack,
                           ),
@@ -68,11 +69,11 @@ Future<bool> confirmDialog(
                   Padding(
                     padding: const EdgeInsets.only(top: 30),
                     child: SizedBox(
-                      height: 50,
-                      width: 250,
+                      height: Responsive.isDesktop(context) ? 50 : 40,
+                      // width: 250,
                       child: RegularButton(
                         isDark: isDark,
-                        sizeFont: 20,
+                        sizeFont: Responsive.isDesktop(context) ? 20 : 16,
                         title: 'Confirm',
                         onTap: () {
                           Navigator.of(context).pop(true);
@@ -85,11 +86,11 @@ Future<bool> confirmDialog(
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: SizedBox(
-                      height: 50,
-                      width: 250,
+                      height: Responsive.isDesktop(context) ? 50 : 40,
+                      // width: 250,
                       child: CustTextButon(
                         isDark: isDark,
-                        // sizeFont: 20,
+                        fontSize: Responsive.isDesktop(context) ? 20 : 16,
                         label: 'Cancel',
                         onTap: () {
                           Navigator.of(context).pop(false);

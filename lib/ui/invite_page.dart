@@ -41,6 +41,7 @@ class _InvitePageState extends State<InvitePage> {
 
   final _formKey = new GlobalKey<FormState>();
   List<Visitor> visitorList = [];
+  Visitor? _visitorModel = Visitor(number: 1);
 
   List<MultiVisitorFOrm> formList = List.empty(growable: true);
   List<MultiVisitorFOrmMobile> formListMobile = List.empty(growable: true);
@@ -59,6 +60,17 @@ class _InvitePageState extends State<InvitePage> {
     print(name);
     print(date);
     // print(name);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    formList.add(MultiVisitorFOrm(
+      index: 0,
+      onRemove: onRemove,
+      visitorModel: _visitorModel,
+    ));
   }
 
   Future clearVisitorData() async {
@@ -223,6 +235,7 @@ class _InvitePageState extends State<InvitePage> {
 
   onRemove(Visitor visitor) {
     setState(() {
+      _visitorModel = Visitor(number: 1);
       int index =
           formList.indexWhere((element) => element.index == visitor.number);
 
@@ -234,6 +247,7 @@ class _InvitePageState extends State<InvitePage> {
 
   onSave() {
     bool allValid = true;
+    print(formList);
 
     //If any form validation function returns false means all forms are not valid
     // formList
@@ -350,23 +364,23 @@ class _InvitePageState extends State<InvitePage> {
                                   top: 21, bottom: 17, left: 30, right: 30),
                               focusColor: onyxBlack,
                               focusedErrorBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                     color: eerieBlack,
                                     width: 10,
                                   )),
                               focusedBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide:
                                       BorderSide(color: eerieBlack, width: 10)),
                               enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                       color: Color(0xFF929AAB), width: 2.5)),
                               fillColor: graySand,
                               filled: true,
                               errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                       color: eerieBlack, width: 2.5)),
                               border: OutlineInputBorder(
@@ -439,27 +453,27 @@ class _InvitePageState extends State<InvitePage> {
                                   top: 21, bottom: 17, left: 30, right: 30),
                               focusColor: onyxBlack,
                               focusedErrorBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                     color: eerieBlack,
                                     width: 10,
                                   )),
                               focusedBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide:
                                       BorderSide(color: eerieBlack, width: 10)),
                               enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                       color: Color(0xFF929AAB), width: 2.5)),
                               fillColor: graySand,
                               filled: true,
                               errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                       color: eerieBlack, width: 2.5)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                       color: Color(0xFF929AAB), width: 2.5)),
                               errorStyle:
@@ -493,7 +507,9 @@ class _InvitePageState extends State<InvitePage> {
                 index: 0,
               ),
               Padding(
-                padding: Responsive.isBigDesktop(context) ? EdgeInsets.only(top: 50, left: 500, right: 500) : EdgeInsets.only(top: 50, left: 300, right: 300),
+                padding: Responsive.isBigDesktop(context)
+                    ? EdgeInsets.only(top: 50, left: 500, right: 500)
+                    : EdgeInsets.only(top: 50, left: 300, right: 300),
                 child: Container(
                   // color: Colors.red,
                   child: Column(
@@ -537,6 +553,7 @@ class _InvitePageState extends State<InvitePage> {
                                   )
                                 : SizedBox(),
                             ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: formList.length,
                               itemBuilder: (context, index) {
@@ -553,14 +570,14 @@ class _InvitePageState extends State<InvitePage> {
                             padding: EdgeInsets.zero,
                             onPressed: () {
                               setState(() {
-                                Visitor _visitorModel =
+                                _visitorModel =
                                     Visitor(number: formList.length);
 
                                 formList.add(MultiVisitorFOrm(
                                   index: formList.length,
                                   visitorModel: _visitorModel,
                                   onRemove: () {
-                                    onRemove(_visitorModel);
+                                    onRemove(_visitorModel!);
                                   },
                                 ));
                               });
@@ -583,7 +600,8 @@ class _InvitePageState extends State<InvitePage> {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
                                 onSave();
-
+                                print('visitorList');
+                                print(visitorList);
                                 var json = jsonEncode(visitorList);
                                 saveInviteVisitorData(json);
                                 print(visitorList.toList());
@@ -631,186 +649,175 @@ class _InvitePageState extends State<InvitePage> {
   }
 
   Widget inputDateContainerMobile() {
-    return Container(
-      padding: EdgeInsets.only(top: 40),
-      // width: 700,
-      // color: Colors.blue,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: Column(
+    return Column(
+      children: [
+        Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Visitation Start',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: eerieBlack),
-                      ),
-                    ),
-                  ],
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Container(
-                    // height: 50,
-                    padding: EdgeInsets.zero,
-                    child: TextFormField(
-                      validator: (value) =>
-                          value == "" ? "This field is required" : null,
-                      cursorColor: onyxBlack,
-                      focusNode: startDateNode,
-                      controller: _startDate,
-                      onTap: () {
-                        // FocusScope.of(context)
-                        //     .requestFocus(new FocusNode());
-                        _selectDate(_startDate);
-                      },
-                      onSaved: (value) {
-                        setState(() {
-                          startDate = _startDate.text;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        isDense: true,
-                        isCollapsed: true,
-                        hintText: 'Click here to select start date',
-                        hintStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        contentPadding: EdgeInsets.only(
-                            top: 21, bottom: 17, left: 30, right: 30),
-                        focusColor: onyxBlack,
-                        focusedErrorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                              color: eerieBlack,
-                              width: 10,
-                            )),
-                        focusedBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 10)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                                color: Color(0xFF929AAB), width: 2.5)),
-                        fillColor: graySand,
-                        filled: true,
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 2.5)),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                                color: Color(0xFF929AAB), width: 2.5)),
-                        errorStyle: TextStyle(color: silver, fontSize: 18),
-                      ),
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF393E46)),
-                    ),
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    'Visitation Start',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: eerieBlack),
                   ),
                 ),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Visitation End',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: eerieBlack),
-                      ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Container(
+                // height: 50,
+                padding: EdgeInsets.zero,
+                child: TextFormField(
+                  validator: (value) =>
+                      value == "" ? "This field is required" : null,
+                  cursorColor: onyxBlack,
+                  focusNode: startDateNode,
+                  controller: _startDate,
+                  onTap: () {
+                    // FocusScope.of(context)
+                    //     .requestFocus(new FocusNode());
+                    _selectDate(_startDate);
+                  },
+                  onSaved: (value) {
+                    setState(() {
+                      startDate = _startDate.text;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    isDense: true,
+                    isCollapsed: true,
+                    hintText: 'Click here to select start date',
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
                     ),
-                  ],
+                    contentPadding: EdgeInsets.only(
+                        top: 20, bottom: 20, left: 30, right: 30),
+                    focusColor: onyxBlack,
+                    focusedErrorBorder: UnderlineInputBorder(
+                        borderRadius: BorderRadius.circular(7),
+                        borderSide: BorderSide(
+                          color: eerieBlack,
+                          width: 10,
+                        )),
+                    focusedBorder: UnderlineInputBorder(
+                        borderRadius: BorderRadius.circular(7),
+                        borderSide: BorderSide(color: eerieBlack, width: 10)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(7),
+                        borderSide:
+                            BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+                    fillColor: graySand,
+                    filled: true,
+                    errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: eerieBlack, width: 2.5)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide:
+                            BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+                    errorStyle: TextStyle(color: silver, fontSize: 14),
+                  ),
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFF393E46)),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Container(
-                    // height: 50,
-                    padding: EdgeInsets.zero,
-                    child: TextFormField(
-                      validator: (value) =>
-                          value == "" ? "This field is required" : null,
-                      cursorColor: onyxBlack,
-                      focusNode: endDateNode,
-                      controller: _endDate,
-                      onTap: () {
-                        // FocusScope.of(context)
-                        //     .requestFocus(new FocusNode());
-                        _selectDate(_endDate);
-                      },
-                      onSaved: (value) {
-                        endDate = _endDate.text;
-                      },
-                      decoration: InputDecoration(
-                        isDense: true,
-                        isCollapsed: true,
-                        hintText: 'Click here to select end date',
-                        hintStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        contentPadding: EdgeInsets.only(
-                            top: 21, bottom: 17, left: 30, right: 30),
-                        focusColor: onyxBlack,
-                        focusedErrorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                              color: eerieBlack,
-                              width: 10,
-                            )),
-                        focusedBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 10)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                                color: Color(0xFF929AAB), width: 2.5)),
-                        fillColor: graySand,
-                        filled: true,
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 2.5)),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                                color: Color(0xFF929AAB), width: 2.5)),
-                        errorStyle: TextStyle(color: silver, fontSize: 18),
-                      ),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Text(
+                      'Visitation End',
                       style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF393E46)),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: eerieBlack),
                     ),
                   ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Container(
+                  // height: 50,
+                  padding: EdgeInsets.zero,
+                  child: TextFormField(
+                    validator: (value) =>
+                        value == "" ? "This field is required" : null,
+                    cursorColor: onyxBlack,
+                    focusNode: endDateNode,
+                    controller: _endDate,
+                    onTap: () {
+                      // FocusScope.of(context)
+                      //     .requestFocus(new FocusNode());
+                      _selectDate(_endDate);
+                    },
+                    onSaved: (value) {
+                      endDate = _endDate.text;
+                    },
+                    decoration: InputDecoration(
+                      isDense: true,
+                      isCollapsed: true,
+                      hintText: 'Click here to select end date',
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      contentPadding: EdgeInsets.only(
+                          top: 20, bottom: 20, left: 30, right: 30),
+                      focusColor: onyxBlack,
+                      focusedErrorBorder: UnderlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: eerieBlack,
+                            width: 14,
+                          )),
+                      focusedBorder: UnderlineInputBorder(
+                          borderRadius: BorderRadius.circular(7),
+                          borderSide: BorderSide(color: eerieBlack, width: 10)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(7),
+                          borderSide:
+                              BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+                      fillColor: graySand,
+                      filled: true,
+                      errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(7),
+                          borderSide:
+                              BorderSide(color: eerieBlack, width: 2.5)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(7),
+                          borderSide:
+                              BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+                      errorStyle: TextStyle(color: silver, fontSize: 14),
+                    ),
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF393E46)),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -822,7 +829,7 @@ class _InvitePageState extends State<InvitePage> {
             [
               NavigationBarMobile(),
               Padding(
-                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
+                padding: EdgeInsets.only(top: 10, left: 35, right: 35),
                 child: Container(
                   // color: Colors.red,
                   child: Column(
@@ -831,7 +838,7 @@ class _InvitePageState extends State<InvitePage> {
                       Text(
                         'Invite Visitor',
                         style: TextStyle(
-                            fontSize: 48, fontWeight: FontWeight.w700),
+                            fontSize: 24, fontWeight: FontWeight.w700),
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 10),
@@ -842,7 +849,7 @@ class _InvitePageState extends State<InvitePage> {
                               Text(
                                 'Please fill visitor\'s name & email below. We will send them an email to complete their data.',
                                 style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.w300),
+                                    fontSize: 14, fontWeight: FontWeight.w300),
                               ),
                             ],
                           ),
@@ -853,7 +860,7 @@ class _InvitePageState extends State<InvitePage> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(top: 10),
+                              padding: EdgeInsets.only(top: 20),
                               child: inputDateContainerMobile(),
                             ),
                             formList.length > 0
@@ -866,6 +873,7 @@ class _InvitePageState extends State<InvitePage> {
                                   )
                                 : SizedBox(),
                             ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: formList.length,
                               itemBuilder: (context, index) {
@@ -882,32 +890,41 @@ class _InvitePageState extends State<InvitePage> {
                             padding: EdgeInsets.zero,
                             onPressed: () {
                               setState(() {
-                                Visitor _visitorModel =
+                                _visitorModel =
                                     Visitor(number: formList.length);
 
                                 formList.add(MultiVisitorFOrm(
                                   index: formList.length,
                                   visitorModel: _visitorModel,
                                   onRemove: () {
-                                    onRemove(_visitorModel);
+                                    onRemove(_visitorModel!);
                                   },
                                 ));
                               });
                             },
                             icon: Icon(
                               Icons.add_circle_outline,
-                              size: 40,
+                              size: 35,
                             ),
                           ),
                         ),
                       ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(top: 20, bottom: 30),
+                      //   child: Center(
+                      //     child: ImageIcon(
+                      //       AssetImage('assets/Add.png'),
+                      //       size: 35,
+                      //     ),
+                      //   ),
+                      // ),
                       Center(
                         child: SizedBox(
-                          height: 60,
-                          width: 275,
+                          height: 40,
+                          // width: 275,
                           child: RegularButton(
                             title: 'Next',
-                            sizeFont: 24,
+                            sizeFont: 16,
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();

@@ -12,6 +12,7 @@ import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/my_app.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
+import 'package:navigation_example/ui/employee_page.dart';
 import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/input_field.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
@@ -19,7 +20,8 @@ import 'package:navigation_example/widgets/regular_button.dart';
 class WelcomePage extends StatelessWidget {
   // const WelcomePage({Key? key}) : super(key: key);
   Future loginAuth() async {
-    var url = Uri.http(apiUrl, '/api/login-hcplus');
+    var url =
+        Uri.https(apiUrl, '/VisitorManagementBackend/public/api/login-hcplus');
     Map<String, String> requestHeader = {
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
       'Content-Type': 'application/json'
@@ -38,12 +40,19 @@ class WelcomePage extends StatelessWidget {
       var box = await Hive.openBox('userLogin');
       box.put('nip', data['Data']['NIP'] != null ? data['Data']['NIP'] : "");
       box.put('name', data['Data']['Name'] != null ? data['Data']['Name'] : "");
+      box.put(
+          'phoneNumber',
+          data['Data']['PhoneNumber'] != null
+              ? data['Data']['PhoneNumber']
+              : "");
+      box.put(
+          'email', data['Data']['Email'] != null ? data['Data']['Email'] : "");
       box.put('jwtToken',
           data['Data']['Token'] != null ? data['Data']['Token'] : "");
 
-      return data['Status'];
+      return data;
     } else {
-      return data['Status'];
+      return data;
     }
   }
 
@@ -52,7 +61,10 @@ class WelcomePage extends StatelessWidget {
       _formKey.currentState!.save();
 
       loginAuth().then((value) {
-        if (value == '200') {
+        if (value['Status'] == '200') {
+          if (value['Data']['FirstLogin'] == true) {
+            Navigator.of(context).pushReplacementNamed(routeEmployee);
+          }
           Navigator.of(context).pushReplacementNamed(routeInvite);
         }
       });
@@ -143,8 +155,10 @@ class WelcomePage extends StatelessWidget {
                               //     image: AssetImage('assets/welcome_page_image.png')),
                               ),
                           child: Padding(
-                            padding:
-                                EdgeInsets.only(top: 100, left: 0, right: 0),
+                            padding: Responsive.isBigDesktop(context)
+                                ? EdgeInsets.only(
+                                    top: 100, left: 150, right: 150)
+                                : EdgeInsets.only(top: 100, left: 0, right: 0),
                             child: Container(
                               // color: Colors.blue,
                               child: Row(
@@ -158,8 +172,12 @@ class WelcomePage extends StatelessWidget {
                                         // color: Colors.amber,
                                         // padding:
                                         //     EdgeInsets.only(right: 70, top: 30),
-                                        width: 550,
-                                        height: 500,
+                                        width: Responsive.isBigDesktop(context)
+                                            ? 650
+                                            : 550,
+                                        height: Responsive.isBigDesktop(context)
+                                            ? 600
+                                            : 500,
                                         child: SvgPicture.asset(
                                             'assets/Ilustrasi Welcome Website B.svg',
                                             fit: BoxFit.fitHeight),
@@ -217,7 +235,7 @@ class WelcomePage extends StatelessWidget {
                                                           'Visitor Invitation',
                                                           style: TextStyle(
                                                             // letterSpacing: 1,
-                                                            fontSize: 64,
+                                                            fontSize: 48,
                                                             fontWeight:
                                                                 FontWeight.w700,
                                                             color: eerieBlack,
@@ -443,18 +461,21 @@ class WelcomePage extends StatelessWidget {
                           padding: EdgeInsets.only(
                             top: 15,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Please login using HC Plus for using the site',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                  color: onyxBlack,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.start,
+                              children: [
+                                Text(
+                                  'Please login using HC Plus for using the site',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                    color: onyxBlack,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         Padding(

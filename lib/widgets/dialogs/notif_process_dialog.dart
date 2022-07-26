@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 
 class NotifProcessDialog extends ModalRoute<void> {
@@ -57,7 +58,9 @@ class NotifProcessDialog extends ModalRoute<void> {
                 borderRadius: BorderRadius.circular(15),
                 color: scaffoldBg,
               ),
-              width: 700,
+              width: Responsive.isDesktop(context)
+                  ? 700
+                  : MediaQuery.of(context).size.width * 0.95,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -94,7 +97,7 @@ class NotifProcessDialog extends ModalRoute<void> {
                       child: Text(
                         isSuccess! ? 'Success' : 'Failed',
                         style: TextStyle(
-                          fontSize: 48,
+                          fontSize: Responsive.isDesktop(context) ? 48 : 24,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -107,7 +110,7 @@ class NotifProcessDialog extends ModalRoute<void> {
                               ? 'Add invitation success'
                               : 'Something wrong!',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: Responsive.isDesktop(context) ? 24 : 14,
                             fontWeight: FontWeight.w300,
                             color: onyxBlack,
                           ),
@@ -120,7 +123,7 @@ class NotifProcessDialog extends ModalRoute<void> {
                         height: 50,
                         width: 250,
                         child: RegularButton(
-                          sizeFont: 24,
+                          sizeFont: Responsive.isDesktop(context) ? 24 : 16,
                           title: 'OK',
                           onTap: () {
                             Navigator.pop(context);

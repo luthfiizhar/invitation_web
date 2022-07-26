@@ -71,6 +71,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     String maxPage,
     String sortBy,
     bool sortType,
+    int sortMenu,
   ) async {
     var type = '';
     setState(() {
@@ -87,7 +88,13 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(jwt);
 
-    final url = Uri.http(apiUrl, '/api/invitation/invitation-list');
+    final url = Uri.https(apiUrl,
+        '/VisitorManagementBackend/public/api/invitation/invitation-list');
+    final url_past = Uri.https(apiUrl,
+        '/VisitorManagementBackend/public/api/invitation/invitation-list-past');
+    final url_cancel = Uri.https(apiUrl,
+        '/VisitorManagementBackend/public/api/invitation/invitation-list-cancel');
+
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -102,7 +109,18 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
       }
     """;
 
-    var response = await http.post(url, headers: requestHeader, body: bodySend);
+    var response;
+    if (sortMenu == 1) {
+      response = await http.post(url, headers: requestHeader, body: bodySend);
+    }
+    if (sortMenu == 2) {
+      response =
+          await http.post(url_past, headers: requestHeader, body: bodySend);
+    }
+    if (sortMenu == 3) {
+      response =
+          await http.post(url_cancel, headers: requestHeader, body: bodySend);
+    }
     var data = json.decode(response.body);
     print('data active : ' + data['Data'].toString());
     // final response = await http.get(requestUri);
@@ -154,7 +172,8 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(jwt);
 
-    final url = Uri.http(apiUrl, '/api/invitation/get-invitation-detail');
+    final url = Uri.https(apiUrl,
+        '/VisitorManagementBackend/public/api/invitation/get-invitation-detail');
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -198,14 +217,21 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     setState(() {
       selectedMenu = newIndex;
     });
+    getActiveInvitations(
+      myActiveInvitePage.toString(),
+      rowPerPage.toString(),
+      sortBy,
+      _sortAsc,
+      selectedMenu,
+    );
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getActiveInvitations(
-            myActiveInvitePage.toString(), rowPerPage.toString(), sortBy, true)
+    getActiveInvitations(myActiveInvitePage.toString(), rowPerPage.toString(),
+            sortBy, true, selectedMenu)
         .then((value) {
       setState(() {
         isLoading = false;
@@ -421,6 +447,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: myInviteMenu.length,
+                                shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   var menuName = myInviteMenu[index]['menu'];
                                   var selected = myInviteMenu[index]['id'];
@@ -465,21 +492,23 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                             // height: 600,
                             width: 1000,
                             // color: Colors.black,
-                            child: Builder(
-                              builder: (context) {
-                                if (selectedMenu == 1) {
-                                  return activeInvitationListViewDesktop(
-                                      contohData, visitors);
-                                }
-                                if (selectedMenu == 2) {
-                                  return Text('past');
-                                }
-                                if (selectedMenu == 3) {
-                                  return Text('Canceled');
-                                }
-                                return SizedBox();
-                              },
-                            ),
+                            child: activeInvitationListViewDesktop(
+                                contohData, visitors, selectedMenu),
+                            // child: Builder(
+                            //   builder: (context) {
+                            //     if (selectedMenu == 1) {
+                            //       return activeInvitationListViewDesktop(
+                            //           contohData, visitors);
+                            //     }
+                            //     if (selectedMenu == 2) {
+                            //       return Text('past');
+                            //     }
+                            //     if (selectedMenu == 3) {
+                            //       return Text('Canceled');
+                            //     }
+                            //     return SizedBox();
+                            //   },
+                            // ),
                           ),
                         ),
                       ),
@@ -525,7 +554,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                                 Text(
                                   'My Invitation',
                                   style: TextStyle(
-                                      fontSize: 34,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.w700),
                                 ),
                               ],
@@ -539,7 +568,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                                   child: Text(
                                     'All of your booking listing can be found here.',
                                     style: TextStyle(
-                                        fontSize: 26,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.w300),
                                   ),
                                 ),
@@ -552,22 +581,49 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(top: 40),
+                            padding: EdgeInsets.only(top: 20),
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
                               height: 60,
                               // color: Colors.blue,
+                              // child: ListView(
+                              //   children: [
+                              //     MyInviteMenuMobile(
+                              //       menuName: myInviteMenu[0]['menu'],
+                              //       selected: selectedMenu == 1,
+                              //       onHighlight: onHighlight,
+                              //       index: 1,
+                              //     ),
+                              //     MyInviteMenuMobile(
+                              //       menuName: myInviteMenu[1]['menu'],
+                              //       selected: selectedMenu == 2,
+                              //       onHighlight: onHighlight,
+                              //       index: 2,
+                              //     ),
+                              //     MyInviteMenuMobile(
+                              //       menuName: myInviteMenu[2]['menu'],
+                              //       selected: selectedMenu == 3,
+                              //       onHighlight: onHighlight,
+                              //       index: 3,
+                              //     ),
+                              //   ],
+                              // ),
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.symmetric(horizontal: 5),
                                 itemCount: myInviteMenu.length,
                                 itemBuilder: (context, index) {
                                   var menuName = myInviteMenu[index]['menu'];
                                   var selected = myInviteMenu[index]['id'];
-                                  return MyInviteMenu(
-                                    menuName: menuName,
-                                    selected: selectedMenu == selected,
-                                    onHighlight: onHighlight,
-                                    index: index + 1,
+                                  return Padding(
+                                    padding: EdgeInsets.zero,
+                                    child: MyInviteMenuMobile(
+                                      menuName: menuName,
+                                      selected: selectedMenu == selected,
+                                      onHighlight: onHighlight,
+                                      index: index + 1,
+                                    ),
                                   );
                                 },
                               ),
@@ -603,22 +659,24 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                           child: Container(
                             // height: 600,
                             width: 1000,
+                            child: activeInvitationListViewMobile(
+                                contohData, visitors, selectedMenu),
                             // color: Colors.black,
-                            child: Builder(
-                              builder: (context) {
-                                if (selectedMenu == 1) {
-                                  return activeInvitationListViewMobile(
-                                      contohData, visitors);
-                                }
-                                if (selectedMenu == 2) {
-                                  return Text('past');
-                                }
-                                if (selectedMenu == 3) {
-                                  return Text('Canceled');
-                                }
-                                return SizedBox();
-                              },
-                            ),
+                            // child: Builder(
+                            //   builder: (context) {
+                            //     if (selectedMenu == 1) {
+                            //       return activeInvitationListViewMobile(
+                            //           contohData, visitors);
+                            //     }
+                            //     if (selectedMenu == 2) {
+                            //       return Text('past');
+                            //     }
+                            //     if (selectedMenu == 3) {
+                            //       return Text('Canceled');
+                            //     }
+                            //     return SizedBox();
+                            //   },
+                            // ),
                           ),
                         ),
                       ),
@@ -649,7 +707,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     });
   }
 
-  Widget activeInvitationListViewDesktop(List data, List visitor) {
+  Widget activeInvitationListViewDesktop(List data, List visitor, int menu) {
     return Container(
       padding: EdgeInsets.only(bottom: 50),
       width: 900,
@@ -664,8 +722,13 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                     sortAscId ? sortAscId = false : sortAscId = true;
                     sortAscTemp = sortAscId;
                     sortBy = "InvitationID";
-                    getActiveInvitations(myActiveInvitePage.toString(),
-                        rowPerPage.toString(), sortBy, sortAscTemp);
+                    getActiveInvitations(
+                      myActiveInvitePage.toString(),
+                      rowPerPage.toString(),
+                      sortBy,
+                      sortAscTemp,
+                      selectedMenu,
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -693,8 +756,13 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                     sortAscTime ? sortAscTime = false : sortAscTime = true;
                     sortBy = "VisitTime";
                     sortAscTemp = sortAscTime;
-                    getActiveInvitations(myActiveInvitePage.toString(),
-                        rowPerPage.toString(), sortBy, sortAscTemp);
+                    getActiveInvitations(
+                      myActiveInvitePage.toString(),
+                      rowPerPage.toString(),
+                      sortBy,
+                      sortAscTemp,
+                      selectedMenu,
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -729,8 +797,13 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                     // print(sortAscTotal);
 
                     sortBy = "TotalVisitor";
-                    getActiveInvitations(myActiveInvitePage.toString(),
-                        rowPerPage.toString(), sortBy, sortAscTemp);
+                    getActiveInvitations(
+                      myActiveInvitePage.toString(),
+                      rowPerPage.toString(),
+                      sortBy,
+                      sortAscTemp,
+                      selectedMenu,
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -843,8 +916,13 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                             rowPerPage = value!;
                           });
 
-                          getActiveInvitations(myActiveInvitePage.toString(),
-                              rowPerPage.toString(), sortBy, sortAscTemp);
+                          getActiveInvitations(
+                            myActiveInvitePage.toString(),
+                            rowPerPage.toString(),
+                            sortBy,
+                            sortAscTemp,
+                            selectedMenu,
+                          );
                         },
                       ),
                     )
@@ -861,10 +939,12 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                           ? () {
                               myActiveInvitePage = myActiveInvitePage - 1;
                               getActiveInvitations(
-                                  myActiveInvitePage.toString(),
-                                  rowPerPage.toString(),
-                                  sortBy,
-                                  sortAscTemp);
+                                myActiveInvitePage.toString(),
+                                rowPerPage.toString(),
+                                sortBy,
+                                sortAscTemp,
+                                selectedMenu,
+                              );
                             }
                           : null,
                       child: Wrap(
@@ -902,11 +982,12 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                                 myActiveInvitePage = myActiveInvitePage + 1;
                               });
                               getActiveInvitations(
-                                      myActiveInvitePage.toString(),
-                                      rowPerPage.toString(),
-                                      sortBy,
-                                      sortAscTemp)
-                                  .then((value) {
+                                myActiveInvitePage.toString(),
+                                rowPerPage.toString(),
+                                sortBy,
+                                sortAscTemp,
+                                selectedMenu,
+                              ).then((value) {
                                 setState(() {
                                   isLoading = false;
                                 });
@@ -944,7 +1025,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     );
   }
 
-  Widget activeInvitationListViewMobile(List data, List visitor) {
+  Widget activeInvitationListViewMobile(List data, List visitor, int menu) {
     return Container(
       padding: EdgeInsets.only(bottom: 50),
       // width: 900,
@@ -996,12 +1077,12 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                         ),
                       ),
                       DropdownButtonHideUnderline(
-                        child: DropdownButton(
+                        child: DropdownButton<int>(
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w300,
                           ),
-                          value: 10,
+                          value: rowPerPage,
                           items: [
                             // DropdownMenuItem(
                             //   child: Text('5'),
@@ -1024,7 +1105,19 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                               value: 100,
                             ),
                           ],
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            setState(() {
+                              rowPerPage = value!;
+                            });
+
+                            getActiveInvitations(
+                              myActiveInvitePage.toString(),
+                              rowPerPage.toString(),
+                              sortBy,
+                              sortAscTemp,
+                              selectedMenu,
+                            );
+                          },
                         ),
                       )
                     ],
@@ -1046,6 +1139,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                                   rowPerPage.toString(),
                                   sortBy,
                                   sortAscTemp,
+                                  selectedMenu,
                                 ).then((value) {
                                   // setState(() {
                                   //   isLoading = false;
@@ -1091,6 +1185,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                                   rowPerPage.toString(),
                                   sortBy,
                                   sortAscTemp,
+                                  selectedMenu,
                                 ).then((value) {
                                   // setState(() {
                                   //   isLoading = false;
@@ -1203,6 +1298,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                           rowPerPage.toString(),
                           sortBy,
                           sortAscTemp,
+                          selectedMenu,
                         ).then((value) {
                           isLoading = false;
                         });

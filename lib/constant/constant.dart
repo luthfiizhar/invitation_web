@@ -35,9 +35,8 @@ final TextStyle tableBodyCode = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 18,
     fontWeight: FontWeight.w700);
 
-final TextStyle tableHeader = TextStyle(
-    fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 18,
-    fontWeight: FontWeight.w700);
+final TextStyle tableHeader =
+    TextStyle(fontSize: 24, fontWeight: FontWeight.w700);
 
 final TextStyle textButton = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 18,
@@ -58,4 +57,5 @@ final TextStyle textButtonRegular = TextStyle(
   color: eerieBlack,
 );
 
-String apiUrl = '172.17.155.37:8500';
+// String apiUrl = "10.100.206.7:8500";//'172.17.155.37:8500';
+String apiUrl = "fmklg.klgsys.com";

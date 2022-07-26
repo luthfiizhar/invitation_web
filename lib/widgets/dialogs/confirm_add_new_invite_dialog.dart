@@ -5,7 +5,9 @@ import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/model/main_model.dart';
+import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
+import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:navigation_example/widgets/text_button.dart';
@@ -66,7 +68,8 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
   Future saveAddVisitor(String eventId, String newList) async {
     var box = await Hive.openBox('userLogin');
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
-    final url = Uri.http(apiUrl, '/api/visitor/add-new-visitor');
+    final url = Uri.https(
+        apiUrl, '/VisitorManagementBackend/public/api/visitor/add-new-visitor');
 
     newList = json.encode(list);
     Map<String, String> requestHeader = {
@@ -86,7 +89,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
     print(data);
     // if (data['Status'] == '200') {
     // } else {}
-    return data['Status'];
+    return data;
   }
 
   @override
@@ -97,7 +100,9 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
       visitorList = model.listInvite;
       list = json.decode(visitorList.toString());
       return Padding(
-        padding: const EdgeInsets.all(15),
+        padding: Responsive.isDesktop(context)
+            ? EdgeInsets.all(15.0)
+            : EdgeInsets.only(top: 15, bottom: 15),
         child: StatefulBuilder(
           builder: (context, setState) {
             return Center(
@@ -329,7 +334,16 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
       if (value) {
         saveAddVisitor(eventID!, "").then((value) {
           print(value);
-          Navigator.of(context).pop();
+          if (value['Status'] == '200') {
+            Navigator.of(context)
+                .push(NotifProcessDialog(isSuccess: true))
+                .then((value) => Navigator.of(context).pop());
+          } else {
+            Navigator.of(context)
+                .push(NotifProcessDialog(isSuccess: false))
+                .then((value) => Navigator.of(context).pop());
+          }
+          // Navigator.of(context).pop();
           // Navigator.pushReplacementNamed(
           //   context, routeInvite);
         });

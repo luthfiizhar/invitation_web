@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
 import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
@@ -117,7 +118,8 @@ class ChangeVisitDialog extends ModalRoute<void> {
     // print('$eventId');
     var box = await Hive.openBox('userLogin');
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
-    final url = Uri.http(apiUrl, '/api/event/update-event-date');
+    final url = Uri.https(
+        apiUrl, '/VisitorManagementBackend/public/api/event/update-event-date');
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -209,7 +211,9 @@ class ChangeVisitDialog extends ModalRoute<void> {
     // TODO: implement buildPage
 
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: Responsive.isDesktop(context)
+          ? EdgeInsets.all(15.0)
+          : EdgeInsets.only(top: 15, bottom: 15),
       child: StatefulBuilder(
         builder: (context, setState) {
           return SingleChildScrollView(
@@ -252,7 +256,9 @@ class ChangeVisitDialog extends ModalRoute<void> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 20),
-                        child: inputDateContainer(),
+                        child: Responsive.isDesktop(context)
+                            ? inputDateContainer()
+                            : inputDateContainerMobile(),
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 60, bottom: 40),
@@ -266,7 +272,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                                     eventID!, _startDate.text, _endDate.text);
                               },
                               title: 'Confirm',
-                              sizeFont: 24,
+                              sizeFont: Responsive.isDesktop(context) ? 24 : 16,
                             ),
                           ),
                         ),
@@ -310,192 +316,364 @@ class ChangeVisitDialog extends ModalRoute<void> {
     if (picked != null) setState(() => controller.text = formattedDate);
   }
 
+  Widget inputDateContainerMobile() {
+    return Container(
+      padding: EdgeInsets.only(top: 30),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Text(
+                        'Visitation Start',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: eerieBlack),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Container(
+                    height: 50,
+                    padding: EdgeInsets.zero,
+                    child: TextFormField(
+                      cursorColor: onyxBlack,
+                      focusNode: startDateNode,
+                      controller: _startDate,
+                      onTap: () {
+                        FocusScope.of(navKey.currentState!.context)
+                            .requestFocus(new FocusNode());
+                        _selectDate(_startDate);
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                          startDate = _startDate.text;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        isDense: true,
+                        isCollapsed: true,
+                        hintText: '',
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        contentPadding: EdgeInsets.only(
+                            top: 20, bottom: 20, left: 30, right: 30),
+                        focusColor: onyxBlack,
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: eerieBlack,
+                              width: 2.5,
+                            )),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: eerieBlack, width: 2.5)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Color(0xFF929AAB), width: 2.5)),
+                        fillColor: graySand,
+                        filled: true,
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: eerieBlack, width: 2.5)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Color(0xFF929AAB), width: 2.5)),
+                        errorStyle: TextStyle(color: silver, fontSize: 14),
+                      ),
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF393E46)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Text(
+                        'Visitation End',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: eerieBlack),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Container(
+                    height: 50,
+                    padding: EdgeInsets.zero,
+                    child: TextFormField(
+                      cursorColor: onyxBlack,
+                      focusNode: endDateNode,
+                      controller: _endDate,
+                      onTap: () {
+                        FocusScope.of(navKey.currentState!.context)
+                            .requestFocus(new FocusNode());
+                        _selectDate(_endDate);
+                      },
+                      onSaved: (value) {
+                        endDate = _endDate.text;
+                      },
+                      decoration: InputDecoration(
+                        isDense: true,
+                        isCollapsed: true,
+                        hintText: '',
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        contentPadding: EdgeInsets.only(
+                            top: 20, bottom: 20, left: 30, right: 30),
+                        focusColor: onyxBlack,
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: eerieBlack,
+                              width: 2.5,
+                            )),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: eerieBlack, width: 2.5)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Color(0xFF929AAB), width: 2.5)),
+                        fillColor: graySand,
+                        filled: true,
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: eerieBlack, width: 2.5)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Color(0xFF929AAB), width: 2.5)),
+                        errorStyle: TextStyle(color: silver, fontSize: 14),
+                      ),
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF393E46)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget inputDateContainer() {
     return Container(
       padding: EdgeInsets.only(top: 40),
       // width: 700,
       // color: Colors.blue,
-      child: Column(
+      child: Row(
         children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 6,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: Column(
+          Expanded(
+            flex: 6,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Text(
-                              'Visitation Start',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: eerieBlack),
-                            ),
-                          ),
-                        ],
-                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Container(
-                          height: 50,
-                          padding: EdgeInsets.zero,
-                          child: TextFormField(
-                            cursorColor: onyxBlack,
-                            focusNode: startDateNode,
-                            controller: _startDate,
-                            onTap: () {
-                              FocusScope.of(navKey.currentState!.context)
-                                  .requestFocus(new FocusNode());
-                              _selectDate(_startDate);
-                            },
-                            onSaved: (value) {
-                              setState(() {
-                                startDate = _startDate.text;
-                              });
-                            },
-                            decoration: InputDecoration(
-                              isDense: true,
-                              isCollapsed: true,
-                              hintText: '',
-                              hintStyle: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  top: 21, bottom: 17, left: 30, right: 30),
-                              focusColor: onyxBlack,
-                              focusedErrorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                    color: eerieBlack,
-                                    width: 2.5,
-                                  )),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                      color: eerieBlack, width: 2.5)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF929AAB), width: 2.5)),
-                              fillColor: graySand,
-                              filled: true,
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                      color: eerieBlack, width: 2.5)),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF929AAB), width: 2.5)),
-                              errorStyle:
-                                  TextStyle(color: silver, fontSize: 18),
-                            ),
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFF393E46)),
-                          ),
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Visitation Start',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: eerieBlack),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 6,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Text(
-                              'Visitation End',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: eerieBlack),
-                            ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Container(
+                      height: 50,
+                      padding: EdgeInsets.zero,
+                      child: TextFormField(
+                        cursorColor: onyxBlack,
+                        focusNode: startDateNode,
+                        controller: _startDate,
+                        onTap: () {
+                          FocusScope.of(navKey.currentState!.context)
+                              .requestFocus(new FocusNode());
+                          _selectDate(_startDate);
+                        },
+                        onSaved: (value) {
+                          setState(() {
+                            startDate = _startDate.text;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          isDense: true,
+                          isCollapsed: true,
+                          hintText: '',
+                          hintStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
                           ),
-                        ],
+                          contentPadding: EdgeInsets.only(
+                              top: 21, bottom: 17, left: 30, right: 30),
+                          focusColor: onyxBlack,
+                          focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: eerieBlack,
+                                width: 2.5,
+                              )),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide:
+                                  BorderSide(color: eerieBlack, width: 2.5)),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                  color: Color(0xFF929AAB), width: 2.5)),
+                          fillColor: graySand,
+                          filled: true,
+                          errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide:
+                                  BorderSide(color: eerieBlack, width: 2.5)),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                  color: Color(0xFF929AAB), width: 2.5)),
+                          errorStyle: TextStyle(color: silver, fontSize: 18),
+                        ),
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF393E46)),
                       ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 6,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Container(
-                          height: 50,
-                          padding: EdgeInsets.zero,
-                          child: TextFormField(
-                            cursorColor: onyxBlack,
-                            focusNode: endDateNode,
-                            controller: _endDate,
-                            onTap: () {
-                              FocusScope.of(navKey.currentState!.context)
-                                  .requestFocus(new FocusNode());
-                              _selectDate(_endDate);
-                            },
-                            onSaved: (value) {
-                              endDate = _endDate.text;
-                            },
-                            decoration: InputDecoration(
-                              isDense: true,
-                              isCollapsed: true,
-                              hintText: '',
-                              hintStyle: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  top: 21, bottom: 17, left: 30, right: 30),
-                              focusColor: onyxBlack,
-                              focusedErrorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                    color: eerieBlack,
-                                    width: 2.5,
-                                  )),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                      color: eerieBlack, width: 2.5)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF929AAB), width: 2.5)),
-                              fillColor: graySand,
-                              filled: true,
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                      color: eerieBlack, width: 2.5)),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF929AAB), width: 2.5)),
-                              errorStyle:
-                                  TextStyle(color: silver, fontSize: 18),
-                            ),
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFF393E46)),
-                          ),
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Visitation End',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: eerieBlack),
                         ),
                       ),
                     ],
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Container(
+                      height: 50,
+                      padding: EdgeInsets.zero,
+                      child: TextFormField(
+                        cursorColor: onyxBlack,
+                        focusNode: endDateNode,
+                        controller: _endDate,
+                        onTap: () {
+                          FocusScope.of(navKey.currentState!.context)
+                              .requestFocus(new FocusNode());
+                          _selectDate(_endDate);
+                        },
+                        onSaved: (value) {
+                          endDate = _endDate.text;
+                        },
+                        decoration: InputDecoration(
+                          isDense: true,
+                          isCollapsed: true,
+                          hintText: '',
+                          hintStyle: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          contentPadding: EdgeInsets.only(
+                              top: 21, bottom: 17, left: 30, right: 30),
+                          focusColor: onyxBlack,
+                          focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: eerieBlack,
+                                width: 2.5,
+                              )),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide:
+                                  BorderSide(color: eerieBlack, width: 2.5)),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                  color: Color(0xFF929AAB), width: 2.5)),
+                          fillColor: graySand,
+                          filled: true,
+                          errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide:
+                                  BorderSide(color: eerieBlack, width: 2.5)),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                  color: Color(0xFF929AAB), width: 2.5)),
+                          errorStyle: TextStyle(color: silver, fontSize: 18),
+                        ),
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF393E46)),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),

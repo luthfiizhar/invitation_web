@@ -77,16 +77,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 30),
+                    padding: EdgeInsets.only(top: 20),
                     child: Divider(
                       thickness: 2,
                       color: spanishGray,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
-                      top: 30,
-                    ),
+                    padding: EdgeInsets.only(top: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -95,7 +93,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             onHighlight: onHighlight,
                             routeName: routeInvite,
                             selected: index == 0,
-                            indexSelected: index),
+                            indexSelected: 0),
                       ],
                     ),
                   ),
@@ -103,15 +101,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(
-                          top: 30,
-                        ),
+                        padding: EdgeInsets.only(top: 20),
                         child: CustDrawerItem(
                             title: 'My Invitation',
                             onHighlight: onHighlight,
                             routeName: routeMyInvite,
                             selected: index == 1,
-                            indexSelected: index),
+                            indexSelected: 1),
                       ),
                     ],
                   ),
@@ -119,15 +115,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(
-                          top: 30,
-                        ),
+                        padding: EdgeInsets.only(top: 20),
                         child: CustDrawerItem(
                             title: 'Employee data',
                             onHighlight: onHighlight,
                             routeName: routeEmployee,
                             selected: index == 2,
-                            indexSelected: index),
+                            indexSelected: 2),
                       ),
                     ],
                   ),
