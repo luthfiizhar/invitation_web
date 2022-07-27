@@ -156,7 +156,8 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
       });
     } else if (data['Status'] == '401') {
       Navigator.of(context)
-          .push(NotifProcessDialog(isSuccess: false))
+          .push(
+              NotifProcessDialog(isSuccess: false, message: "Something wrong!"))
           .then((value) {
         logout().then((value) {
           Navigator.pushReplacementNamed(
@@ -577,85 +578,40 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                           ],
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: 60,
-                              // color: Colors.blue,
-                              // child: ListView(
-                              //   children: [
-                              //     MyInviteMenuMobile(
-                              //       menuName: myInviteMenu[0]['menu'],
-                              //       selected: selectedMenu == 1,
-                              //       onHighlight: onHighlight,
-                              //       index: 1,
-                              //     ),
-                              //     MyInviteMenuMobile(
-                              //       menuName: myInviteMenu[1]['menu'],
-                              //       selected: selectedMenu == 2,
-                              //       onHighlight: onHighlight,
-                              //       index: 2,
-                              //     ),
-                              //     MyInviteMenuMobile(
-                              //       menuName: myInviteMenu[2]['menu'],
-                              //       selected: selectedMenu == 3,
-                              //       onHighlight: onHighlight,
-                              //       index: 3,
-                              //     ),
-                              //   ],
-                              // ),
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                itemCount: myInviteMenu.length,
-                                itemBuilder: (context, index) {
-                                  var menuName = myInviteMenu[index]['menu'];
-                                  var selected = myInviteMenu[index]['id'];
-                                  return Padding(
-                                    padding: EdgeInsets.zero,
-                                    child: MyInviteMenuMobile(
-                                      menuName: menuName,
-                                      selected: selectedMenu == selected,
-                                      onHighlight: onHighlight,
-                                      index: index + 1,
-                                    ),
-                                  );
-                                },
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Container(
+                          // width: MediaQuery.of(context).size.width * 0.8,
+                          height: 60,
+                          // color: Colors.blue,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              MyInviteMenuMobile(
+                                menuName: myInviteMenu[0]['menu'],
+                                selected: selectedMenu == 1,
+                                onHighlight: onHighlight,
+                                index: 1,
                               ),
-                              // child: Row(
-                              //   children: [
-                              //     MyInviteMenu(
-                              //       menuName: 'Active Invitation',
-                              //       onHighlight: onHighlight,
-                              //       selected: selectedMenu == 1,
-                              //       index: 1,
-                              //     ),
-                              //     MyInviteMenu(
-                              //       menuName: 'Past Invitation',
-                              //       onHighlight: onHighlight,
-                              //       selected: selectedMenu == 2,
-                              //       index: 2,
-                              //     ),
-                              //     MyInviteMenu(
-                              //       menuName: 'Canceled',
-                              //       onHighlight: onHighlight,
-                              //       selected: selectedMenu == 3,
-                              //       index: 3,
-                              //     ),
-                              // ],
-                              // ),
-                            ),
+                              MyInviteMenuMobile(
+                                menuName: myInviteMenu[1]['menu'],
+                                selected: selectedMenu == 2,
+                                onHighlight: onHighlight,
+                                index: 2,
+                              ),
+                              MyInviteMenuMobile(
+                                menuName: myInviteMenu[2]['menu'],
+                                selected: selectedMenu == 3,
+                                onHighlight: onHighlight,
+                                index: 3,
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                       Center(
                         child: Padding(
-                          padding: EdgeInsets.only(top: 40),
+                          padding: EdgeInsets.only(top: 20),
                           child: Container(
                             // height: 600,
                             width: 1000,
@@ -1049,7 +1005,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                         index),
                     index != data.length - 1
                         ? Padding(
-                            padding: const EdgeInsets.only(top: 20, bottom: 20),
+                            padding: const EdgeInsets.only(top: 15, bottom: 15),
                             child: Divider(
                               thickness: 2,
                               color: spanishGray,

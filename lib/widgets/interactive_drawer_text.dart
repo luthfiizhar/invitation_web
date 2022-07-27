@@ -43,7 +43,11 @@ class InteractiveDrawerTextState extends State<InteractiveDrawerText> {
                   ? kPageTitleStyleMobile.copyWith(color: eerieBlack)
                   : (widget.selected!)
                       ? kPageTitleStyleMobile.copyWith(color: eerieBlack)
-                      : kPageTitleStyleMobile.copyWith(color: Colors.white),
+                      : TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w300,
+                          color: scaffoldBg,
+                        ),
             ),
           ),
         ),

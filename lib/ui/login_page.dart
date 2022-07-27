@@ -49,6 +49,8 @@ class WelcomePage extends StatelessWidget {
           'email', data['Data']['Email'] != null ? data['Data']['Email'] : "");
       box.put('jwtToken',
           data['Data']['Token'] != null ? data['Data']['Token'] : "");
+      box.put('firstLogin',
+          data['Data']['FirstLogin'] != null ? data['Data']['FirsLogin'] : "");
 
       return data;
     } else {
@@ -61,11 +63,11 @@ class WelcomePage extends StatelessWidget {
       _formKey.currentState!.save();
 
       loginAuth().then((value) {
+        // var firstLogin = false;
         if (value['Status'] == '200') {
-          if (value['Data']['FirstLogin'] == true) {
-            Navigator.of(context).pushReplacementNamed(routeEmployee);
-          }
-          Navigator.of(context).pushReplacementNamed(routeInvite);
+          value['Data']['FirstLogin']
+              ? Navigator.of(context).pushReplacementNamed(routeEmployee)
+              : Navigator.of(context).pushReplacementNamed(routeInvite);
         }
       });
       // print(userName);
@@ -136,210 +138,240 @@ class WelcomePage extends StatelessWidget {
               bottom: 20,
               right: 20,
               // left: ,
-              child: Text('Facility Management 2022')),
+              child: Text(
+                'Facility Management. 2022.',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  color: spanishGray,
+                ),
+              )),
           LayoutBuilder(builder: (context, c) {
             return SingleChildScrollView(
               child: Center(
                 child: Container(
                   height: MediaQuery.of(context).size.height,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Text('${window.screen?.width}   ${window.screen?.height}'),
-                      Container(
-                          // height: 500,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: BoxDecoration(
-                              // color: Colors.grey,
-                              // image: DecorationImage(
-                              //     image: AssetImage('assets/welcome_page_image.png')),
-                              ),
-                          child: Padding(
-                            padding: Responsive.isBigDesktop(context)
-                                ? EdgeInsets.only(
-                                    top: 100, left: 150, right: 150)
-                                : EdgeInsets.only(top: 100, left: 0, right: 0),
-                            child: Container(
-                              // color: Colors.blue,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        // color: Colors.amber,
-                                        // padding:
-                                        //     EdgeInsets.only(right: 70, top: 30),
-                                        width: Responsive.isBigDesktop(context)
-                                            ? 650
-                                            : 550,
-                                        height: Responsive.isBigDesktop(context)
-                                            ? 600
-                                            : 500,
-                                        child: SvgPicture.asset(
-                                            'assets/Ilustrasi Welcome Website B.svg',
-                                            fit: BoxFit.fitHeight),
-                                      ),
-                                    ],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                              // height: 500,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                  // color: Colors.grey,
+                                  // image: DecorationImage(
+                                  //     image: AssetImage('assets/welcome_page_image.png')),
                                   ),
-                                  Expanded(
-                                    // flex: 9,
-                                    child: Container(
-                                      // color: Colors.blue,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 15.0, top: 15),
-                                            child: Container(
-                                              // color: Colors.yellow,
-                                              // height: 200,
-                                              // width: 620,
-                                              padding: EdgeInsets.zero,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Welcome to',
-                                                    style: TextStyle(
-                                                        // letterSpacing: 1,
-                                                        fontSize: 32,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        // fontFamily: 'Helvetica',
-                                                        color: eerieBlack),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Container(
-                                                    width: 600,
-                                                    child: Wrap(
+                              child: Center(
+                                child: Padding(
+                                  padding: Responsive.isBigDesktop(context)
+                                      ? EdgeInsets.only(
+                                          top: 100, left: 200, right: 200)
+                                      : EdgeInsets.only(
+                                          top: 100, left: 0, right: 0),
+                                  child: Container(
+                                    // color: Colors.blue,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          // color: Colors.amber,
+                                          // padding:
+                                          //     EdgeInsets.only(right: 70, top: 30),
+                                          width:
+                                              Responsive.isBigDesktop(context)
+                                                  ? 650
+                                                  : 550,
+                                          height:
+                                              Responsive.isBigDesktop(context)
+                                                  ? 600
+                                                  : 500,
+                                          child: SvgPicture.asset(
+                                              'assets/Ilustrasi Welcome Website B.svg',
+                                              fit: BoxFit.fitHeight),
+                                        ),
+                                        Expanded(
+                                          // flex: 9,
+                                          child: Container(
+                                            // color: Colors.blue,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 15.0, top: 15),
+                                                  child: Container(
+                                                    // color: Colors.yellow,
+                                                    // height: 200,
+                                                    // width: 620,
+                                                    padding: EdgeInsets.zero,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Text(
-                                                          'Kawan Lama Group',
+                                                          'Welcome to',
                                                           style: TextStyle(
-                                                            // letterSpacing: 1,
-                                                            fontSize: 48,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            color: eerieBlack,
-                                                          ),
+                                                              // letterSpacing: 1,
+                                                              fontSize: 32,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              // fontFamily: 'Helvetica',
+                                                              color:
+                                                                  eerieBlack),
                                                         ),
-                                                        Text(
-                                                          'Visitor Invitation',
-                                                          style: TextStyle(
-                                                            // letterSpacing: 1,
-                                                            fontSize: 48,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            color: eerieBlack,
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Container(
+                                                          width: 600,
+                                                          child: Wrap(
+                                                            children: [
+                                                              Text(
+                                                                'Kawan Lama Group',
+                                                                style:
+                                                                    TextStyle(
+                                                                  // letterSpacing: 1,
+                                                                  fontSize: 48,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color:
+                                                                      eerieBlack,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'Visitor Invitation',
+                                                                style:
+                                                                    TextStyle(
+                                                                  // letterSpacing: 1,
+                                                                  fontSize: 48,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color:
+                                                                      eerieBlack,
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                top: 15, left: 15),
-                                            child: Container(
-                                              child: Text(
-                                                'Please login using HC Plus for using the site',
-                                                style: TextStyle(
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.w300,
-                                                  color: onyxBlack,
                                                 ),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              top: 40,
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  padding:
-                                                      EdgeInsets.only(left: 15),
-                                                  width: 300,
-                                                  // height: 70,
-                                                  child: InputField(
-                                                    controller: _username,
-                                                    label: 'Username',
-                                                    focusNode: userNameNode,
-                                                    hintText:
-                                                        'Username here...',
-                                                    onSaved: (value) {
-                                                      userName = value;
-                                                    },
-                                                    obsecureText: false,
-                                                    validator: (value) => value ==
-                                                            ""
-                                                        ? "This field is required"
-                                                        : null,
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 15, left: 15),
+                                                  child: Container(
+                                                    child: Text(
+                                                      'Please login using HC Plus for using the site',
+                                                      style: TextStyle(
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        color: onyxBlack,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
-                                                SizedBox(
-                                                  width: 20,
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                    top: 40,
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: 15),
+                                                        width: 300,
+                                                        // height: 70,
+                                                        child: InputField(
+                                                          controller: _username,
+                                                          label: 'Username',
+                                                          focusNode:
+                                                              userNameNode,
+                                                          hintText:
+                                                              'Username here...',
+                                                          onSaved: (value) {
+                                                            userName = value;
+                                                          },
+                                                          obsecureText: false,
+                                                          validator: (value) =>
+                                                              value == ""
+                                                                  ? "This field is required"
+                                                                  : null,
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Container(
+                                                        width: 300,
+                                                        child: InputField(
+                                                          controller: _password,
+                                                          label: 'Password',
+                                                          focusNode: passNode,
+                                                          hintText:
+                                                              'Password here...',
+                                                          onSaved: (value) {
+                                                            password = value;
+                                                          },
+                                                          obsecureText: true,
+                                                          validator: (value) =>
+                                                              value == ""
+                                                                  ? "This field is required"
+                                                                  : null,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                                Container(
-                                                  width: 300,
-                                                  child: InputField(
-                                                    controller: _password,
-                                                    label: 'Password',
-                                                    focusNode: passNode,
-                                                    hintText:
-                                                        'Password here...',
-                                                    onSaved: (value) {
-                                                      password = value;
-                                                    },
-                                                    obsecureText: true,
-                                                    validator: (value) => value ==
-                                                            ""
-                                                        ? "This field is required"
-                                                        : null,
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 35,
+                                                      left: 15,
+                                                      right: 15,
+                                                      bottom: 40),
+                                                  child: SizedBox(
+                                                    width: 140,
+                                                    height: 50,
+                                                    //Tombol Login Desktop Layout
+                                                    child: RegularButton(
+                                                      title: 'Login',
+                                                      sizeFont: 20,
+                                                      onTap: () {
+                                                        login(context);
+                                                      },
+                                                    ),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                top: 35,
-                                                left: 15,
-                                                right: 15,
-                                                bottom: 40),
-                                            child: SizedBox(
-                                              width: 140,
-                                              height: 50,
-                                              //Tombol Login Desktop Layout
-                                              child: RegularButton(
-                                                title: 'Login',
-                                                sizeFont: 20,
-                                                onTap: () {
-                                                  login(context);
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        )
+                                      ],
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )),
+                                  ),
+                                ),
+                              )),
+                        ],
+                      ),
                       // Container(),
                     ],
                   ),
@@ -363,9 +395,9 @@ class WelcomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      padding: EdgeInsets.only(left: 20, top: 20),
-                      width: 120,
-                      height: 40,
+                      padding: EdgeInsets.only(left: 0, top: 0),
+                      width: 150,
+                      height: 60,
                       // color: Colors.blue,
                       child: SvgPicture.asset(
                         'assets/klg_main_logo_old.svg',
@@ -381,7 +413,7 @@ class WelcomePage extends StatelessWidget {
                   // color: Colors.red,
                   child: Padding(
                     padding: EdgeInsets.only(
-                      top: 50,
+                      top: 20,
                       left: 50,
                       right: 50,
                     ),
@@ -495,7 +527,7 @@ class WelcomePage extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 30),
+                          padding: const EdgeInsets.only(top: 20),
                           child: InputField(
                             controller: _password,
                             label: 'Password',
@@ -508,13 +540,13 @@ class WelcomePage extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 50, bottom: 30),
+                          padding: const EdgeInsets.only(top: 40, bottom: 30),
                           child: SizedBox(
-                              width: 175,
-                              height: 50,
+                              width: 110,
+                              height: 40,
                               child: RegularButton(
                                 title: 'Login',
-                                sizeFont: 24,
+                                sizeFont: 16,
                                 onTap: () {
                                   login(context);
                                 },
@@ -526,12 +558,19 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.only(top: 100, bottom: 20, right: 20),
+                      const EdgeInsets.only(top: 40, bottom: 20, right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
-                        child: Text('Facility Management 2022'),
+                        child: Text(
+                          'Facility Management 2022',
+                          style: TextStyle(
+                            color: spanishGray,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ),
                     ],
                   ),

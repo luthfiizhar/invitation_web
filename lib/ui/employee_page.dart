@@ -7,6 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/responsive.dart';
+import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/footer.dart';
 import 'package:navigation_example/widgets/input_field.dart';
 import 'package:navigation_example/widgets/input_visitor.dart';
@@ -36,6 +37,7 @@ class _EmployeePageState extends State<EmployeePage> {
   late FocusNode emailNode;
   late FocusNode phoneNumberNode;
   late FocusNode phoneCodeNode;
+  final _formKey = new GlobalKey<FormState>();
 
   Future getDataEmployee() async {
     var box = await Hive.openBox('userLogin');
@@ -57,8 +59,8 @@ class _EmployeePageState extends State<EmployeePage> {
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(visitorId);
 
-    final url = Uri.https(apiUrl,
-        '/VisitorManagementBackend/public/api/visitor/approve-visitor-data');
+    final url = Uri.https(
+        apiUrl, '/VisitorManagementBackend/public/api/user/update-user-data');
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -66,21 +68,23 @@ class _EmployeePageState extends State<EmployeePage> {
     };
     var bodySend = """ 
       {
-          
+          "CountryCode" : "$code",
+          "PhoneNumber" : "$number",
+          "Email" : "$email"
       }
     """;
 
     print(bodySend);
     var response = await http.post(url, headers: requestHeader, body: bodySend);
     var data = json.decode(response.body);
-    print('first name' + data['Data']['FirstName']);
+    // print('first name' + data['Data']['FirstName']);
     // if (data['Status'] == '200') {
     //   isLoading = false;
     // } else {
     //   isLoading = false;
     // }
     // setState(() {});
-    return data['Data'];
+    return data;
   }
 
   @override
@@ -125,8 +129,9 @@ class _EmployeePageState extends State<EmployeePage> {
               Padding(
                 padding: Responsive.isBigDesktop(context)
                     ? EdgeInsets.only(top: 60, left: 500, right: 500)
-                    : EdgeInsets.only(top: 60, left: 300, right: 300),
+                    : EdgeInsets.only(top: 60, left: 350, right: 350),
                 child: Form(
+                  key: _formKey,
                   child: Container(
                     child: Column(
                       // crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,50 +145,103 @@ class _EmployeePageState extends State<EmployeePage> {
                             ),
                           ],
                         ),
-                        Container(
+                        Padding(
                           padding: EdgeInsets.only(top: 20),
-                          child: Text(
-                            'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
-                            style: pageSubtitle,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Wrap(
+                                  alignment: WrapAlignment.start,
+                                  // runAlignment: WrapAlignment.start,
+                                  // crossAxisAlignment: WrapCrossAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
+                                      style: pageSubtitle,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
                               top: 40, left: 100, right: 100),
-                          child: Center(
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  nameField(),
-                                  phoneNoField(),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      top: 30,
-                                    ),
-                                    child: InputVisitor(
-                                      controller: _email,
-                                      label: 'Email',
-                                      focusNode: emailNode,
-                                      onSaved: (value) {},
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 80, bottom: 30),
-                                    child: SizedBox(
-                                      width: 200,
-                                      height: 50,
-                                      child: RegularButton(
-                                        title: 'Confirm',
-                                        sizeFont: 24,
-                                        onTap: () {},
-                                      ),
-                                    ),
-                                  )
-                                ],
+                          child: Column(
+                            // crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 450,
+                                // color: Colors.amber,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    nameField(),
+                                  ],
+                                ),
                               ),
-                            ),
+                              Container(
+                                // color: Colors.green,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    phoneNoField(),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: 30,
+                                ),
+                                child: SizedBox(
+                                  width: 450,
+                                  child: InputVisitor(
+                                    controller: _email,
+                                    label: 'Email',
+                                    focusNode: emailNode,
+                                    onSaved: (value) {
+                                      email = value!;
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 80, bottom: 30),
+                                child: SizedBox(
+                                  width: 200,
+                                  height: 50,
+                                  child: RegularButton(
+                                    title: 'Confirm',
+                                    sizeFont: 24,
+                                    onTap: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        _formKey.currentState!.save();
+                                        updateDataEmployee(
+                                                phoneCode, phoneNumber, email)
+                                            .then((value) {
+                                          print(value);
+                                          if (value['Status'] == "200") {
+                                            Navigator.of(context).push(
+                                                NotifProcessDialog(
+                                                    isSuccess: true,
+                                                    message:
+                                                        "Data has been updated!"));
+                                          } else {
+                                            Navigator.of(context).push(
+                                                NotifProcessDialog(
+                                                    isSuccess: false,
+                                                    message:
+                                                        "Somethin wrong!"));
+                                          }
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ],
@@ -215,6 +273,7 @@ class _EmployeePageState extends State<EmployeePage> {
               Padding(
                 padding: EdgeInsets.only(top: 10, left: 20, right: 20),
                 child: Form(
+                  key: _formKey,
                   child: Container(
                     child: Column(
                       // crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,7 +289,7 @@ class _EmployeePageState extends State<EmployeePage> {
                           ],
                         ),
                         Container(
-                          padding: EdgeInsets.only(top: 20),
+                          padding: EdgeInsets.only(top: 10),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -242,34 +301,36 @@ class _EmployeePageState extends State<EmployeePage> {
                         ),
                         Padding(
                           padding:
-                              const EdgeInsets.only(top: 40, left: 0, right: 0),
+                              const EdgeInsets.only(top: 20, left: 0, right: 0),
                           child: Center(
                             child: Container(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   nameField(),
-                                  phoneNoField(),
+                                  phoneNoFieldMobile(),
                                   Padding(
                                     padding: EdgeInsets.only(
-                                      top: 30,
+                                      top: 10,
                                     ),
                                     child: InputVisitor(
                                       controller: _email,
                                       label: 'Email',
                                       focusNode: emailNode,
-                                      onSaved: (value) {},
+                                      onSaved: (value) {
+                                        email = value!;
+                                      },
                                     ),
                                   ),
                                   Padding(
                                     padding:
-                                        EdgeInsets.only(top: 80, bottom: 30),
+                                        EdgeInsets.only(top: 30, bottom: 30),
                                     child: SizedBox(
-                                      width: 200,
-                                      height: 50,
+                                      // width: 200,
+                                      height: 40,
                                       child: RegularButton(
                                         title: 'Confirm',
-                                        sizeFont: 24,
+                                        sizeFont: 16,
                                         onTap: () {},
                                       ),
                                     ),
@@ -297,54 +358,20 @@ class _EmployeePageState extends State<EmployeePage> {
   }
 
   Widget nameField() {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Text(
-                'Full Name',
-                style: TextStyle(
-                  fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                  fontWeight: FontWeight.w700,
-                  color: onyxBlack,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(
+    return Container(
+      // color: Colors.red,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  name,
+                  'Full Name',
                   style: TextStyle(
                     fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                    fontWeight: FontWeight.w400,
-                    color: onyxBlack,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 30),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  'Employee Number',
-                  style: TextStyle(
-                    fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: onyxBlack,
                   ),
@@ -352,20 +379,104 @@ class _EmployeePageState extends State<EmployeePage> {
               ),
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                      fontWeight: FontWeight.w400,
+                      color: onyxBlack,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 30),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    'Employee Number',
+                    style: TextStyle(
+                      fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                      fontWeight: FontWeight.w700,
+                      color: onyxBlack,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    nip,
+                    style: TextStyle(
+                      fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                      fontWeight: FontWeight.w400,
+                      color: onyxBlack,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget phoneNoFieldMobile() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 30),
+              child: Text(
+                'Phone Number',
+                style: TextStyle(
+                    fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 15),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  nip,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    color: onyxBlack,
+              SizedBox(
+                // padding: EdgeInsets.zero,
+                width: 100,
+                // height: 50,
+                child: phoneCodeInput(),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Container(
+                    padding: EdgeInsets.zero,
+                    width: Responsive.isDesktop(context) ? 330 : null,
+                    // height: 50,
+                    child: phoneNumberInput(),
                   ),
                 ),
               ),
@@ -378,46 +489,49 @@ class _EmployeePageState extends State<EmployeePage> {
 
   Widget phoneNoField() {
     return Container(
-        child: Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20, top: 30),
-              child: Text(
-                'Phone Number',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Row(
+      // color: Colors.blue,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                // padding: EdgeInsets.zero,
-                width: 120,
-                // height: 50,
-                child: phoneCodeInput(),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Container(
-                    padding: EdgeInsets.zero,
-                    // width: 250,
-                    // height: 50,
-                    child: phoneNumberInput(),
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, top: 30),
+                child: Text(
+                  'Phone Number',
+                  style: TextStyle(
+                      fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                      fontWeight: FontWeight.w700),
                 ),
               ),
             ],
           ),
-        ),
-      ],
-    ));
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Row(
+              children: [
+                SizedBox(
+                  // padding: EdgeInsets.zero,
+                  width: 100,
+                  // height: 50,
+                  child: phoneCodeInput(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Container(
+                    padding: EdgeInsets.zero,
+                    width: Responsive.isDesktop(context) ? 330 : null,
+                    // height: 50,
+                    child: phoneNumberInput(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget phoneNumberInput() {
@@ -434,28 +548,35 @@ class _EmployeePageState extends State<EmployeePage> {
       cursorColor: eerieBlack,
       decoration: InputDecoration(
         isDense: true,
-        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+        contentPadding: Responsive.isDesktop(context)
+            ? EdgeInsets.symmetric(vertical: 20, horizontal: 20)
+            : EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         isCollapsed: true,
         focusColor: eerieBlack,
         focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius:
+                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
             borderSide: BorderSide(
               color: eerieBlack,
               width: 2.5,
             )),
         focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius:
+                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
             borderSide: BorderSide(color: eerieBlack, width: 2.5)),
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius:
+                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
             borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
         fillColor: graySand,
         filled: true,
         errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius:
+                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
             borderSide: BorderSide(color: eerieBlack, width: 2.5)),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius:
+                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
             borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
         errorStyle: phoneNumberNode.hasFocus
             ? TextStyle(fontSize: 0, height: 0)
@@ -471,73 +592,138 @@ class _EmployeePageState extends State<EmployeePage> {
     );
   }
 
-  Widget phoneCodeInput() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            maxLength: 2,
-            cursorColor: eerieBlack,
-            controller: _phoneNumberCode,
-            focusNode: phoneCodeNode,
-            validator: (value) {
-              if (_phoneNumber.text.isEmpty) {
-                return '';
-              } else {
-                return null;
-              }
-            },
-            onSaved: (value) {
-              phoneCode = _phoneNumberCode.text;
-            },
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              counterText: "",
-              prefixIcon: Icon(
-                Icons.add,
-                size: 24,
+  Widget phoneNumberInputMobile() {
+    return Expanded(
+      child: TextFormField(
+        focusNode: phoneNumberNode,
+        controller: _phoneNumber,
+        keyboardType: TextInputType.phone,
+        validator: (value) => value!.isEmpty ? 'This field is required' : null,
+        onSaved: (value) {
+          setState(() {
+            phoneNumber = _phoneNumber.text;
+          });
+        },
+        cursorColor: eerieBlack,
+        decoration: InputDecoration(
+          isDense: true,
+          contentPadding: Responsive.isDesktop(context)
+              ? EdgeInsets.symmetric(vertical: 20, horizontal: 20)
+              : EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          isCollapsed: true,
+          focusColor: eerieBlack,
+          focusedErrorBorder: OutlineInputBorder(
+              borderRadius:
+                  BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+              borderSide: BorderSide(
                 color: eerieBlack,
-              ),
-              prefixIconColor: eerieBlack,
-              isDense: true,
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              isCollapsed: true,
-              focusColor: eerieBlack,
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: eerieBlack,
-                  width: 2.5,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: eerieBlack, width: 2.5)),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-              fillColor: graySand,
-              filled: true,
-              errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: eerieBlack, width: 2.5)),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-              errorStyle: phoneNumberNode.hasFocus
-                  ? TextStyle(fontSize: 0, height: 0)
-                  : TextStyle(
-                      color: silver,
-                      fontSize: Responsive.isDesktop(context) ? 18 : 14),
-            ),
-            style: TextStyle(
-                fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                fontWeight: FontWeight.w400,
-                color: eerieBlack),
+                width: 2.5,
+              )),
+          focusedBorder: OutlineInputBorder(
+              borderRadius:
+                  BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+              borderSide: BorderSide(color: eerieBlack, width: 2.5)),
+          enabledBorder: OutlineInputBorder(
+              borderRadius:
+                  BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+              borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+          fillColor: graySand,
+          filled: true,
+          errorBorder: OutlineInputBorder(
+              borderRadius:
+                  BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+              borderSide: BorderSide(color: eerieBlack, width: 2.5)),
+          border: OutlineInputBorder(
+              borderRadius:
+                  BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+              borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+          errorStyle: phoneNumberNode.hasFocus
+              ? TextStyle(fontSize: 0, height: 0)
+              : TextStyle(
+                  color: silver,
+                  fontSize: Responsive.isDesktop(context) ? 18 : 14),
+        ),
+        style: TextStyle(
+          fontSize: Responsive.isDesktop(context) ? 20 : 14,
+          fontWeight: FontWeight.w400,
+          color: Color(0xFF393E46),
+        ),
+      ),
+    );
+  }
+
+  Widget phoneCodeInput() {
+    return TextFormField(
+      maxLength: 2,
+      cursorColor: eerieBlack,
+      controller: _phoneNumberCode,
+      focusNode: phoneCodeNode,
+      validator: (value) {
+        if (_phoneNumber.text.isEmpty) {
+          return '';
+        } else {
+          return null;
+        }
+      },
+      onSaved: (value) {
+        phoneCode = _phoneNumberCode.text;
+      },
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        counterText: "",
+        prefixIcon: Padding(
+          padding: Responsive.isDesktop(context)
+              ? EdgeInsets.only(bottom: 5)
+              : EdgeInsets.only(bottom: 3),
+          child: Icon(
+            Icons.add,
+            size: Responsive.isDesktop(context) ? 20 : 14,
+            color: eerieBlack,
           ),
         ),
-      ],
+        prefixIconColor: eerieBlack,
+        isDense: true,
+        contentPadding: Responsive.isDesktop(context)
+            ? EdgeInsets.symmetric(vertical: 20, horizontal: 17)
+            : EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        isCollapsed: true,
+        focusColor: eerieBlack,
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius:
+              BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+          borderSide: BorderSide(
+            color: eerieBlack,
+            width: 2.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+            borderRadius:
+                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+            borderSide: BorderSide(color: eerieBlack, width: 2.5)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius:
+                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+            borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+        fillColor: graySand,
+        filled: true,
+        errorBorder: OutlineInputBorder(
+            borderRadius:
+                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+            borderSide: BorderSide(color: eerieBlack, width: 2.5)),
+        border: OutlineInputBorder(
+            borderRadius:
+                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+            borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+        errorStyle: phoneNumberNode.hasFocus
+            ? TextStyle(fontSize: 0, height: 0)
+            : TextStyle(
+                color: silver,
+                fontSize: Responsive.isDesktop(context) ? 18 : 14),
+      ),
+      style: TextStyle(
+          fontSize: Responsive.isDesktop(context) ? 20 : 14,
+          fontWeight: FontWeight.w400,
+          color: eerieBlack),
     );
   }
 }

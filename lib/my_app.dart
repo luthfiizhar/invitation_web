@@ -14,20 +14,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MainModel>(
       create: (context) => MainModel(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Navigation Bar Web',
-        theme: ThemeData(
-          fontFamily: 'Helvetica',
-          primarySwatch: Colors.blue,
+      child: Listener(
+        onPointerDown: (_) {
+          WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+        },
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Visitor Invitation Web',
+          theme: ThemeData(
+            fontFamily: 'Helvetica',
+            primarySwatch: Colors.blue,
+          ),
+          // home: HomePage(),
+          builder: (_, child) => AppView(
+            child: child,
+          ),
+          initialRoute:
+              jwtToken == null || isExpired! ? routeLogin : routeInvite,
+          navigatorKey: navKey,
+          onGenerateRoute: RouteGenerator.generateRoute,
         ),
-        // home: HomePage(),
-        builder: (_, child) => AppView(
-          child: child,
-        ),
-        initialRoute: jwtToken == null ? routeLogin : routeInvite,
-        navigatorKey: navKey,
-        onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
   }

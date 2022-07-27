@@ -61,6 +61,7 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
 
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(right: 30),
       color: scaffoldBg,
       height: 100.0,
       child: Row(
@@ -82,7 +83,7 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 35),
+                  padding: const EdgeInsets.only(right: 20),
                   child: InkWell(
                     onHover: (value) {},
                     onTap: () {

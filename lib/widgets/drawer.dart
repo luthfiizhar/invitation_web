@@ -64,7 +64,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             child: Padding(
               padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
                     width: 235,
@@ -77,14 +77,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 20),
+                    padding: EdgeInsets.only(top: 10),
                     child: Divider(
                       thickness: 2,
                       color: spanishGray,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 20),
+                    padding: EdgeInsets.only(top: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -101,7 +101,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(top: 20),
+                        padding: EdgeInsets.only(top: 10),
                         child: CustDrawerItem(
                             title: 'My Invitation',
                             onHighlight: onHighlight,
@@ -115,7 +115,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(top: 20),
+                        padding: EdgeInsets.only(top: 10),
                         child: CustDrawerItem(
                             title: 'Employee data',
                             onHighlight: onHighlight,

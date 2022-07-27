@@ -37,30 +37,47 @@ class FooterInviteWeb extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: Responsive.isDesktop(context) ? 30 : 10,
-            top: Responsive.isDesktop(context) ? 30 : 10,
+            right: Responsive.isDesktop(context) ? 30 : 15,
+            top: Responsive.isDesktop(context) ? 30 : 15,
             child: Container(
-                height: Responsive.isDesktop(context) ? 50 : 30,
-                width: Responsive.isDesktop(context) ? 90 : 60,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Copyright',
-                      style: TextStyle(
-                        fontSize: Responsive.isDesktop(context) ? 20 : 12,
-                        color: Color(0xFFF5F5F5),
-                      ),
+              // color: Colors.red,
+              height: Responsive.isDesktop(context) ? 23 : 15,
+              width: Responsive.isDesktop(context) ? 186 : 150,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Facility Management',
+                    style: TextStyle(
+                      fontSize: Responsive.isDesktop(context) ? 20 : 12,
+                      color: Color(0xFFF5F5F5),
                     ),
-                    Text(
-                      'NIP',
-                      style: TextStyle(
-                        fontSize: Responsive.isDesktop(context) ? 20 : 12,
-                        color: Color(0xFFF5F5F5),
-                      ),
-                    ),
-                  ],
-                )),
+                  ),
+                ],
+              ),
+            ),
+            // Container(
+            //     height: Responsive.isDesktop(context) ? 50 : 30,
+            //     width: Responsive.isDesktop(context) ? 90 : 60,
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.end,
+            //       children: [
+            //         Text(
+            //           'Facility Management',
+            //           style: TextStyle(
+            //             fontSize: Responsive.isDesktop(context) ? 20 : 12,
+            //             color: Color(0xFFF5F5F5),
+            //           ),
+            //         ),
+            //         Text(
+            //           'NIP',
+            //           style: TextStyle(
+            //             fontSize: Responsive.isDesktop(context) ? 20 : 12,
+            //             color: Color(0xFFF5F5F5),
+            //           ),
+            //         ),
+            //       ],
+            //     )),
           ),
         ],
       ),

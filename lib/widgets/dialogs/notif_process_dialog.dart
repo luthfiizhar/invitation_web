@@ -5,7 +5,7 @@ import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 
 class NotifProcessDialog extends ModalRoute<void> {
-  NotifProcessDialog({this.isSuccess});
+  NotifProcessDialog({this.isSuccess, required this.message});
   bool? isSuccess;
   String? message;
   @override
@@ -106,9 +106,7 @@ class NotifProcessDialog extends ModalRoute<void> {
                       padding: EdgeInsets.only(top: 20),
                       child: Container(
                         child: Text(
-                          isSuccess!
-                              ? 'Add invitation success'
-                              : 'Something wrong!',
+                          isSuccess! ? '$message' : 'Something wrong!',
                           style: TextStyle(
                             fontSize: Responsive.isDesktop(context) ? 24 : 14,
                             fontWeight: FontWeight.w300,

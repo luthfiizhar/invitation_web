@@ -74,8 +74,9 @@ Widget listVisitorDetailDialog(
                         Text(
                           '$name',
                           style: TextStyle(
-                            fontSize: Responsive.isDesktop(context) ? 24 : 18,
+                            fontSize: Responsive.isDesktop(context) ? 24 : 16,
                             fontWeight: FontWeight.w700,
+                            color: onyxBlack,
                           ),
                         ),
                         Padding(
@@ -83,8 +84,9 @@ Widget listVisitorDetailDialog(
                           child: Text(
                             '$email',
                             style: TextStyle(
-                              fontSize: Responsive.isDesktop(context) ? 24 : 18,
+                              fontSize: Responsive.isDesktop(context) ? 24 : 16,
                               fontWeight: FontWeight.w300,
+                              color: onyxBlack,
                             ),
                           ),
                         ),
@@ -95,7 +97,7 @@ Widget listVisitorDetailDialog(
                                 ? 'Visitor Verified'
                                 : 'Visitor not yet Verified',
                             style: TextStyle(
-                              fontSize: Responsive.isDesktop(context) ? 24 : 18,
+                              fontSize: Responsive.isDesktop(context) ? 24 : 14,
                               fontWeight: FontWeight.w300,
                               color: verified == "APPROVED"
                                   ? Color(0xFF0DB14B)
@@ -349,7 +351,8 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                     fontWeight: FontWeight.w300,
                                     fontSize: Responsive.isBigDesktop(context)
                                         ? 20
-                                        : 18,
+                                        : 14,
+                                    color: onyxBlack,
                                   ),
                                 ),
                               ),
@@ -358,11 +361,11 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                 child: Text(
                                   '$inviteCode',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: Responsive.isBigDesktop(context)
-                                        ? 32
-                                        : 24,
-                                  ),
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: Responsive.isBigDesktop(context)
+                                          ? 32
+                                          : 20,
+                                      color: onyxBlack),
                                 ),
                               ),
                               Container(
@@ -390,6 +393,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                                   context)
                                                               ? 20
                                                               : 18,
+                                                      color: onyxBlack,
                                                     ),
                                                   ),
                                                 ),
@@ -406,6 +410,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                                   context)
                                                               ? 24
                                                               : 20,
+                                                      color: onyxBlack,
                                                     ),
                                                   ),
                                                 ),
@@ -430,6 +435,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                                   context)
                                                               ? 20
                                                               : 18,
+                                                      color: onyxBlack,
                                                     ),
                                                   ),
                                                 ),
@@ -446,6 +452,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                                   context)
                                                               ? 24
                                                               : 20,
+                                                      color: onyxBlack,
                                                     ),
                                                   ),
                                                 ),
@@ -467,7 +474,8 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                 fontSize: Responsive.isDesktop(
                                                         context)
                                                     ? 20
-                                                    : 16,
+                                                    : 14,
+                                                color: onyxBlack,
                                               ),
                                             ),
                                           ),
@@ -481,6 +489,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                         context)
                                                     ? 24
                                                     : 16,
+                                                color: onyxBlack,
                                               ),
                                             ),
                                           ),
@@ -497,7 +506,8 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                       Responsive.isDesktop(
                                                               context)
                                                           ? 20
-                                                          : 16,
+                                                          : 14,
+                                                  color: onyxBlack,
                                                 ),
                                               ),
                                             ),
@@ -511,7 +521,8 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                 fontSize: Responsive.isDesktop(
                                                         context)
                                                     ? 24
-                                                    : 20,
+                                                    : 16,
+                                                color: onyxBlack,
                                               ),
                                             ),
                                           ),
@@ -524,8 +535,9 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                   'Invitation Created By',
                                   style: TextStyle(
                                     fontSize:
-                                        Responsive.isDesktop(context) ? 20 : 16,
+                                        Responsive.isDesktop(context) ? 20 : 14,
                                     fontWeight: FontWeight.w300,
+                                    color: onyxBlack,
                                   ),
                                 ),
                               ),
@@ -534,10 +546,11 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                 child: Text(
                                   '$employeeName',
                                   style: TextStyle(
-                                      fontSize: Responsive.isDesktop(context)
-                                          ? 24
-                                          : 20,
-                                      fontWeight: FontWeight.w700),
+                                    fontSize:
+                                        Responsive.isDesktop(context) ? 24 : 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: onyxBlack,
+                                  ),
                                 ),
                               ),
                               Container(
@@ -552,7 +565,8 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                         fontWeight: FontWeight.w300,
                                         fontSize: Responsive.isDesktop(context)
                                             ? 20
-                                            : 18,
+                                            : 14,
+                                        color: onyxBlack,
                                       ),
                                     ),
                                     TextButton(
@@ -561,7 +575,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                             .push(AddVisitorOverlay(
                                           inviteCode: eventID,
                                         ))
-                                            .then((value) {
+                                            .then((_) {
                                           getInvitationDetail(eventID!)
                                               .then((value) {
                                             setState(
@@ -582,12 +596,12 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                       child: Text(
                                         'Add Visitor',
                                         style: TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                          fontSize:
-                                              Responsive.isDesktop(context)
-                                                  ? 20
-                                                  : 18,
-                                        ),
+                                            fontWeight: FontWeight.w700,
+                                            fontSize:
+                                                Responsive.isDesktop(context)
+                                                    ? 20
+                                                    : 14,
+                                            color: onyxBlack),
                                       ),
                                     ),
                                     // GestureDetector(
@@ -632,10 +646,17 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                   child: Column(
                                     children: [
                                       SizedBox(
-                                        height: 50,
-                                        width: 250,
+                                        height: Responsive.isDesktop(context)
+                                            ? 50
+                                            : 40,
+                                        width: Responsive.isDesktop(context)
+                                            ? 250
+                                            : null,
                                         child: CustTextButon(
-                                          // sizeFont: 20,
+                                          fontSize:
+                                              Responsive.isDesktop(context)
+                                                  ? 20
+                                                  : 16,
                                           label: 'Change Visit Time',
                                           onTap: () {
                                             // changeVisitDialog(context)
@@ -663,10 +684,17 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                       Padding(
                                         padding: const EdgeInsets.only(top: 10),
                                         child: SizedBox(
-                                          height: 50,
-                                          width: 250,
+                                          height: Responsive.isDesktop(context)
+                                              ? 50
+                                              : 40,
+                                          width: Responsive.isDesktop(context)
+                                              ? 250
+                                              : null,
                                           child: CustTextButon(
-                                            // sizeFont: 20,
+                                            fontSize:
+                                                Responsive.isDesktop(context)
+                                                    ? 20
+                                                    : 16,
                                             label: 'Cancel',
                                             onTap: () {
                                               showConfirmDialog(context);
@@ -680,10 +708,17 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                           bottom: 40,
                                         ),
                                         child: SizedBox(
-                                          height: 50,
-                                          width: 250,
+                                          height: Responsive.isDesktop(context)
+                                              ? 50
+                                              : 40,
+                                          width: Responsive.isDesktop(context)
+                                              ? 250
+                                              : null,
                                           child: RegularButton(
-                                            sizeFont: 20,
+                                            sizeFont:
+                                                Responsive.isDesktop(context)
+                                                    ? 20
+                                                    : 16,
                                             title: 'Confirm',
                                             onTap: () {
                                               Navigator.of(context).pop(false);

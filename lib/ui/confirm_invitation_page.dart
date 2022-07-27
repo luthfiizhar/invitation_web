@@ -98,27 +98,30 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: [
-      SliverList(
-        delegate: SliverChildListDelegate([
-          Responsive.isDesktop(context)
-              ? NavigationBarWeb(
-                  index: 0,
-                )
-              : NavigationBarMobile(
-                  index: 0,
-                ),
-          Responsive.isDesktop(context)
-              ? desktopLayoutConfirmPage(context)
-              : mobileLayoutConfirmPage(context),
-        ]),
-      ),
-      SliverFillRemaining(
-        hasScrollBody: false,
-        child:
-            Align(alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
-      )
-    ]);
+    return Container(
+      color: Responsive.isDesktop(context) ? null : eerieBlack,
+      child: CustomScrollView(slivers: [
+        SliverList(
+          delegate: SliverChildListDelegate([
+            Responsive.isDesktop(context)
+                ? NavigationBarWeb(
+                    index: 0,
+                  )
+                : NavigationBarMobile(
+                    index: 0,
+                  ),
+            Responsive.isDesktop(context)
+                ? desktopLayoutConfirmPage(context)
+                : mobileLayoutConfirmPage(context),
+          ]),
+        ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Align(
+              alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
+        )
+      ]),
+    );
     // return SingleChildScrollView(
     //   child: Column(
     //     children: [
@@ -252,13 +255,15 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
         saveInvitation().then((value) {
           if (value == "200") {
             Navigator.of(context)
-                .push(NotifProcessDialog(isSuccess: true))
+                .push(NotifProcessDialog(
+                    isSuccess: true, message: "Visitors has been invited!"))
                 .then((value) {
               Navigator.pushReplacementNamed(context, routeInvite);
             });
           } else {
             Navigator.of(context)
-                .push(NotifProcessDialog(isSuccess: false))
+                .push(NotifProcessDialog(
+                    isSuccess: false, message: "Something wrong!"))
                 .then((value) {
               // Navigator.of(context).pop
             });
@@ -498,7 +503,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                     children: [
                       SizedBox(
                         // width: 250,
-                        height: 30,
+                        height: 35,
                         child: RegularButton(
                           title: 'Confirm',
                           sizeFont: 16,
@@ -524,7 +529,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                       SizedBox(width: 20, height: 10),
                       SizedBox(
                         // width: 250,
-                        height: 30,
+                        height: 35,
                         child: CustTextButon(
                           fontSize: 16,
                           isDark: true,

@@ -24,8 +24,9 @@ final TextStyle kPageTitleStyleMobile =
 final TextStyle pageTitle =
     TextStyle(fontSize: 48, fontWeight: FontWeight.w700);
 
-final TextStyle pageSubtitle =
-    TextStyle(fontSize: 24, fontWeight: FontWeight.w300);
+final TextStyle pageSubtitle = TextStyle(
+    fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
+    fontWeight: FontWeight.w300);
 
 final TextStyle tableBody = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 18,

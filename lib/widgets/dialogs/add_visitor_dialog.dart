@@ -152,7 +152,7 @@ class AddVisitorOverlay extends ModalRoute<void> {
           builder: (context, setState) {
             return Center(
               child: Container(
-                width: 700,
+                width: 730,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: scaffoldBg,
@@ -236,8 +236,8 @@ class AddVisitorOverlay extends ModalRoute<void> {
                           ),
                           Center(
                             child: SizedBox(
-                              height: 60,
-                              width: 275,
+                              height: Responsive.isDesktop(context) ? 50 : 40,
+                              width: Responsive.isDesktop(context) ? 275 : null,
                               child: RegularButton(
                                 title: 'Next',
                                 sizeFont:
@@ -255,13 +255,13 @@ class AddVisitorOverlay extends ModalRoute<void> {
                                     Navigator.of(context)
                                         .push(AddNewInviteConfirmDialog(
                                             eventID: inviteCode))
-                                        .then((value) {
+                                        .then((_) {
                                       // model.listInvite = "";
                                       // setState(
                                       //   () {
                                       visitorList.clear();
                                       clearVisitorData();
-                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop(false);
                                       //   },
                                       // );
                                     });

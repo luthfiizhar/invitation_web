@@ -311,35 +311,35 @@ class VisitorDataOverlay extends ModalRoute<void> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 50),
+          padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'First Name',
             detailList["FirstName"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Last Name',
             detailList["LastName"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Gender',
             detailList["Gender"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Email',
             detailList["Email"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(top: 20),
           child: phoneInfo(
             'Phone Number',
             "",
@@ -347,48 +347,48 @@ class VisitorDataOverlay extends ModalRoute<void> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.only(top: 20),
           child: Divider(
             thickness: 2,
             color: spanishGray,
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Origin Company',
             detailList["CompanyName"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Visit Reason',
             detailList["VisitReason"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Visit Date',
             detailList["VisitTime"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Meeting With',
             detailList["MeetingWith"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 50),
+          padding: EdgeInsets.only(top: 40),
           child: Center(
             child: SizedBox(
               // width: 400,
-              height: 60,
+              height: 40,
               child: RegularButton(
-                sizeFont: 24,
+                sizeFont: 16,
                 title: 'OK',
                 onTap: () {
                   Navigator.of(context).pop();

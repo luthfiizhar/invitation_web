@@ -147,111 +147,116 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
   }
 
   Widget desktopLayout(BuildContext context, int number) {
-    return Container(
-      padding: EdgeInsets.only(top: 30),
-      width: 700,
-      // color: Colors.blue,
-      child: Column(
-        children: [
-          widget.index != 0
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: Divider(
-                    thickness: 2,
-                    color: spanishGray,
-                  ),
-                )
-              : SizedBox(),
-          Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
+    return Column(
+      children: [
+        widget.index != 0
+            ? Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Divider(
+                  thickness: 2,
+                  color: spanishGray,
+                ),
+              )
+            : SizedBox(),
+        Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
                   'Visitor Detail ' + number.toString(),
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
                 ),
-                TextButton.icon(
-                  onPressed: () {
-                    widget.onRemove!();
-                  },
-                  icon: Icon(
-                    Icons.close,
-                    color: onyxBlack,
-                  ),
-                  label: Text(''),
+              ),
+              TextButton.icon(
+                onPressed: () {
+                  widget.onRemove!();
+                },
+                icon: Icon(
+                  Icons.close,
+                  color: onyxBlack,
                 ),
-              ],
-            ),
+                label: Text(''),
+              ),
+            ],
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 30),
-            child: Row(
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
-                  flex: 6,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: InputVisitor(
-                      validator: (value) =>
-                          value == "" ? "This field is required" : null,
-                      controller: widget._firstName,
-                      label: 'First Name',
-                      onSaved: (value) {
-                        widget.visitorModel!.FirstName = value.toString();
-                      },
-                      // focusNode: firstNameNode,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 6,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 15,
-                    ),
-                    child: InputVisitor(
-                      validator: (value) =>
-                          value! == "" ? "This field is required" : null,
-                      controller: widget._lastName,
-                      label: 'Last Name',
-                      onSaved: (value) {
-                        widget.visitorModel!.LastName = value.toString();
-                      },
-                      // focusNode: lastNameNode,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 30),
-            child: Row(
-              children: [
-                Expanded(
-                  // flex: 12,
-                  child: Padding(
-                    padding: EdgeInsets.zero,
-                    child: Container(
-                      child: InputVisitor(
-                        validator: (value) =>
-                            value == "" ? "This field is required" : null,
-                        controller: widget._email,
-                        label: 'Email',
-                        onSaved: (value) {
-                          widget.visitorModel!.Email = value.toString();
-                        },
-                        // focusNode: emailNode,
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: SizedBox(
+                          width: 300,
+                          child: InputVisitor(
+                            validator: (value) =>
+                                value == "" ? "This field is required" : null,
+                            controller: widget._firstName,
+                            label: 'First Name',
+                            onSaved: (value) {
+                              widget.visitorModel!.FirstName = value.toString();
+                            },
+                            // focusNode: firstNameNode,
+                          ),
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 15,
+                        ),
+                        child: SizedBox(
+                          width: 300,
+                          child: InputVisitor(
+                            validator: (value) =>
+                                value! == "" ? "This field is required" : null,
+                            controller: widget._lastName,
+                            label: 'Last Name',
+                            onSaved: (value) {
+                              widget.visitorModel!.LastName = value.toString();
+                            },
+                            // focusNode: lastNameNode,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 630,
+                        child: InputVisitor(
+                          validator: (value) =>
+                              value == "" ? "This field is required" : null,
+                          controller: widget._email,
+                          label: 'Email',
+                          onSaved: (value) {
+                            widget.visitorModel!.Email = value.toString();
+                          },
+                          // focusNode: emailNode,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 

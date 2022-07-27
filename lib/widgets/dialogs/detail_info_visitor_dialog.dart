@@ -80,7 +80,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
     return Padding(
       padding: Responsive.isDesktop(context)
           ? EdgeInsets.all(15.0)
-          : EdgeInsets.only(top: 15, bottom: 15),
+          : EdgeInsets.only(top: 15, bottom: 50),
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Center(
@@ -312,6 +312,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
               child: Center(
                 child: CustTextButon(
                   label: 'Cancel',
+                  fontSize: Responsive.isDesktop(context) ? 24 : 16,
                   onTap: () {
                     Navigator.of(context).pop();
                   },
@@ -319,16 +320,16 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
               ),
             ),
             SizedBox(
-              width: 30,
+              width: Responsive.isDesktop(context) ? 30 : null,
             ),
             Padding(
               padding: EdgeInsets.only(top: 50),
               child: Center(
                 child: SizedBox(
-                  width: 250,
-                  height: 60,
+                  width: Responsive.isDesktop(context) ? 250 : null,
+                  height: Responsive.isDesktop(context) ? 50 : 40,
                   child: RegularButton(
-                    sizeFont: 24,
+                    sizeFont: Responsive.isDesktop(context) ? 24 : 16,
                     title: 'Confirm',
                     onTap: () {
                       showConfirmDialog(context);
@@ -352,28 +353,28 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 50),
+          padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'First Name',
             detailList["FirstName"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Last Name',
             detailList["LastName"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Gender',
             detailList["Gender"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Email',
             detailList["Email"],
@@ -387,7 +388,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
         //   ),
         // ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(top: 20),
           child: phoneInfo(
             'Phone Number',
             detailList['PhoneNumber'] == null
@@ -396,57 +397,58 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.only(top: 20),
           child: Divider(
             thickness: 2,
             color: spanishGray,
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Origin Company',
             detailList["CompanyName"].toString(),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Visit Reason',
             detailList["VisitReason"].toString(),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Visit Date',
             detailList["VisitTime"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'Meeting With',
             detailList["MeetingWith"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 50),
+          padding: EdgeInsets.only(top: 30),
           child: Center(
             child: CustTextButon(
+              fontSize: Responsive.isDesktop(context) ? 24 : 14,
               label: 'Cancel',
               onTap: () {},
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 50),
+          padding: EdgeInsets.only(top: 20),
           child: Center(
             child: SizedBox(
               // width: 400,
-              height: 60,
+              height: 40,
               child: RegularButton(
-                sizeFont: 24,
+                sizeFont: Responsive.isDesktop(context) ? 24 : 14,
                 title: 'Confirm',
                 onTap: () {
                   showConfirmDialog(context);

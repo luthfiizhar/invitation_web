@@ -6,6 +6,7 @@ import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/responsive.dart';
+import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
 import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
@@ -192,55 +193,141 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                       ),
                       Container(
                         padding: EdgeInsets.only(top: 50, bottom: 50),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              height: 60,
-                              child: CustTextButon(
-                                fontSize: 16,
-                                isDark: true,
-                                label: 'Cancel',
-                                onTap: () {
-                                  // setState(() {
-                                  // list!.clear();
-                                  // model.listInvite = "";
-                                  // clearVisitorData();
-                                  // });
+                        child: Responsive.isDesktop(context)
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 100
+                                        : null,
+                                    height: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 50
+                                        : 40,
+                                    child: CustTextButon(
+                                      fontSize: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 16
+                                          : 14,
+                                      isDark: true,
+                                      label: 'Cancel',
+                                      onTap: () {
+                                        // setState(() {
+                                        // list!.clear();
+                                        // model.listInvite = "";
+                                        // clearVisitorData();
+                                        // });
 
-                                  Navigator.of(context).pop(false);
-                                },
+                                        Navigator.of(context).pop(false);
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(width: 20, height: 60),
+                                  SizedBox(
+                                    width: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 100
+                                        : null,
+                                    height: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 50
+                                        : 40,
+                                    child: RegularButton(
+                                      title: 'Confirm',
+                                      sizeFont: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 16
+                                          : 14,
+                                      onTap: () {
+                                        showConfirmDialog(context);
+                                        // print('aaa');
+                                        // confirmDialog(context,
+                                        //         'Are you sure the data is correct?', true)
+                                        //     .then((value) {
+                                        //   if (value) {
+                                        //     saveInvitation().then((value) {
+                                        //       // Navigator.pushReplacementNamed(
+                                        //       //   context, routeInvite);
+                                        //     });
+                                        //   } else {
+                                        //     print('cancel');
+                                        //   }
+                                        // });
+                                      },
+                                      isDark: true,
+                                    ),
+                                  )
+                                ],
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 100
+                                        : null,
+                                    height: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 50
+                                        : 40,
+                                    child: RegularButton(
+                                      title: 'Confirm',
+                                      sizeFont: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 16
+                                          : 14,
+                                      onTap: () {
+                                        showConfirmDialog(context);
+                                        // print('aaa');
+                                        // confirmDialog(context,
+                                        //         'Are you sure the data is correct?', true)
+                                        //     .then((value) {
+                                        //   if (value) {
+                                        //     saveInvitation().then((value) {
+                                        //       // Navigator.pushReplacementNamed(
+                                        //       //   context, routeInvite);
+                                        //     });
+                                        //   } else {
+                                        //     print('cancel');
+                                        //   }
+                                        // });
+                                      },
+                                      isDark: true,
+                                    ),
+                                  ),
+                                  SizedBox(width: 20, height: 20),
+                                  SizedBox(
+                                    width: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 100
+                                        : null,
+                                    height: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 50
+                                        : 40,
+                                    child: CustTextButon(
+                                      fontSize: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 16
+                                          : 14,
+                                      isDark: true,
+                                      label: 'Cancel',
+                                      onTap: () {
+                                        // setState(() {
+                                        // list!.clear();
+                                        // model.listInvite = "";
+                                        // clearVisitorData();
+                                        // });
+
+                                        Navigator.of(context).pop(false);
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            SizedBox(width: 20, height: 60),
-                            SizedBox(
-                              width: 100,
-                              height: 60,
-                              child: RegularButton(
-                                title: 'Confirm',
-                                sizeFont: 16,
-                                onTap: () {
-                                  showConfirmDialog(context);
-                                  // print('aaa');
-                                  // confirmDialog(context,
-                                  //         'Are you sure the data is correct?', true)
-                                  //     .then((value) {
-                                  //   if (value) {
-                                  //     saveInvitation().then((value) {
-                                  //       // Navigator.pushReplacementNamed(
-                                  //       //   context, routeInvite);
-                                  //     });
-                                  //   } else {
-                                  //     print('cancel');
-                                  //   }
-                                  // });
-                                },
-                                isDark: true,
-                              ),
-                            )
-                          ],
-                        ),
                       ),
                     ],
                   ),
@@ -259,7 +346,8 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
       leading: Text(
         '$no',
         style: TextStyle(
-          fontSize: 48,
+          fontSize:
+              Responsive.isDesktop(navKey.currentState!.context) ? 48 : 28,
           fontWeight: FontWeight.w700,
           color: scaffoldBg,
         ),
@@ -269,7 +357,8 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
         child: Text(
           '$firstName $lastName',
           style: TextStyle(
-            fontSize: 24,
+            fontSize:
+                Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
             fontWeight: FontWeight.w700,
             color: scaffoldBg,
           ),
@@ -278,7 +367,8 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
       subtitle: Text(
         '$email',
         style: TextStyle(
-          fontSize: 20,
+          fontSize:
+              Responsive.isDesktop(navKey.currentState!.context) ? 20 : 12,
           fontWeight: FontWeight.w300,
           color: scaffoldBg,
         ),
@@ -336,11 +426,13 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
           print(value);
           if (value['Status'] == '200') {
             Navigator.of(context)
-                .push(NotifProcessDialog(isSuccess: true))
+                .push(NotifProcessDialog(
+                    isSuccess: true, message: "Visitor has been invited!"))
                 .then((value) => Navigator.of(context).pop());
           } else {
             Navigator.of(context)
-                .push(NotifProcessDialog(isSuccess: false))
+                .push(NotifProcessDialog(
+                    isSuccess: false, message: "Something wrong!"))
                 .then((value) => Navigator.of(context).pop());
           }
           // Navigator.of(context).pop();

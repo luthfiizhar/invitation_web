@@ -21,7 +21,7 @@ class NavigationItem extends StatelessWidget {
         onHighlight!(routeName);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: InteractiveNavItem(
           text: title,
           selected: selected,

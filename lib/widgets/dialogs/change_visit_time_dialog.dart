@@ -188,14 +188,16 @@ class ChangeVisitDialog extends ModalRoute<void> {
           if (value == '200') {
             print('success');
             Navigator.of(navKey.currentState!.context)
-                .push(NotifProcessDialog(isSuccess: true))
+                .push(NotifProcessDialog(
+                    isSuccess: true, message: "Visit date has been updated!"))
                 .then((value) {
               Navigator.pop(navKey.currentState!.context);
             });
             // Navigator.pop(navKey.currentState!.context);
           } else {
             Navigator.of(navKey.currentState!.context)
-                .push(NotifProcessDialog(isSuccess: false))
+                .push(NotifProcessDialog(
+                    isSuccess: false, message: "Something Wrong!"))
                 .then((value) {
               Navigator.pop(navKey.currentState!.context);
             });

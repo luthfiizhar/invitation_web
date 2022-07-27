@@ -306,191 +306,183 @@ class _InvitePageState extends State<InvitePage> {
       padding: EdgeInsets.only(top: 40),
       // width: 700,
       // color: Colors.blue,
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 6,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Text(
-                              'Visitation Start',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: eerieBlack),
-                            ),
-                          ),
-                        ],
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Text(
+                        'Visitation Start',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: eerieBlack),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Container(
-                          // height: 50,
-                          padding: EdgeInsets.zero,
-                          child: TextFormField(
-                            validator: (value) =>
-                                value == "" ? "This field is required" : null,
-                            cursorColor: onyxBlack,
-                            focusNode: startDateNode,
-                            controller: _startDate,
-                            onTap: () {
-                              // FocusScope.of(context)
-                              //     .requestFocus(new FocusNode());
-                              _selectDate(_startDate);
-                            },
-                            onSaved: (value) {
-                              setState(() {
-                                startDate = _startDate.text;
-                              });
-                            },
-                            decoration: InputDecoration(
-                              isDense: true,
-                              isCollapsed: true,
-                              hintText: 'Click here to select start date',
-                              hintStyle: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  top: 21, bottom: 17, left: 30, right: 30),
-                              focusColor: onyxBlack,
-                              focusedErrorBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: eerieBlack,
-                                    width: 10,
-                                  )),
-                              focusedBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide:
-                                      BorderSide(color: eerieBlack, width: 10)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF929AAB), width: 2.5)),
-                              fillColor: graySand,
-                              filled: true,
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: eerieBlack, width: 2.5)),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF929AAB), width: 2.5)),
-                              errorStyle:
-                                  TextStyle(color: silver, fontSize: 18),
-                            ),
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFF393E46)),
-                          ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: SizedBox(
+                    width: 300,
+                    // height: 50,
+                    // padding: EdgeInsets.zero,
+                    child: TextFormField(
+                      validator: (value) =>
+                          value == "" ? "This field is required" : null,
+                      cursorColor: onyxBlack,
+                      focusNode: startDateNode,
+                      controller: _startDate,
+                      onTap: () {
+                        // FocusScope.of(context)
+                        //     .requestFocus(new FocusNode());
+                        _selectDate(_startDate);
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                          startDate = _startDate.text;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        isDense: true,
+                        isCollapsed: true,
+                        hintText: 'Click here to select start date',
+                        hintStyle: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
                         ),
+                        contentPadding: EdgeInsets.only(
+                            top: 21, bottom: 17, left: 30, right: 30),
+                        focusColor: onyxBlack,
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: eerieBlack,
+                              width: 2.5,
+                            )),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: eerieBlack, width: 2.5)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Color(0xFF929AAB), width: 2.5)),
+                        fillColor: graySand,
+                        filled: true,
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: eerieBlack, width: 2.5)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide(
+                                color: Color(0xFF929AAB), width: 2.5)),
+                        errorStyle: TextStyle(color: silver, fontSize: 18),
                       ),
-                    ],
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF393E46)),
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 6,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Text(
-                              'Visitation End',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: eerieBlack),
-                            ),
-                          ),
-                        ],
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Text(
+                        'Visitation End',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: eerieBlack),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Container(
-                          // height: 50,
-                          padding: EdgeInsets.zero,
-                          child: TextFormField(
-                            validator: (value) =>
-                                value == "" ? "This field is required" : null,
-                            cursorColor: onyxBlack,
-                            focusNode: endDateNode,
-                            controller: _endDate,
-                            onTap: () {
-                              // FocusScope.of(context)
-                              //     .requestFocus(new FocusNode());
-                              _selectDate(_endDate);
-                            },
-                            onSaved: (value) {
-                              endDate = _endDate.text;
-                            },
-                            decoration: InputDecoration(
-                              isDense: true,
-                              isCollapsed: true,
-                              hintText: 'Click here to select end date',
-                              hintStyle: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  top: 21, bottom: 17, left: 30, right: 30),
-                              focusColor: onyxBlack,
-                              focusedErrorBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: eerieBlack,
-                                    width: 10,
-                                  )),
-                              focusedBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide:
-                                      BorderSide(color: eerieBlack, width: 10)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF929AAB), width: 2.5)),
-                              fillColor: graySand,
-                              filled: true,
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: eerieBlack, width: 2.5)),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Color(0xFF929AAB), width: 2.5)),
-                              errorStyle:
-                                  TextStyle(color: silver, fontSize: 18),
-                            ),
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFF393E46)),
-                          ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: SizedBox(
+                    width: 300,
+                    // height: 50,
+                    // padding: EdgeInsets.zero,
+                    child: TextFormField(
+                      validator: (value) =>
+                          value == "" ? "This field is required" : null,
+                      cursorColor: onyxBlack,
+                      focusNode: endDateNode,
+                      controller: _endDate,
+                      onTap: () {
+                        // FocusScope.of(context)
+                        //     .requestFocus(new FocusNode());
+                        _selectDate(_endDate);
+                      },
+                      onSaved: (value) {
+                        endDate = _endDate.text;
+                      },
+                      decoration: InputDecoration(
+                        isDense: true,
+                        isCollapsed: true,
+                        hintText: 'Click here to select end date',
+                        hintStyle: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
                         ),
+                        contentPadding: EdgeInsets.only(
+                            top: 21, bottom: 17, left: 30, right: 30),
+                        focusColor: onyxBlack,
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: eerieBlack,
+                              width: 2.5,
+                            )),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: eerieBlack, width: 2.5)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Color(0xFF929AAB), width: 2.5)),
+                        fillColor: graySand,
+                        filled: true,
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                BorderSide(color: eerieBlack, width: 2.5)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Color(0xFF929AAB), width: 2.5)),
+                        errorStyle: TextStyle(color: silver, fontSize: 18),
                       ),
-                    ],
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF393E46)),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -535,33 +527,54 @@ class _InvitePageState extends State<InvitePage> {
                           ),
                         ),
                       ),
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: inputDateContainer(),
-                            ),
-                            formList.length > 0
-                                ? Padding(
-                                    padding: const EdgeInsets.only(top: 30),
-                                    child: Divider(
-                                      thickness: 2,
-                                      color: spanishGray,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Container(
+                              // color: Colors.amber,
+                              width: 650,
+                              child: Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          inputDateContainer(),
+                                        ],
+                                      ),
                                     ),
-                                  )
-                                : SizedBox(),
-                            ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: formList.length,
-                              itemBuilder: (context, index) {
-                                return formList[index];
-                              },
+                                    formList.length > 0
+                                        ? Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 30),
+                                            child: Divider(
+                                              thickness: 2,
+                                              color: spanishGray,
+                                            ),
+                                          )
+                                        : SizedBox(),
+                                    ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: formList.length,
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                            // color: Colors.lightBlue,
+                                            child: formList[index]);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 30),
@@ -700,15 +713,15 @@ class _InvitePageState extends State<InvitePage> {
                     contentPadding: EdgeInsets.only(
                         top: 20, bottom: 20, left: 30, right: 30),
                     focusColor: onyxBlack,
-                    focusedErrorBorder: UnderlineInputBorder(
+                    focusedErrorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(7),
                         borderSide: BorderSide(
                           color: eerieBlack,
-                          width: 10,
+                          width: 2.5,
                         )),
-                    focusedBorder: UnderlineInputBorder(
+                    focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(7),
-                        borderSide: BorderSide(color: eerieBlack, width: 10)),
+                        borderSide: BorderSide(color: eerieBlack, width: 2.5)),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(7),
                         borderSide:
@@ -782,15 +795,16 @@ class _InvitePageState extends State<InvitePage> {
                       contentPadding: EdgeInsets.only(
                           top: 20, bottom: 20, left: 30, right: 30),
                       focusColor: onyxBlack,
-                      focusedErrorBorder: UnderlineInputBorder(
+                      focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide(
                             color: eerieBlack,
-                            width: 14,
+                            width: 2.5,
                           )),
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(7),
-                          borderSide: BorderSide(color: eerieBlack, width: 10)),
+                          borderSide:
+                              BorderSide(color: eerieBlack, width: 2.5)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(7),
                           borderSide:
