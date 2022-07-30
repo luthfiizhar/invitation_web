@@ -12,6 +12,7 @@ import 'package:navigation_example/widgets/dialogs/add_visitor_dialog.dart';
 import 'package:navigation_example/widgets/dialogs/change_visit_time_dialog.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
 import 'package:navigation_example/widgets/dialogs/detail_info_visitor_dialog.dart';
+import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/dialogs/visitor_data.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
@@ -242,7 +243,24 @@ class DetailVisitorOverlay extends ModalRoute<void> {
       if (value) {
         cancelInvitation(eventID!).then((value) {
           print(value);
-          Navigator.of(context).pop();
+          if (value['Status'] == '200') {
+            Navigator.push(
+                    context,
+                    NotifProcessDialog(
+                        message: 'Cancel event success', isSuccess: true))
+                .then((value) {
+              Navigator.of(context).pop();
+            });
+          } else {
+            Navigator.push(
+                    context,
+                    NotifProcessDialog(
+                        message: 'Cancel event failed', isSuccess: false))
+                .then((value) {
+              Navigator.of(context).pop();
+            });
+          }
+          // Navigator.of(context).pop();
         });
       } else {
         // Navigator.of(context).pop();
@@ -255,7 +273,8 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(jwt);
 
-    final url = Uri.http(apiUrl, '/api/event/cancel-event');
+    final url = Uri.https(
+        apiUrl, '/VisitorManagementBackend/public/api/event/cancel-event');
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -277,7 +296,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     } else {
       isLoading = false;
     }
-    return data['Data'];
+    return data;
   }
 
   Future getInvitationDetail(String inviteCode) async {
@@ -288,7 +307,8 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(jwt);
 
-    final url = Uri.http(apiUrl, '/api/invitation/get-invitation-detail');
+    final url = Uri.https(apiUrl,
+        '/VisitorManagementBackend/public/api/invitation/get-invitation-detail');
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',

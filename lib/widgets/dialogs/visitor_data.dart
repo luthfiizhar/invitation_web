@@ -70,95 +70,103 @@ class VisitorDataOverlay extends ModalRoute<void> {
       padding: const EdgeInsets.all(15.0),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          var detailList = json.decode(listDetail!);
+          // var detailList = json.decode(listDetail!);
           return Center(
-            child: Container(
-              width: Responsive.isDesktop(context) ? 1000 : 550,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: scaffoldBg,
-              ),
-              child: ScrollConfiguration(
-                behavior:
-                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: Responsive.isDesktop(context)
-                        ? EdgeInsets.only(left: 150, right: 150, top: 30)
-                        : EdgeInsets.only(left: 25, right: 25, top: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+            child: Stack(
+              children: [
+                Container(
+                  width: Responsive.isDesktop(context) ? 600 : 600,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: scaffoldBg,
+                  ),
+                  child: ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context)
+                        .copyWith(scrollbars: false),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: Responsive.isDesktop(context)
+                            ? EdgeInsets.only(
+                                left: paddingSampingDialog,
+                                right: paddingSampingDialog,
+                                top: paddingAtasDialog)
+                            : EdgeInsets.only(left: 25, right: 25, top: 30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextButton.icon(
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
-                              },
-                              icon: Icon(
-                                Icons.close,
-                                color: eerieBlack,
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Visitor Data',
+                                    style: dialogTitle,
+                                  ),
+                                ],
                               ),
-                              label: Text(''),
                             ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 25),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // detailList['VisitorPhoto'] != ""
+                                  // ?
+                                  Container(
+                                    height: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 125
+                                        : 75,
+                                    width: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 125
+                                        : 75,
+                                    child:
+                                        Image.asset('assets/avatar_male.png'),
+                                  )
+                                  // : CircleAvatar(
+                                  //     radius: Responsive.isDesktop(
+                                  //             navKey.currentState!.context)
+                                  //         ? 100
+                                  //         : 60,
+                                  //     backgroundImage: MemoryImage(
+                                  //       Base64Decoder().convert(
+                                  //           detailList['VisitorPhoto']!
+                                  //               .toString()
+                                  //               .split(',')
+                                  //               .last),
+                                  //     ),
+                                  //   ),
+                                ],
+                              ),
+                            ),
+                            //Content
+                            Responsive.isDesktop(context)
+                                ? desktopLayout(context, listDetail!)
+                                : mobileLayout(context, listDetail!),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Visitor Data',
-                                style: dialogTitle,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 40),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              detailList['VisitorPhoto'] == ""
-                                  ? Container(
-                                      height: Responsive.isDesktop(
-                                              navKey.currentState!.context)
-                                          ? 125
-                                          : 50,
-                                      width: Responsive.isDesktop(
-                                              navKey.currentState!.context)
-                                          ? 125
-                                          : 50,
-                                      child:
-                                          Image.asset('assets/avatar_male.png'),
-                                    )
-                                  : CircleAvatar(
-                                      radius: Responsive.isDesktop(
-                                              navKey.currentState!.context)
-                                          ? 100
-                                          : 60,
-                                      backgroundImage: MemoryImage(
-                                        Base64Decoder().convert(
-                                            detailList['VisitorPhoto']!
-                                                .toString()
-                                                .split(',')
-                                                .last),
-                                      ),
-                                    ),
-                            ],
-                          ),
-                        ),
-                        //Content
-                        Responsive.isDesktop(context)
-                            ? desktopLayout(context, listDetail!)
-                            : mobileLayout(context, listDetail!),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+                Positioned(
+                  right: 20,
+                  top: 20,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Container(
+                      child: Icon(
+                        Icons.close,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },
@@ -167,7 +175,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
   }
 
   Widget desktopLayout(BuildContext context, String detail) {
-    var detailList = json.decode(detail);
+    // var detailList = json.decode(detail);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -177,20 +185,20 @@ class VisitorDataOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 50),
+                padding: EdgeInsets.only(top: 25),
                 child: detailInfo(
                   'First Name',
-                  detailList!["FirstName"],
+                  "test", //detailList!["FirstName"] == null ? "Test" : "",
                 ),
               ),
             ),
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 50),
+                padding: EdgeInsets.only(top: 25),
                 child: detailInfo(
                   'Last Name',
-                  detailList!["LastName"],
+                  "test", //detailList!["LastName"] == null ? "Test" : "",
                 ),
               ),
             ),
@@ -200,14 +208,14 @@ class VisitorDataOverlay extends ModalRoute<void> {
           padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'Gender',
-            detailList!["Gender"].toString(),
+            "test", //detailList!["Gender"].toString() == "null" ? "Test" : "",
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'Email',
-            detailList!["Email"],
+            "test", //detailList!["Email"] == null ? "Test" : "",
           ),
         ),
         Padding(
@@ -215,11 +223,11 @@ class VisitorDataOverlay extends ModalRoute<void> {
           child: phoneInfo(
             'Phone Number',
             "",
-            detailList!["PhoneNumber"].toString(),
+            "test", //detailList!["PhoneNumber"].toString() == "null" ? "Test" : "",
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.symmetric(vertical: 15),
           child: Divider(
             thickness: 2,
             color: spanishGray,
@@ -231,20 +239,20 @@ class VisitorDataOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 40),
+                padding: EdgeInsets.only(top: 0),
                 child: detailInfo(
                   'Origin Company',
-                  detailList!["CompanyName"],
+                  "test", //detailList!["CompanyName"] == null ? "Test" : "",
                 ),
               ),
             ),
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 40),
+                padding: EdgeInsets.only(top: 0),
                 child: detailInfo(
                   'Visit Reason',
-                  detailList!["VisitReason"].toString(),
+                  "test", //detailList!["VisitReason"].toString() == "null" ? "Test" : "",
                 ),
               ),
             ),
@@ -257,21 +265,21 @@ class VisitorDataOverlay extends ModalRoute<void> {
               flex: 6,
               child: Padding(
                 padding: EdgeInsets.only(
-                  top: 40,
+                  top: 30,
                 ),
                 child: detailInfo(
                   'Visit Date',
-                  detailList!["VisitTime"],
+                  "test", //detailList!["VisitTime"] == null ? "Test" : "",
                 ),
               ),
             ),
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 40),
+                padding: EdgeInsets.only(top: 30),
                 child: detailInfo(
                   'Meeting With',
-                  detailList!["MeetingWith"],
+                  "test", //detailList!["MeetingWith"] == null ? "Test" : "",
                 ),
               ),
             ),
@@ -281,13 +289,13 @@ class VisitorDataOverlay extends ModalRoute<void> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 50),
+              padding: EdgeInsets.only(top: 35),
               child: Center(
                 child: SizedBox(
                   width: 250,
-                  height: 60,
+                  height: 50,
                   child: RegularButton(
-                    sizeFont: 24,
+                    sizeFont: textSizeButton,
                     title: 'OK',
                     onTap: () {
                       Navigator.of(context).pop();
@@ -412,8 +420,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
           Text(
             '$label',
             style: TextStyle(
-              fontSize:
-                  Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
+              fontSize: textSizeTitleContent,
               fontWeight: FontWeight.w300,
               color: onyxBlack,
             ),
@@ -423,9 +430,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
             child: Text(
               '$content',
               style: TextStyle(
-                fontSize: Responsive.isDesktop(navKey.currentState!.context)
-                    ? 30
-                    : 16,
+                fontSize: textSizeContent,
                 fontWeight: FontWeight.w700,
                 color: onyxBlack,
               ),
