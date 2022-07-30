@@ -20,6 +20,7 @@ import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/dialogs/notification_dialog.dart';
 import 'package:navigation_example/widgets/footer.dart';
 import 'package:navigation_example/widgets/interactive_myinvite_menu_item.dart';
+import 'package:navigation_example/widgets/list_content_my_invitation.dart';
 import 'package:navigation_example/widgets/myinvite_menu_item.dart';
 import 'package:navigation_example/widgets/navigation_bar.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
@@ -42,6 +43,11 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     {"id": 2, "menu": "Past Invitation"},
     {"id": 3, "menu": "Canceled"},
   ];
+  List myInviteMenuMobile = [
+    {"id": 1, "menu": "Active"},
+    {"id": 2, "menu": "Past"},
+    {"id": 3, "menu": "Canceled"},
+  ];
   int selectedMenu = 1;
 
   bool nextButtonDisabled = true;
@@ -58,6 +64,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
   int rowPerPage = 10;
 
   bool isLoading = false;
+  bool detailIsLoading = false;
 
   var _rowPerPages = 5;
 
@@ -83,7 +90,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
       }
     });
 
-    print('hahahaha');
+    // print('hahahaha');
     var box = await Hive.openBox('userLogin');
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(jwt);
@@ -168,7 +175,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
   }
 
   Future getInvitationDetail(String inviteCode) async {
-    print('hahaha');
+    // print('hahaha');
     var box = await Hive.openBox('userLogin');
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(jwt);
@@ -385,8 +392,8 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
               ),
               Padding(
                 padding: Responsive.isBigDesktop(context)
-                    ? EdgeInsets.only(top: 30, left: 300, right: 300)
-                    : EdgeInsets.only(top: 30, left: 100, right: 100),
+                    ? EdgeInsets.only(top: 5, left: 300, right: 300)
+                    : EdgeInsets.only(top: 5, left: 100, right: 100),
                 child: Container(
                   // color: Colors.blue,
                   child: Column(
@@ -410,7 +417,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                                     Text(
                                       'My Invitation',
                                       style: TextStyle(
-                                          fontSize: 48,
+                                          fontSize: 32,
                                           fontWeight: FontWeight.w700),
                                     ),
                                   ],
@@ -419,7 +426,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.only(top: 20),
+                                      padding: EdgeInsets.only(top: 10),
                                       child: Text(
                                         'All of your invitation listing can be found here.',
                                         style: pageSubtitle,
@@ -440,25 +447,54 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(top: 40),
+                            padding: EdgeInsets.only(top: 15),
                             child: Container(
                               width: 600,
-                              height: 60,
+                              // height: 60,
                               // color: Colors.blue,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: myInviteMenu.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  var menuName = myInviteMenu[index]['menu'];
-                                  var selected = myInviteMenu[index]['id'];
-                                  return MyInviteMenu(
-                                    menuName: menuName,
-                                    selected: selectedMenu == selected,
-                                    onHighlight: onHighlight,
-                                    index: index + 1,
-                                  );
-                                },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      MyInviteMenu(
+                                        menuName: myInviteMenu[0]['menu'],
+                                        selected: selectedMenu == 1,
+                                        onHighlight: onHighlight,
+                                        index: 1,
+                                      ),
+                                      MyInviteMenu(
+                                        menuName: myInviteMenu[1]['menu'],
+                                        selected: selectedMenu == 2,
+                                        onHighlight: onHighlight,
+                                        index: 2,
+                                      ),
+                                      MyInviteMenu(
+                                        menuName: myInviteMenu[2]['menu'],
+                                        selected: selectedMenu == 3,
+                                        onHighlight: onHighlight,
+                                        index: 3,
+                                      ),
+                                    ],
+                                  ),
+                                  // ListView.builder(
+                                  //   scrollDirection: Axis.horizontal,
+                                  //   itemCount: myInviteMenu.length,
+                                  //   shrinkWrap: true,
+                                  //   itemBuilder: (context, index) {
+                                  //     var menuName =
+                                  //         myInviteMenu[index]['menu'];
+                                  //     var selected = myInviteMenu[index]['id'];
+                                  //     return MyInviteMenu(
+                                  //       menuName: menuName,
+                                  //       selected: selectedMenu == selected,
+                                  //       onHighlight: onHighlight,
+                                  //       index: index + 1,
+                                  //     );
+                                  //   },
+                                  // ),
+                                ],
                               ),
                               // child: Row(
                               //   children: [
@@ -488,7 +524,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                       ),
                       Center(
                         child: Padding(
-                          padding: EdgeInsets.only(top: 40),
+                          padding: EdgeInsets.only(top: 15),
                           child: Container(
                             // height: 600,
                             width: 1000,
@@ -537,7 +573,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
             [
               NavigationBarMobile(),
               Padding(
-                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
+                padding: EdgeInsets.only(top: 10, left: 30, right: 30),
                 child: Container(
                   // color: Colors.blue,
                   child: Column(
@@ -565,7 +601,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                               alignment: WrapAlignment.start,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(top: 20),
+                                  padding: EdgeInsets.only(top: 10),
                                   child: Text(
                                     'All of your booking listing can be found here.',
                                     style: TextStyle(
@@ -579,28 +615,28 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 20),
+                        padding: EdgeInsets.only(top: 15),
                         child: Container(
                           // width: MediaQuery.of(context).size.width * 0.8,
-                          height: 60,
+                          // height: 60,
                           // color: Colors.blue,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               MyInviteMenuMobile(
-                                menuName: myInviteMenu[0]['menu'],
+                                menuName: myInviteMenuMobile[0]['menu'],
                                 selected: selectedMenu == 1,
                                 onHighlight: onHighlight,
                                 index: 1,
                               ),
                               MyInviteMenuMobile(
-                                menuName: myInviteMenu[1]['menu'],
+                                menuName: myInviteMenuMobile[1]['menu'],
                                 selected: selectedMenu == 2,
                                 onHighlight: onHighlight,
                                 index: 2,
                               ),
                               MyInviteMenuMobile(
-                                menuName: myInviteMenu[2]['menu'],
+                                menuName: myInviteMenuMobile[2]['menu'],
                                 selected: selectedMenu == 3,
                                 onHighlight: onHighlight,
                                 index: 3,
@@ -611,7 +647,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                       ),
                       Center(
                         child: Padding(
-                          padding: EdgeInsets.only(top: 20),
+                          padding: EdgeInsets.only(top: 10),
                           child: Container(
                             // height: 600,
                             width: 1000,
@@ -650,17 +686,6 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
         )
       ],
     );
-  }
-
-  int? _sortColumnIndex;
-  bool _sortAscending = true;
-
-  void _sort<T>(Comparable<T> getField(d), int columnIndex, bool ascending) {
-    contohData.sort();
-    setState(() {
-      _sortColumnIndex = columnIndex;
-      _sortAscending = ascending;
-    });
   }
 
   Widget activeInvitationListViewDesktop(List data, List visitor, int menu) {
@@ -794,7 +819,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 15),
+            padding: const EdgeInsets.only(top: 0),
             child: Divider(
               thickness: 2,
               color: onyxBlack,
@@ -806,20 +831,35 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: listContentDesktop(
-                          data[index]['EventID'],
-                          data[index]['InvitationID'],
-                          data[index]['VisitTime'],
-                          data[index]['TotalVisitor'].toString(),
-                          visitor,
-                          index),
+                      padding: const EdgeInsets.symmetric(vertical: 0),
+                      // child: listContentDesktop(
+                      //     data[index]['EventID'],
+                      //     data[index]['InvitationID'],
+                      //     data[index]['VisitTime'],
+                      //     data[index]['TotalVisitor'].toString(),
+                      //     visitor,
+                      //     index),
+                      child: ListItemMyInvititationDesktop(
+                        eventId: data[index]['EventID'],
+                        index: index,
+                        inviteId: data[index]['InvitationID'],
+                        totalVisitor: data[index]['TotalVisitor'].toString(),
+                        visitTime: data[index]['VisitTime'],
+                        visitor: visitor,
+                        // getActiveInvite: getActiveInvitations(
+                        //   myActiveInvitePage.toString(),
+                        //   rowPerPage.toString(),
+                        //   sortBy,
+                        //   sortAscTemp,
+                        //   selectedMenu,
+                        // ),
+                      ),
                     );
                   },
                 )
               : CircularProgressIndicator(color: eerieBlack),
           Padding(
-            padding: const EdgeInsets.only(top: 15, bottom: 20),
+            padding: const EdgeInsets.only(top: 5, bottom: 0),
             child: Divider(
               thickness: 2,
               color: onyxBlack,
@@ -834,16 +874,13 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                     Text(
                       'Showing: ',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.w300,
                       ),
                     ),
                     DropdownButtonHideUnderline(
                       child: DropdownButton<int>(
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w300,
-                        ),
+                        style: tableBody,
                         value: rowPerPage,
                         items: [
                           // DropdownMenuItem(
@@ -908,20 +945,17 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
+                            padding: const EdgeInsets.only(bottom: 3),
                             child: Icon(
                               Icons.chevron_left,
-                              size: 26,
+                              size: 24,
                             ),
                           ),
                           Align(
                             alignment: Alignment.center,
                             child: Text(
                               'Previous',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w300,
-                              ),
+                              style: tableBody,
                             ),
                           ),
                         ],
@@ -956,16 +990,13 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                         children: [
                           Text(
                             'Next',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w300,
-                            ),
+                            style: tableBody,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
+                            padding: const EdgeInsets.only(bottom: 3),
                             child: Icon(
                               Icons.chevron_right,
-                              size: 26,
+                              size: 24,
                             ),
                           ),
                         ],
@@ -983,7 +1014,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
 
   Widget activeInvitationListViewMobile(List data, List visitor, int menu) {
     return Container(
-      padding: EdgeInsets.only(bottom: 50),
+      padding: EdgeInsets.only(top: 10, bottom: 10),
       // width: 900,
       width: MediaQuery.of(navKey.currentState!.context).size.width * 0.8,
       child: Column(
@@ -993,7 +1024,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
+                padding: EdgeInsets.only(top: 0),
                 child: Column(
                   children: [
                     listContentMobile(
@@ -1005,9 +1036,9 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                         index),
                     index != data.length - 1
                         ? Padding(
-                            padding: const EdgeInsets.only(top: 15, bottom: 15),
+                            padding: const EdgeInsets.symmetric(vertical: 7),
                             child: Divider(
-                              thickness: 2,
+                              thickness: 1,
                               color: spanishGray,
                             ),
                           )
@@ -1226,46 +1257,57 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
               ),
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              child: CustTextButon(
-                label: 'Detail',
-                onTap: () {
-                  print(inviteId);
-                  getInvitationDetail(eventId).then((value) {
-                    // print('visitor -> ' + visitor.toString());
-                    dynamic listVisitor = value['Visitors'];
-                    print('listVisitor - >' + listVisitor.toString());
-                    Navigator.of(navKey.currentState!.overlay!.context)
-                        .push(DetailVisitorOverlay(
-                      visitorList: listVisitor,
-                      eventID: eventId,
-                      inviteCode: inviteId,
-                      totalPerson: totalVisitor,
-                      visitDate: visitTime,
-                      employeeName: value['EmployeeName'],
-                    ))
-                        .then((value) {
-                      setState(() {
-                        getActiveInvitations(
-                          myActiveInvitePage.toString(),
-                          rowPerPage.toString(),
-                          sortBy,
-                          sortAscTemp,
-                          selectedMenu,
-                        ).then((value) {
-                          isLoading = false;
+          detailIsLoading
+              ? CircularProgressIndicator(
+                  color: eerieBlack,
+                )
+              : Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    child: CustTextButon(
+                      label: 'Detail',
+                      onTap: () {
+                        setState(() {
+                          detailIsLoading = true;
                         });
-                      });
-                    });
-                  });
-                },
-                textStyle: textButton,
-              ),
-            ),
-          ),
+                        print(inviteId);
+                        getInvitationDetail(eventId).then((value) {
+                          // print('visitor -> ' + visitor.toString());
+                          setState(() {
+                            detailIsLoading = false;
+                          });
+                          dynamic listVisitor = value['Visitors'];
+                          print('listVisitor - >' + listVisitor.toString());
+                          Navigator.of(navKey.currentState!.overlay!.context)
+                              .push(DetailVisitorOverlay(
+                            visitorList: listVisitor,
+                            eventID: eventId,
+                            inviteCode: inviteId,
+                            totalPerson: totalVisitor,
+                            visitDate: visitTime,
+                            employeeName: value['EmployeeName'],
+                          ))
+                              .then((value) {
+                            setState(() {
+                              getActiveInvitations(
+                                myActiveInvitePage.toString(),
+                                rowPerPage.toString(),
+                                sortBy,
+                                sortAscTemp,
+                                selectedMenu,
+                              ).then((value) {
+                                isLoading = false;
+                              });
+                            });
+                          });
+                        });
+                      },
+                      textStyle: textButton,
+                    ),
+                  ),
+                ),
         ],
       ),
     );
@@ -1279,65 +1321,84 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     List visitor,
     int index,
   ) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 10,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          detailIsLoading = true;
+        });
+        getInvitationDetail(eventId).then((value) {
+          setState(() {});
+          detailIsLoading = false;
+          dynamic listVisitor = value['Visitors'];
+          Navigator.of(navKey.currentState!.overlay!.context)
+              .push(DetailVisitorOverlay(
+            visitorList: listVisitor,
+            inviteCode: inviteId,
+            totalPerson: totalVisitor,
+            visitDate: visitTime,
+            employeeName: value['EmployeeName'],
+          ));
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Stack(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  inviteId,
-                  style: tableBodyCode,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    visitTime,
-                    style: tableBody,
+                Expanded(
+                  flex: 10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        inviteId,
+                        style: tableBodyCode,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          visitTime,
+                          style: tableBody,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          '$totalVisitor Person',
+                          style: tableBody,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    '$totalVisitor Person',
-                    style: tableBody,
-                  ),
-                ),
+                // Expanded(
+                //   flex: 2,
+                //   child: detailIsLoading
+                //       ? CircularProgressIndicator(
+                //           color: eerieBlack,
+                //         )
+                //       : ImageIcon(
+                //           AssetImage('assets/Forward.png'),
+                //         ),
+                // )
               ],
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: GestureDetector(
-              onTap: () {
-                getInvitationDetail(eventId).then((value) {
-                  dynamic listVisitor = value['Visitors'];
-                  Navigator.of(navKey.currentState!.overlay!.context)
-                      .push(DetailVisitorOverlay(
-                    visitorList: listVisitor,
-                    inviteCode: inviteId,
-                    totalPerson: totalVisitor,
-                    visitDate: visitTime,
-                    employeeName: value['EmployeeName'],
-                  ));
-                });
-              },
-              child: ImageIcon(
-                AssetImage('assets/Forward.png'),
-              ),
-              // Icon(
-              //   Icons.chevron_right,
-              //   size: 40,
-              //   color: onyxBlack,
-              // ),
+            Positioned(
+              right: 0,
+              top: 20,
+              child: detailIsLoading
+                  ? CircularProgressIndicator(
+                      color: eerieBlack,
+                    )
+                  : ImageIcon(
+                      AssetImage('assets/Forward.png'),
+                    ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

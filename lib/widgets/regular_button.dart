@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/responsive.dart';
 // import 'package:google_fonts/google_fonts.dart';
 // import 'package:visitor_app/colors.dart';
 
@@ -57,7 +58,9 @@ class RegularButton extends StatelessWidget {
         child: Ink(
           padding: EdgeInsets.zero,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: Responsive.isDesktop(context)
+                ? BorderRadius.circular(10)
+                : BorderRadius.circular(7),
             color: Colors.white,
             gradient: LinearGradient(
               begin: Alignment.topLeft,

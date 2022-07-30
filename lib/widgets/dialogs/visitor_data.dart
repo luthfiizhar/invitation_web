@@ -125,12 +125,12 @@ class VisitorDataOverlay extends ModalRoute<void> {
                                   ? Container(
                                       height: Responsive.isDesktop(
                                               navKey.currentState!.context)
-                                          ? 200
-                                          : 100,
+                                          ? 125
+                                          : 50,
                                       width: Responsive.isDesktop(
                                               navKey.currentState!.context)
-                                          ? 200
-                                          : 100,
+                                          ? 125
+                                          : 50,
                                       child:
                                           Image.asset('assets/avatar_male.png'),
                                     )
@@ -180,7 +180,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 50),
                 child: detailInfo(
                   'First Name',
-                  detailList["FirstName"],
+                  detailList!["FirstName"],
                 ),
               ),
             ),
@@ -190,7 +190,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 50),
                 child: detailInfo(
                   'Last Name',
-                  detailList["LastName"],
+                  detailList!["LastName"],
                 ),
               ),
             ),
@@ -200,14 +200,14 @@ class VisitorDataOverlay extends ModalRoute<void> {
           padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'Gender',
-            detailList["Gender"].toString(),
+            detailList!["Gender"].toString(),
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 30),
           child: detailInfo(
             'Email',
-            detailList["Email"],
+            detailList!["Email"],
           ),
         ),
         Padding(
@@ -215,7 +215,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
           child: phoneInfo(
             'Phone Number',
             "",
-            detailList["PhoneNumber"].toString(),
+            detailList!["PhoneNumber"].toString(),
           ),
         ),
         Padding(
@@ -234,7 +234,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 40),
                 child: detailInfo(
                   'Origin Company',
-                  detailList["CompanyName"],
+                  detailList!["CompanyName"],
                 ),
               ),
             ),
@@ -244,7 +244,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 40),
                 child: detailInfo(
                   'Visit Reason',
-                  detailList["VisitReason"].toString(),
+                  detailList!["VisitReason"].toString(),
                 ),
               ),
             ),
@@ -261,7 +261,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 ),
                 child: detailInfo(
                   'Visit Date',
-                  detailList["VisitTime"],
+                  detailList!["VisitTime"],
                 ),
               ),
             ),
@@ -271,7 +271,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                 padding: EdgeInsets.only(top: 40),
                 child: detailInfo(
                   'Meeting With',
-                  detailList["MeetingWith"],
+                  detailList!["MeetingWith"],
                 ),
               ),
             ),

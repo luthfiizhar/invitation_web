@@ -111,18 +111,18 @@ class InteractiveMyInviteMenuMobileState
               widget.text!,
               style: _hovering
                   ? TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: Colors
                           .white) //kPageTitleStyleMobile.copyWith(color: Colors.white)
                   : (widget.selected!)
                       ? TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: Colors
                               .white) //kPageTitleStyleMobile.copyWith(color: Colors.white)
                       : TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ), //kPageTitleStyleMobile,
             ),

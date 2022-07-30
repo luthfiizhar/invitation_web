@@ -21,6 +21,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
   String? startDate;
   String? endDate;
   List? list = [];
+  bool isLoading = false;
 
   Future getDataVisitor() async {
     var box = await Hive.openBox('inputvisitorBox');
@@ -100,6 +101,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
       // print("main model ->" + model.listInvite);
       visitorList = model.listInvite;
       list = json.decode(visitorList.toString());
+
       return Padding(
         padding: Responsive.isDesktop(context)
             ? EdgeInsets.all(15.0)
@@ -112,10 +114,10 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                 borderRadius: BorderRadius.circular(15),
                 color: eerieBlack,
               ),
-              width: 700,
+              width: 600,
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 30, right: 30, top: 30),
+                  padding: EdgeInsets.only(left: 50, right: 50, top: 40),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -123,7 +125,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                         child: Text(
                           'Confirm Invitation',
                           style: TextStyle(
-                              fontSize: 36,
+                              fontSize: Responsive.isDesktop(context) ? 36 : 24,
                               fontWeight: FontWeight.w700,
                               color: scaffoldBg),
                         ),
@@ -146,7 +148,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                               'Visit Date: ',
                               style: TextStyle(
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w300,
+                                  fontWeight: FontWeight.w700,
                                   color: scaffoldBg),
                             ),
                             Text(
@@ -179,10 +181,10 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                                 index != list!.length - 1
                                     ? Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 20, bottom: 20),
+                                            top: 10, bottom: 10),
                                         child: Divider(
-                                          thickness: 2,
-                                          color: spanishGray,
+                                          thickness: 1,
+                                          color: scaffoldBg,
                                         ),
                                       )
                                     : SizedBox(),
@@ -192,7 +194,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.only(top: 50, bottom: 50),
+                        padding: EdgeInsets.only(top: 50, bottom: 30),
                         child: Responsive.isDesktop(context)
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +202,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                                   SizedBox(
                                     width: Responsive.isDesktop(
                                             navKey.currentState!.context)
-                                        ? 100
+                                        ? 220
                                         : null,
                                     height: Responsive.isDesktop(
                                             navKey.currentState!.context)
@@ -225,40 +227,50 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                                     ),
                                   ),
                                   SizedBox(width: 20, height: 60),
-                                  SizedBox(
-                                    width: Responsive.isDesktop(
-                                            navKey.currentState!.context)
-                                        ? 100
-                                        : null,
-                                    height: Responsive.isDesktop(
-                                            navKey.currentState!.context)
-                                        ? 50
-                                        : 40,
-                                    child: RegularButton(
-                                      title: 'Confirm',
-                                      sizeFont: Responsive.isDesktop(
-                                              navKey.currentState!.context)
-                                          ? 16
-                                          : 14,
-                                      onTap: () {
-                                        showConfirmDialog(context);
-                                        // print('aaa');
-                                        // confirmDialog(context,
-                                        //         'Are you sure the data is correct?', true)
-                                        //     .then((value) {
-                                        //   if (value) {
-                                        //     saveInvitation().then((value) {
-                                        //       // Navigator.pushReplacementNamed(
-                                        //       //   context, routeInvite);
-                                        //     });
-                                        //   } else {
-                                        //     print('cancel');
-                                        //   }
-                                        // });
-                                      },
-                                      isDark: true,
-                                    ),
-                                  )
+                                  isLoading
+                                      ? CircularProgressIndicator(
+                                          color: scaffoldBg,
+                                        )
+                                      : SizedBox(
+                                          width: Responsive.isDesktop(
+                                                  navKey.currentState!.context)
+                                              ? 220
+                                              : null,
+                                          height: Responsive.isDesktop(
+                                                  navKey.currentState!.context)
+                                              ? 50
+                                              : 40,
+                                          child: RegularButton(
+                                            title: 'Confirm',
+                                            sizeFont: Responsive.isDesktop(
+                                                    navKey
+                                                        .currentState!.context)
+                                                ? 16
+                                                : 14,
+                                            onTap: () {
+                                              setState(
+                                                () {
+                                                  isLoading = true;
+                                                },
+                                              );
+                                              showConfirmDialog(context);
+                                              // print('aaa');
+                                              // confirmDialog(context,
+                                              //         'Are you sure the data is correct?', true)
+                                              //     .then((value) {
+                                              //   if (value) {
+                                              //     saveInvitation().then((value) {
+                                              //       // Navigator.pushReplacementNamed(
+                                              //       //   context, routeInvite);
+                                              //     });
+                                              //   } else {
+                                              //     print('cancel');
+                                              //   }
+                                              // });
+                                            },
+                                            isDark: true,
+                                          ),
+                                        )
                                 ],
                               )
                             : Column(
@@ -424,6 +436,9 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
       if (value) {
         saveAddVisitor(eventID!, "").then((value) {
           print(value);
+          setState(() {
+            isLoading = false;
+          });
           if (value['Status'] == '200') {
             Navigator.of(context)
                 .push(NotifProcessDialog(

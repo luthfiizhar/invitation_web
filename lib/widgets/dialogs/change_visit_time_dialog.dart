@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 
 Future<bool> changeVisitDialog(BuildContext context) async {
   bool shouldPop = true;
+  bool isLoading = false;
   return await showDialog(
       barrierDismissible: false,
       context: navKey.currentState!.overlay!.context,
@@ -102,6 +103,7 @@ Future<bool> changeVisitDialog(BuildContext context) async {
 class ChangeVisitDialog extends ModalRoute<void> {
   ChangeVisitDialog({this.eventID});
 
+  bool isLoading = false;
   String? eventID;
   TextEditingController _startDate = TextEditingController();
   TextEditingController _endDate = TextEditingController();
@@ -185,6 +187,9 @@ class ChangeVisitDialog extends ModalRoute<void> {
         .then((value) {
       if (value) {
         changeVisitTime(eventId, start, end).then((value) {
+          setState(() {
+            isLoading = false;
+          });
           if (value == '200') {
             print('success');
             Navigator.of(navKey.currentState!.context)
@@ -218,69 +223,112 @@ class ChangeVisitDialog extends ModalRoute<void> {
           : EdgeInsets.only(top: 15, bottom: 15),
       child: StatefulBuilder(
         builder: (context, setState) {
-          return SingleChildScrollView(
-            child: Center(
+          return Center(
+            child: SingleChildScrollView(
               child: Container(
-                width: 700,
+                width: 650,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: scaffoldBg,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 50, right: 50, top: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: Responsive.isDesktop(context)
+                          ? EdgeInsets.only(left: 50, right: 50, top: 40)
+                          : EdgeInsets.only(left: 25, right: 25, top: 25),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextButton.icon(
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                            icon: Icon(
-                              Icons.close,
-                              color: eerieBlack,
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.end,
+                          //   children: [
+                          //     TextButton.icon(
+                          //       onPressed: () {
+                          //         Navigator.of(context).pop(false);
+                          //       },
+                          //       icon: Icon(
+                          //         Icons.close,
+                          //         color: eerieBlack,
+                          //       ),
+                          //       label: Text(''),
+                          //     ),
+                          //   ],
+                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Change Visit Time',
+                                style: dialogTitle,
+                              ),
+                            ],
+                          ),
+                          Form(
+                            key: _formKey,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 30),
+                              child: Responsive.isDesktop(context)
+                                  ? inputDateContainer()
+                                  : inputDateContainerMobile(),
                             ),
-                            label: Text(''),
+                          ),
+                          Padding(
+                            padding: Responsive.isDesktop(context)
+                                ? EdgeInsets.only(top: 60, bottom: 40)
+                                : EdgeInsets.only(top: 30, bottom: 25),
+                            child: Center(
+                              child: isLoading
+                                  ? CircularProgressIndicator(
+                                      color: eerieBlack,
+                                    )
+                                  : SizedBox(
+                                      width: Responsive.isBigDesktop(context)
+                                          ? 250
+                                          : null,
+                                      height: 50,
+                                      child: RegularButton(
+                                        onTap: () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            _formKey.currentState!.save();
+                                            setState(
+                                              () {
+                                                isLoading = true;
+                                              },
+                                            );
+                                            showConfirmDialog(eventID!,
+                                                _startDate.text, _endDate.text);
+                                          }
+                                        },
+                                        title: 'Confirm',
+                                        sizeFont: Responsive.isDesktop(context)
+                                            ? 24
+                                            : 16,
+                                      ),
+                                    ),
+                            ),
                           ),
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Change Visit Time',
-                            style: dialogTitle,
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: Responsive.isDesktop(context)
-                            ? inputDateContainer()
-                            : inputDateContainerMobile(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 60, bottom: 40),
-                        child: Center(
-                          child: SizedBox(
-                            width: 250,
-                            height: 50,
-                            child: RegularButton(
-                              onTap: () {
-                                showConfirmDialog(
-                                    eventID!, _startDate.text, _endDate.text);
-                              },
-                              title: 'Confirm',
-                              sizeFont: Responsive.isDesktop(context) ? 24 : 16,
-                            ),
+                    ),
+                    Positioned(
+                      right: 20,
+                      top: 20,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop(false);
+                        },
+                        child: Container(
+                          child: Icon(
+                            Icons.close,
+                            size: 30,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -320,7 +368,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
 
   Widget inputDateContainerMobile() {
     return Container(
-      padding: EdgeInsets.only(top: 30),
+      padding: EdgeInsets.only(top: 0),
       child: Column(
         children: [
           Padding(
@@ -345,12 +393,14 @@ class ChangeVisitDialog extends ModalRoute<void> {
                 Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: Container(
-                    height: 50,
+                    // height: 50,
                     padding: EdgeInsets.zero,
                     child: TextFormField(
                       cursorColor: onyxBlack,
                       focusNode: startDateNode,
                       controller: _startDate,
+                      validator: (value) =>
+                          value == "" ? "This field is required" : null,
                       onTap: () {
                         FocusScope.of(navKey.currentState!.context)
                             .requestFocus(new FocusNode());
@@ -370,7 +420,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                           fontWeight: FontWeight.w400,
                         ),
                         contentPadding: EdgeInsets.only(
-                            top: 20, bottom: 20, left: 30, right: 30),
+                            top: 17, bottom: 16, left: 20, right: 20),
                         focusColor: onyxBlack,
                         focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -396,7 +446,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
                                 color: Color(0xFF929AAB), width: 2.5)),
-                        errorStyle: TextStyle(color: silver, fontSize: 14),
+                        errorStyle: TextStyle(color: orangeRed, fontSize: 14),
                       ),
                       style: TextStyle(
                           fontSize: 14,
@@ -436,6 +486,8 @@ class ChangeVisitDialog extends ModalRoute<void> {
                       cursorColor: onyxBlack,
                       focusNode: endDateNode,
                       controller: _endDate,
+                      validator: (value) =>
+                          value == "" ? "This field is required" : null,
                       onTap: () {
                         FocusScope.of(navKey.currentState!.context)
                             .requestFocus(new FocusNode());
@@ -453,7 +505,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                           fontWeight: FontWeight.w400,
                         ),
                         contentPadding: EdgeInsets.only(
-                            top: 20, bottom: 20, left: 30, right: 30),
+                            top: 17, bottom: 16, left: 20, right: 20),
                         focusColor: onyxBlack,
                         focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -498,7 +550,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
 
   Widget inputDateContainer() {
     return Container(
-      padding: EdgeInsets.only(top: 40),
+      padding: EdgeInsets.only(top: 0),
       // width: 700,
       // color: Colors.blue,
       child: Row(
@@ -527,12 +579,14 @@ class ChangeVisitDialog extends ModalRoute<void> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: Container(
-                      height: 50,
+                      // height: 50,
                       padding: EdgeInsets.zero,
                       child: TextFormField(
                         cursorColor: onyxBlack,
                         focusNode: startDateNode,
                         controller: _startDate,
+                        validator: (value) =>
+                            value == "" ? "This field is required" : null,
                         onTap: () {
                           FocusScope.of(navKey.currentState!.context)
                               .requestFocus(new FocusNode());
@@ -552,30 +606,30 @@ class ChangeVisitDialog extends ModalRoute<void> {
                             fontWeight: FontWeight.w400,
                           ),
                           contentPadding: EdgeInsets.only(
-                              top: 21, bottom: 17, left: 30, right: 30),
+                              top: 17, bottom: 17, left: 20, right: 20),
                           focusColor: onyxBlack,
                           focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
                                 color: eerieBlack,
                                 width: 2.5,
                               )),
                           focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: eerieBlack, width: 2.5)),
                           enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
                                   color: Color(0xFF929AAB), width: 2.5)),
                           fillColor: graySand,
                           filled: true,
                           errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: eerieBlack, width: 2.5)),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
                                   color: Color(0xFF929AAB), width: 2.5)),
                           errorStyle: TextStyle(color: silver, fontSize: 18),
@@ -615,12 +669,14 @@ class ChangeVisitDialog extends ModalRoute<void> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: Container(
-                      height: 50,
+                      // height: 50,
                       padding: EdgeInsets.zero,
                       child: TextFormField(
                         cursorColor: onyxBlack,
                         focusNode: endDateNode,
                         controller: _endDate,
+                        validator: (value) =>
+                            value == "" ? "This field is required" : null,
                         onTap: () {
                           FocusScope.of(navKey.currentState!.context)
                               .requestFocus(new FocusNode());
@@ -638,30 +694,30 @@ class ChangeVisitDialog extends ModalRoute<void> {
                             fontWeight: FontWeight.w400,
                           ),
                           contentPadding: EdgeInsets.only(
-                              top: 21, bottom: 17, left: 30, right: 30),
+                              top: 17, bottom: 17, left: 20, right: 20),
                           focusColor: onyxBlack,
                           focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
                                 color: eerieBlack,
                                 width: 2.5,
                               )),
                           focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: eerieBlack, width: 2.5)),
                           enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
                                   color: Color(0xFF929AAB), width: 2.5)),
                           fillColor: graySand,
                           filled: true,
                           errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: eerieBlack, width: 2.5)),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
                                   color: Color(0xFF929AAB), width: 2.5)),
                           errorStyle: TextStyle(color: silver, fontSize: 18),

@@ -17,8 +17,15 @@ import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/input_field.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
+  @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
   // const WelcomePage({Key? key}) : super(key: key);
+
+  bool isLoading = false;
   Future loginAuth() async {
     var url =
         Uri.https(apiUrl, '/VisitorManagementBackend/public/api/login-hcplus');
@@ -61,9 +68,14 @@ class WelcomePage extends StatelessWidget {
   login(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      setState(() {
+        isLoading = true;
+      });
 
       loginAuth().then((value) {
         // var firstLogin = false;
+        isLoading = false;
+        setState(() {});
         if (value['Status'] == '200') {
           value['Data']['FirstLogin']
               ? Navigator.of(context).pushReplacementNamed(routeEmployee)
@@ -84,13 +96,17 @@ class WelcomePage extends StatelessWidget {
   }
 
   String? userName;
+
   String? password;
 
   TextEditingController _username = TextEditingController();
+
   TextEditingController _password = TextEditingController();
 
   FocusNode userNameNode = FocusNode();
+
   FocusNode passNode = FocusNode();
+
   final _formKey = new GlobalKey<FormState>();
 
   @override
@@ -109,7 +125,7 @@ class WelcomePage extends StatelessWidget {
         children: [
           Positioned(
               top: 0,
-              left: -20,
+              left: -15,
               // left: ,
               child: Container(
                 padding: EdgeInsets.zero,
@@ -159,21 +175,28 @@ class WelcomePage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                              // height: 500,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              decoration: BoxDecoration(
-                                  // color: Colors.grey,
-                                  // image: DecorationImage(
-                                  //     image: AssetImage('assets/welcome_page_image.png')),
-                                  ),
-                              child: Center(
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                                // height: 500,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: BoxDecoration(
+                                    // color: Colors.grey,
+                                    // image: DecorationImage(
+                                    //     image: AssetImage('assets/welcome_page_image.png')),
+                                    ),
                                 child: Padding(
                                   padding: Responsive.isBigDesktop(context)
                                       ? EdgeInsets.only(
-                                          top: 100, left: 200, right: 200)
+                                          top: 0,
+                                          left: 200,
+                                          right: 200,
+                                          bottom: 20)
                                       : EdgeInsets.only(
-                                          top: 100, left: 0, right: 0),
+                                          top: 0,
+                                          left: 0,
+                                          right: 0,
+                                          bottom: 20),
                                   child: Container(
                                     // color: Colors.blue,
                                     child: Row(
@@ -222,21 +245,6 @@ class WelcomePage extends StatelessWidget {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Text(
-                                                          'Welcome to',
-                                                          style: TextStyle(
-                                                              // letterSpacing: 1,
-                                                              fontSize: 32,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                              // fontFamily: 'Helvetica',
-                                                              color:
-                                                                  eerieBlack),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
                                                         Container(
                                                           width: 600,
                                                           child: Wrap(
@@ -246,7 +254,7 @@ class WelcomePage extends StatelessWidget {
                                                                 style:
                                                                     TextStyle(
                                                                   // letterSpacing: 1,
-                                                                  fontSize: 48,
+                                                                  fontSize: 56,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
@@ -259,7 +267,7 @@ class WelcomePage extends StatelessWidget {
                                                                 style:
                                                                     TextStyle(
                                                                   // letterSpacing: 1,
-                                                                  fontSize: 48,
+                                                                  fontSize: 56,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
@@ -276,12 +284,12 @@ class WelcomePage extends StatelessWidget {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(
-                                                      top: 15, left: 15),
+                                                      top: 50, left: 15),
                                                   child: Container(
                                                     child: Text(
                                                       'Please login using HC Plus for using the site',
                                                       style: TextStyle(
-                                                        fontSize: 24,
+                                                        fontSize: 22,
                                                         fontWeight:
                                                             FontWeight.w300,
                                                         color: onyxBlack,
@@ -291,7 +299,7 @@ class WelcomePage extends StatelessWidget {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(
-                                                    top: 40,
+                                                    top: 20,
                                                   ),
                                                   child: Row(
                                                     children: [
@@ -302,6 +310,9 @@ class WelcomePage extends StatelessWidget {
                                                         width: 300,
                                                         // height: 70,
                                                         child: InputField(
+                                                          onSubmitted: (data) {
+                                                            login(context);
+                                                          },
                                                           controller: _username,
                                                           label: 'Username',
                                                           focusNode:
@@ -324,6 +335,9 @@ class WelcomePage extends StatelessWidget {
                                                       Container(
                                                         width: 300,
                                                         child: InputField(
+                                                          onSubmitted: (data) {
+                                                            login(context);
+                                                          },
                                                           controller: _password,
                                                           label: 'Password',
                                                           focusNode: passNode,
@@ -348,18 +362,22 @@ class WelcomePage extends StatelessWidget {
                                                       left: 15,
                                                       right: 15,
                                                       bottom: 40),
-                                                  child: SizedBox(
-                                                    width: 140,
-                                                    height: 50,
-                                                    //Tombol Login Desktop Layout
-                                                    child: RegularButton(
-                                                      title: 'Login',
-                                                      sizeFont: 20,
-                                                      onTap: () {
-                                                        login(context);
-                                                      },
-                                                    ),
-                                                  ),
+                                                  child: isLoading
+                                                      ? CircularProgressIndicator(
+                                                          color: eerieBlack,
+                                                        )
+                                                      : SizedBox(
+                                                          width: 140,
+                                                          height: 50,
+                                                          //Tombol Login Desktop Layout
+                                                          child: RegularButton(
+                                                            title: 'Login',
+                                                            sizeFont: 20,
+                                                            onTap: () {
+                                                              login(context);
+                                                            },
+                                                          ),
+                                                        ),
                                                 ),
                                               ],
                                             ),
@@ -368,8 +386,8 @@ class WelcomePage extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                ),
-                              )),
+                                )),
+                          ),
                         ],
                       ),
                       // Container(),
@@ -420,16 +438,18 @@ class WelcomePage extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          // color: Colors.amber,
-                          // padding:
-                          //     EdgeInsets.only(right: 70, top: 30),
-                          width: 200,
-                          height: 200,
-                          child: SvgPicture.asset(
-                              'assets/Ilustrasi Welcome Website B.svg',
-                              fit: BoxFit.fitHeight),
-                        ),
+                        // Container(
+                        //   // color: Colors.amber,
+                        //   // padding:
+                        //   //     EdgeInsets.only(right: 70, top: 30),
+                        //   width: 250,
+                        //   height: 250,
+                        // child:
+                        SvgPicture.asset(
+                            'assets/Ilustrasi Welcome Website B.svg',
+                            fit: BoxFit.cover,
+                            width: MediaQuery.of(context).size.width * 0.65),
+                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -443,18 +463,6 @@ class WelcomePage extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Welcome to',
-                                      style: TextStyle(
-                                          // letterSpacing: 1,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w300,
-                                          // fontFamily: 'Helvetica',
-                                          color: eerieBlack),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
                                     Container(
                                       // color: Colors.amber,
                                       // width: 300,
@@ -491,7 +499,7 @@ class WelcomePage extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                            top: 15,
+                            top: 45,
                           ),
                           child: Align(
                             alignment: Alignment.centerLeft,
@@ -511,8 +519,11 @@ class WelcomePage extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 30),
+                          padding: EdgeInsets.only(top: 15),
                           child: InputField(
+                            onSubmitted: (data) {
+                              login(context);
+                            },
                             controller: _username,
                             label: 'Username',
                             focusNode: userNameNode,
@@ -529,6 +540,9 @@ class WelcomePage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 20),
                           child: InputField(
+                            onSubmitted: (data) {
+                              login(context);
+                            },
                             controller: _password,
                             label: 'Password',
                             focusNode: passNode,
@@ -541,16 +555,20 @@ class WelcomePage extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 40, bottom: 30),
-                          child: SizedBox(
-                              width: 110,
-                              height: 40,
-                              child: RegularButton(
-                                title: 'Login',
-                                sizeFont: 16,
-                                onTap: () {
-                                  login(context);
-                                },
-                              )),
+                          child: isLoading
+                              ? CircularProgressIndicator(
+                                  color: eerieBlack,
+                                )
+                              : SizedBox(
+                                  width: 110,
+                                  height: 40,
+                                  child: RegularButton(
+                                    title: 'Login',
+                                    sizeFont: 16,
+                                    onTap: () {
+                                      login(context);
+                                    },
+                                  )),
                         ),
                       ],
                     ),
@@ -558,7 +576,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.only(top: 40, bottom: 20, right: 20),
+                      const EdgeInsets.only(top: 70, bottom: 20, right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

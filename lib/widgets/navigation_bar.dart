@@ -61,7 +61,7 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
 
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(right: 30),
+      padding: EdgeInsets.only(right: 30, bottom: 25),
       color: scaffoldBg,
       height: 100.0,
       child: Row(
@@ -73,7 +73,7 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
               height: 40,
               child: Text(
                 'Visitor Invitation Web',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
               ),
             ),
           ),
@@ -178,7 +178,7 @@ class NavigationBarMobile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 15),
+            padding: const EdgeInsets.only(left: 15, top: 15),
             child: Container(
               width: 300,
               height: 40,
@@ -189,7 +189,7 @@ class NavigationBarMobile extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 15, bottom: 20),
+            padding: const EdgeInsets.only(right: 15, bottom: 20, top: 15),
             child: GestureDetector(
               onTap: () {
                 Scaffold.of(context).openEndDrawer();

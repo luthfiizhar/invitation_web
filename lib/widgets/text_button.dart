@@ -25,11 +25,19 @@ class CustTextButon extends StatelessWidget {
     if (isDark == null) {
       isDark = false;
     }
+    // fontSize = 20;
     if (fontSize == null) {
       fontSize = 20;
+      // textStyle = TextStyle(
+      //   fontFamily: 'Helvetica',
+      //   fontSize: fontSize,
+      //   fontWeight: FontWeight.w700,
+      //   color: isDark! ? scaffoldBg : eerieBlack,
+      // );
     }
     if (textStyle == null) {
       textStyle = TextStyle(
+        fontFamily: 'Helvetica',
         fontSize: fontSize,
         fontWeight: FontWeight.w700,
         color: isDark! ? scaffoldBg : eerieBlack,

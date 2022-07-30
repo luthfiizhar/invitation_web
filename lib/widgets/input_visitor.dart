@@ -51,48 +51,45 @@ class _InputVisitorState extends State<InputVisitor> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Text(
-                '${widget.label}',
-                style: TextStyle(
-                    fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                    fontWeight: FontWeight.w700,
-                    color: eerieBlack),
+    return Container(
+      // color: Colors.blue,
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  '${widget.label}',
+                  style: TextStyle(
+                      fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                      fontWeight: FontWeight.w700,
+                      color: eerieBlack),
+                ),
               ),
-            ),
-          ],
-        ),
-        // widget.focusNode!.hasFocus
-        //     ? Padding(
-        //         padding: const EdgeInsets.only(top: 15),
-        //         child: Container(
-        //           decoration: BoxDecoration(
-        //               color: graySand,
-        //               borderRadius: BorderRadius.circular(15),
-        //               boxShadow: [
-        //                 BoxShadow(
-        //                     blurRadius: 0,
-        //                     offset: Offset(0.0, 5.0),
-        //                     color: Color(0xFFFFFFF))
-        //               ]),
-        //           padding: const EdgeInsets.all(0),
-        //           child: textField(),
-        //         ),
-        //       )
-        // :
-        Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Container(
-            // color: Colors.black,
-            // height: 50,
-            // width: 300,
-            padding: EdgeInsets.zero,
+            ],
+          ),
+          // widget.focusNode!.hasFocus
+          //     ? Padding(
+          //         padding: const EdgeInsets.only(top: 15),
+          //         child: Container(
+          //           decoration: BoxDecoration(
+          //               color: graySand,
+          //               borderRadius: BorderRadius.circular(15),
+          //               boxShadow: [
+          //                 BoxShadow(
+          //                     blurRadius: 0,
+          //                     offset: Offset(0.0, 5.0),
+          //                     color: Color(0xFFFFFFF))
+          //               ]),
+          //           padding: const EdgeInsets.all(0),
+          //           child: textField(),
+          //         ),
+          //       )
+          // :
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
             child: TextFormField(
               key: widget.key,
               keyboardType: widget.keyboardType,
@@ -110,14 +107,25 @@ class _InputVisitorState extends State<InputVisitor> {
               validator: widget.validator,
               decoration: InputDecoration(
                 isDense: true,
+                isCollapsed: true,
                 hintText: widget.hintText,
                 hintStyle: TextStyle(
                   fontSize: Responsive.isDesktop(context) ? 20 : 14,
                   fontWeight: FontWeight.w400,
                 ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                isCollapsed: true,
+                contentPadding: Responsive.isDesktop(context)
+                    ? EdgeInsets.only(
+                        top: 17,
+                        bottom: 15,
+                        left: 20,
+                        right: 20,
+                      )
+                    : EdgeInsets.only(
+                        top: 16,
+                        bottom: 17,
+                        left: 20,
+                        right: 20,
+                      ),
                 focusColor: onyxBlack,
                 focusedErrorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(
@@ -147,7 +155,7 @@ class _InputVisitorState extends State<InputVisitor> {
                     borderSide:
                         BorderSide(color: Color(0xFF929AAB), width: 2.5)),
                 errorStyle: TextStyle(
-                    color: silver,
+                    color: orangeRed,
                     fontSize: Responsive.isDesktop(context) ? 18 : 14),
               ),
               style: TextStyle(
@@ -155,10 +163,10 @@ class _InputVisitorState extends State<InputVisitor> {
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF393E46)),
             ),
+            // ),
           ),
-          // ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

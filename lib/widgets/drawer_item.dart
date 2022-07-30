@@ -27,11 +27,12 @@ class CustDrawerItem extends StatelessWidget {
       return GestureDetector(
         onTap: () {
           // Navigator.pushNamed(context, '$routeName');
+          Scaffold.of(navKey.currentState!.context).closeEndDrawer();
           navKey.currentState!.pushReplacementNamed(routeName!);
           onHighlight!(routeName);
           model.setIndexDrawer(indexSelected!);
           print(model.indexDrawer);
-          // Scaffold.of(navKey.currentState!.context).closeDrawer();
+
           // Navigator.pop(context);
         },
         child: Padding(

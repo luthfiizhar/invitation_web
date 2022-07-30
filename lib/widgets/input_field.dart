@@ -3,6 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/responsive.dart';
+import 'package:universal_html/html.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 class InputField extends StatefulWidget {
@@ -18,6 +19,7 @@ class InputField extends StatefulWidget {
       this.onSaved,
       this.hintText,
       this.obsecureText,
+      this.onSubmitted,
       Key? key});
 
   final TextEditingController controller;
@@ -31,6 +33,7 @@ class InputField extends StatefulWidget {
   // final String? validator;
   final FormFieldValidator<String>? validator;
   final FormFieldSetter<String>? onSaved;
+  final FunctionStringCallback? onSubmitted;
   // final GlobalKey? formKey;
 
   @override
@@ -63,7 +66,7 @@ class _InputFieldState extends State<InputField> {
               child: Text(
                 '${widget.label}',
                 style: TextStyle(
-                    fontSize: Responsive.isDesktop(context) ? 20 : 18,
+                    fontSize: Responsive.isDesktop(context) ? 20 : 14,
                     fontWeight: FontWeight.w700,
                     color: eerieBlack),
               ),
@@ -78,6 +81,7 @@ class _InputFieldState extends State<InputField> {
             keyboardType: widget.keyboardType,
             // cursorRadius: Radius.circular(10),
             // cursorHeight: 50,
+            onFieldSubmitted: widget.onSubmitted,
             cursorColor: onyxBlack,
             focusNode: widget.focusNode,
             controller: widget.controller,
@@ -102,7 +106,7 @@ class _InputFieldState extends State<InputField> {
               ),
               // alignLabelWithHint: false,
               contentPadding:
-                  EdgeInsets.only(top: 21, bottom: 17, left: 30, right: 30),
+                  EdgeInsets.only(top: 17, bottom: 16, left: 20, right: 20),
               // isCollapsed: true,
               focusColor: onyxBlack,
               focusedErrorBorder: OutlineInputBorder(

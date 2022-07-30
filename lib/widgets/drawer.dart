@@ -59,75 +59,85 @@ class _CustomDrawerState extends State<CustomDrawer> {
       backgroundColor: eerieBlack,
       child: Stack(
         children: [
-          Positioned(
-            top: 0,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    width: 235,
-                    child: Text(
-                      'Visitor Invitation',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white),
+          ListView(
+            shrinkWrap: true,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 30, left: 30, right: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: 235,
+                      child: Text(
+                        'Visitor Invitation',
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Divider(
-                      thickness: 2,
-                      color: spanishGray,
+                    // Container(
+                    //   height: 10,
+                    //   decoration: BoxDecoration(
+                    //     border: Border(
+                    //       bottom: BorderSide(color: Colors.lightGreen, width: 3.0),
+                    //     ),
+                    //   ),
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: Divider(
+                        color: scaffoldBg,
+                        thickness: 1,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    Padding(
+                      padding: EdgeInsets.only(top: 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustDrawerItem(
+                              title: 'New Visitor Invite',
+                              onHighlight: onHighlight,
+                              routeName: routeInvite,
+                              selected: index == 0,
+                              indexSelected: 0),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        CustDrawerItem(
-                            title: 'New Visitor Invite',
-                            onHighlight: onHighlight,
-                            routeName: routeInvite,
-                            selected: index == 0,
-                            indexSelected: 0),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: CustDrawerItem(
+                              title: 'My Invitation',
+                              onHighlight: onHighlight,
+                              routeName: routeMyInvite,
+                              selected: index == 1,
+                              indexSelected: 1),
+                        ),
                       ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: CustDrawerItem(
-                            title: 'My Invitation',
-                            onHighlight: onHighlight,
-                            routeName: routeMyInvite,
-                            selected: index == 1,
-                            indexSelected: 1),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: CustDrawerItem(
-                            title: 'Employee data',
-                            onHighlight: onHighlight,
-                            routeName: routeEmployee,
-                            selected: index == 2,
-                            indexSelected: 2),
-                      ),
-                    ],
-                  ),
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: CustDrawerItem(
+                              title: 'Employee data',
+                              onHighlight: onHighlight,
+                              routeName: routeEmployee,
+                              selected: index == 2,
+                              indexSelected: 2),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
           Positioned(
             bottom: 30,

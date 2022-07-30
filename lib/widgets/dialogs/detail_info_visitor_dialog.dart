@@ -85,93 +85,101 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
         builder: (context, constraints) {
           return Center(
             child: Container(
-              width: Responsive.isDesktop(context) ? 1000 : 550,
+              width: Responsive.isDesktop(context) ? 600 : 550,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: scaffoldBg,
               ),
-              child: ScrollConfiguration(
-                behavior:
-                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: Responsive.isDesktop(context)
-                        ? EdgeInsets.only(left: 150, right: 150, top: 30)
-                        : EdgeInsets.only(left: 25, right: 25, top: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+              child: Stack(
+                children: [
+                  ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context)
+                        .copyWith(scrollbars: false),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: Responsive.isDesktop(context)
+                            ? EdgeInsets.only(
+                                left: paddingSampingDialog,
+                                right: paddingSampingDialog,
+                                top: paddingAtasDialog)
+                            : EdgeInsets.only(left: 25, right: 25, top: 30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextButton.icon(
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
-                              },
-                              icon: Icon(
-                                Icons.close,
-                                color: eerieBlack,
-                              ),
-                              label: Text(''),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Visitor Verification',
-                                style: dialogTitle,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Wrap(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    'Please confirm your visitor data before they comes into Head Office.',
-                                    style: pageSubtitle,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.clip,
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 25),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Visitor Verification',
+                                    style: dialogTitle,
                                   ),
+                                ],
+                              ),
+                            ),
+                            Wrap(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        'Please confirm your visitor data before they comes into Head Office.',
+                                        style: pageSubtitle,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.clip,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 25),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 125
+                                        : 75,
+                                    width: Responsive.isDesktop(
+                                            navKey.currentState!.context)
+                                        ? 125
+                                        : 75,
+                                    child:
+                                        Image.asset('assets/avatar_male.png'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            //Content
+                            Responsive.isDesktop(context)
+                                ? desktopLayout(context, listDetail!)
+                                : mobileLayout(context, listDetail!),
                           ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 40),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: Responsive.isDesktop(
-                                        navKey.currentState!.context)
-                                    ? 200
-                                    : 100,
-                                width: Responsive.isDesktop(
-                                        navKey.currentState!.context)
-                                    ? 200
-                                    : 100,
-                                child: Image.asset('assets/avatar_male.png'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        //Content
-                        Responsive.isDesktop(context)
-                            ? desktopLayout(context, listDetail!)
-                            : mobileLayout(context, listDetail!),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  Positioned(
+                    right: 20,
+                    top: 20,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: Container(
+                        child: Icon(
+                          Icons.close,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           );
@@ -192,7 +200,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 50),
+                padding: EdgeInsets.only(top: 25),
                 child: detailInfo(
                   'First Name',
                   detailList!["FirstName"],
@@ -202,7 +210,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 50),
+                padding: EdgeInsets.only(top: 25),
                 child: detailInfo(
                   'Last Name',
                   detailList!["LastName"],
@@ -236,13 +244,13 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           padding: EdgeInsets.only(top: 30),
           child: phoneInfo(
             'Phone Number',
-            detailList['PhoneNumber'] == "null"
+            detailList!['PhoneNumber'] == null
                 ? "-"
                 : detailList['PhoneNumber'].toString(),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: EdgeInsets.symmetric(vertical: 15),
           child: Divider(
             thickness: 2,
             color: spanishGray,
@@ -254,11 +262,11 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 40),
+                padding: EdgeInsets.only(top: 0),
                 child: detailInfo(
                   'Origin Company',
-                  detailList["CompanyName"] == "null"
-                      ? "-"
+                  detailList!["CompanyName"] == null
+                      ? '-'
                       : detailList!["CompanyName"].toString(),
                 ),
               ),
@@ -266,7 +274,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 40),
+                padding: EdgeInsets.only(top: 0),
                 child: detailInfo(
                   'Visit Reason',
                   detailList["VisitReason"] == "null"
@@ -284,7 +292,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
               flex: 6,
               child: Padding(
                 padding: EdgeInsets.only(
-                  top: 40,
+                  top: 25,
                 ),
                 child: detailInfo(
                   'Visit Date',
@@ -295,7 +303,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 40),
+                padding: EdgeInsets.only(top: 25),
                 child: detailInfo(
                   'Meeting With',
                   detailList["MeetingWith"],
@@ -308,14 +316,18 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 50),
+              padding: EdgeInsets.only(top: 30),
               child: Center(
-                child: CustTextButon(
-                  label: 'Cancel',
-                  fontSize: Responsive.isDesktop(context) ? 24 : 16,
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
+                child: SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: CustTextButon(
+                    label: 'Cancel',
+                    fontSize: textSizeButton,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
               ),
             ),
@@ -323,13 +335,13 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
               width: Responsive.isDesktop(context) ? 30 : null,
             ),
             Padding(
-              padding: EdgeInsets.only(top: 50),
+              padding: EdgeInsets.only(top: 30),
               child: Center(
                 child: SizedBox(
-                  width: Responsive.isDesktop(context) ? 250 : null,
+                  width: Responsive.isDesktop(context) ? 200 : null,
                   height: Responsive.isDesktop(context) ? 50 : 40,
                   child: RegularButton(
-                    sizeFont: Responsive.isDesktop(context) ? 24 : 16,
+                    sizeFont: textSizeButton,
                     title: 'Confirm',
                     onTap: () {
                       showConfirmDialog(context);
@@ -472,8 +484,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           Text(
             '$label',
             style: TextStyle(
-              fontSize:
-                  Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
+              fontSize: textSizeTitleContent,
               fontWeight: FontWeight.w300,
               color: onyxBlack,
             ),
@@ -483,9 +494,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
             child: Text(
               '$content',
               style: TextStyle(
-                fontSize: Responsive.isDesktop(navKey.currentState!.context)
-                    ? 30
-                    : 16,
+                fontSize: textSizeContent,
                 fontWeight: FontWeight.w700,
                 color: onyxBlack,
               ),
@@ -504,8 +513,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           Text(
             '$label',
             style: TextStyle(
-              fontSize:
-                  Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
+              fontSize: textSizeTitleContent,
               fontWeight: FontWeight.w300,
               color: onyxBlack,
             ),
@@ -513,11 +521,9 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           Padding(
             padding: EdgeInsets.only(top: 10),
             child: Text(
-              '$number',
+              number == null ? "" : '$number',
               style: TextStyle(
-                fontSize: Responsive.isDesktop(navKey.currentState!.context)
-                    ? 30
-                    : 16,
+                fontSize: textSizeContent,
                 fontWeight: FontWeight.w700,
                 color: onyxBlack,
               ),

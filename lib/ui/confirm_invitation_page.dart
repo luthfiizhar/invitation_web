@@ -24,6 +24,7 @@ class ConfirmInvitePage extends StatefulWidget {
 }
 
 class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
+  bool isLoading = false;
   String? visitorList;
   String? startDate;
   String? endDate;
@@ -249,11 +250,17 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
   }
 
   showConfirmDialog() {
+    setState(() {
+      isLoading = true;
+    });
     return confirmDialog(context, 'Are you sure the data is correct?', true)
         .then((value) {
       if (value) {
         saveInvitation().then((value) {
           if (value == "200") {
+            setState(() {
+              isLoading = false;
+            });
             Navigator.of(context)
                 .push(NotifProcessDialog(
                     isSuccess: true, message: "Visitors has been invited!"))
@@ -272,6 +279,9 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
           // Navigator.pushReplacementNamed(context, routeInvite);
         });
       } else {
+        setState(() {
+          isLoading = false;
+        });
         // clearVisitorData();
         // print('cancel');
       }
@@ -281,20 +291,20 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
   Widget desktopLayoutConfirmPage(BuildContext context) {
     return Padding(
       padding: Responsive.isBigDesktop(context)
-          ? EdgeInsets.only(top: 20, left: 500, right: 500, bottom: 20)
-          : EdgeInsets.only(top: 20, left: 300, right: 300, bottom: 20),
+          ? EdgeInsets.only(top: 5, left: 500, right: 500, bottom: 20)
+          : EdgeInsets.only(top: 5, left: 350, right: 350, bottom: 20),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15), color: eerieBlack),
         child: Padding(
-          padding: EdgeInsets.only(top: 50, bottom: 50, left: 70, right: 70),
+          padding: EdgeInsets.only(top: 40, bottom: 40, left: 70, right: 70),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
               child: Text(
                 'Confirm Invitation',
                 style: TextStyle(
-                    fontSize: 48,
+                    fontSize: 36,
                     fontWeight: FontWeight.w700,
                     color: scaffoldBg),
               ),
@@ -304,7 +314,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
               child: Text(
                 'Please confirm visitor data before send invitation.',
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 22,
                     fontWeight: FontWeight.w300,
                     color: scaffoldBg),
               ),
@@ -316,14 +326,14 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                   Text(
                     'Visit Date: ',
                     style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w300,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
                         color: scaffoldBg),
                   ),
                   Text(
                     '$startDate - $endDate',
                     style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 22,
                         fontWeight: FontWeight.w300,
                         color: scaffoldBg),
                   ),
@@ -346,10 +356,10 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                           list![index]['LastName'], list![index]['Email']),
                       index != list!.length - 1
                           ? Padding(
-                              padding: EdgeInsets.only(top: 20, bottom: 20),
+                              padding: EdgeInsets.only(top: 10, bottom: 10),
                               child: Divider(
-                                thickness: 2,
-                                color: spanishGray,
+                                thickness: 1,
+                                color: scaffoldBg,
                               ),
                             )
                           : SizedBox(),
@@ -359,12 +369,12 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 50, bottom: 50),
+              padding: EdgeInsets.only(top: 50, bottom: 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 200,
+                    width: 225,
                     height: 60,
                     child: CustTextButon(
                       isDark: true,
@@ -379,32 +389,36 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                       },
                     ),
                   ),
-                  SizedBox(width: 20, height: 60),
-                  SizedBox(
-                    width: 200,
-                    height: 60,
-                    child: RegularButton(
-                      title: 'Confirm',
-                      sizeFont: 20,
-                      onTap: () {
-                        // print('aaa');
-                        // confirmDialog(context,
-                        //         'Are you sure the data is correct?', true)
-                        //     .then((value) {
-                        //   if (value) {
-                        //     saveInvitation().then((value) {
-                        //       // Navigator.pushReplacementNamed(
-                        //       //   context, routeInvite);
-                        //     });
-                        //   } else {
-                        //     print('cancel');
-                        //   }
-                        // });
-                        showConfirmDialog();
-                      },
-                      isDark: true,
-                    ),
-                  )
+                  SizedBox(width: 20),
+                  isLoading
+                      ? CircularProgressIndicator(
+                          color: scaffoldBg,
+                        )
+                      : SizedBox(
+                          width: 225,
+                          height: 60,
+                          child: RegularButton(
+                            title: 'Confirm',
+                            sizeFont: 20,
+                            onTap: () {
+                              // print('aaa');
+                              // confirmDialog(context,
+                              //         'Are you sure the data is correct?', true)
+                              //     .then((value) {
+                              //   if (value) {
+                              //     saveInvitation().then((value) {
+                              //       // Navigator.pushReplacementNamed(
+                              //       //   context, routeInvite);
+                              //     });
+                              //   } else {
+                              //     print('cancel');
+                              //   }
+                              // });
+                              showConfirmDialog();
+                            },
+                            isDark: true,
+                          ),
+                        ),
                 ],
               ),
             ),
@@ -416,12 +430,12 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
 
   Widget mobileLayoutConfirmPage(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 20),
+      padding: EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 20),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15), color: eerieBlack),
         child: Padding(
-          padding: EdgeInsets.only(top: 50, bottom: 50, left: 30, right: 30),
+          padding: EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -435,7 +449,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.only(top: 15),
                 child: Text(
                   'Please confirm visitor data before send invitation.',
                   style: TextStyle(
@@ -445,14 +459,14 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 30),
+                padding: EdgeInsets.only(top: 15),
                 child: Row(
                   children: [
                     Text(
                       'Visit Date: ',
                       style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w700,
                           color: scaffoldBg),
                     ),
                     Text(
@@ -468,7 +482,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
               Container(
                 // color: Colors.blue,
                 // height: 450,
-                padding: EdgeInsets.only(top: 30),
+                padding: EdgeInsets.only(top: 15),
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
@@ -482,10 +496,10 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                         index != list!.length - 1
                             ? Padding(
                                 padding:
-                                    const EdgeInsets.only(top: 20, bottom: 20),
+                                    const EdgeInsets.only(top: 10, bottom: 10),
                                 child: Divider(
-                                  thickness: 2,
-                                  color: spanishGray,
+                                  thickness: 1,
+                                  color: scaffoldBg,
                                 ),
                               )
                             : SizedBox(),
@@ -495,37 +509,41 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 50, bottom: 50),
+                padding: EdgeInsets.only(top: 25, bottom: 0),
                 child: Center(
                   child: Column(
                     // mainAxisAlignment: MainAxisAlignment.center,
                     // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        // width: 250,
-                        height: 35,
-                        child: RegularButton(
-                          title: 'Confirm',
-                          sizeFont: 16,
-                          onTap: () {
-                            showConfirmDialog();
-                            // print('aaa');
-                            // confirmDialog(context,
-                            //         'Are you sure the data is correct?', true)
-                            //     .then((value) {
-                            //   if (value) {
-                            //     saveInvitation().then((value) {
-                            //       // Navigator.pushReplacementNamed(
-                            //       //   context, routeInvite);
-                            //     });
-                            //   } else {
-                            //     print('cancel');
-                            //   }
-                            // });
-                          },
-                          isDark: true,
-                        ),
-                      ),
+                      isLoading
+                          ? CircularProgressIndicator(
+                              color: scaffoldBg,
+                            )
+                          : SizedBox(
+                              // width: 250,
+                              height: 35,
+                              child: RegularButton(
+                                title: 'Confirm',
+                                sizeFont: 16,
+                                onTap: () {
+                                  showConfirmDialog();
+                                  // print('aaa');
+                                  // confirmDialog(context,
+                                  //         'Are you sure the data is correct?', true)
+                                  //     .then((value) {
+                                  //   if (value) {
+                                  //     saveInvitation().then((value) {
+                                  //       // Navigator.pushReplacementNamed(
+                                  //       //   context, routeInvite);
+                                  //     });
+                                  //   } else {
+                                  //     print('cancel');
+                                  //   }
+                                  // });
+                                },
+                                isDark: true,
+                              ),
+                            ),
                       SizedBox(width: 20, height: 10),
                       SizedBox(
                         // width: 250,

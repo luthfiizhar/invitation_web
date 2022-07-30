@@ -23,6 +23,7 @@ class EmployeePage extends StatefulWidget {
 }
 
 class _EmployeePageState extends State<EmployeePage> {
+  bool isLoading = false;
   late String phoneCode;
   late String phoneNumber;
   late String email;
@@ -127,48 +128,90 @@ class _EmployeePageState extends State<EmployeePage> {
                 index: 2,
               ),
               Padding(
-                padding: Responsive.isBigDesktop(context)
-                    ? EdgeInsets.only(top: 60, left: 500, right: 500)
-                    : EdgeInsets.only(top: 60, left: 350, right: 350),
+                padding:
+                    // Responsive.isBigDesktop(context)
+                    //     ? EdgeInsets.only(top: 5, left: 350, right: 350)
+                    //     : EdgeInsets.only(top: 5, left: 350, right: 350),
+                    Responsive.isBigDesktop(context)
+                        ? EdgeInsets.only(top: 5, left: 350, right: 350)
+                        : EdgeInsets.only(top: 5, left: 350, right: 350),
                 child: Form(
                   key: _formKey,
                   child: Container(
+                    width: Responsive.isBigDesktop(context) ? 650 : 650,
+                    // color: Colors.amber,
                     child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Employee',
-                              style: pageTitle,
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 20),
+                        Container(
+                          padding: Responsive.isBigDesktop(context)
+                              ? EdgeInsets.only(top: 0, left: 150, right: 150)
+                              : EdgeInsets.only(top: 0, left: 0, right: 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                child: Wrap(
-                                  alignment: WrapAlignment.start,
-                                  // runAlignment: WrapAlignment.start,
-                                  // crossAxisAlignment: WrapCrossAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
-                                      style: pageSubtitle,
-                                    ),
-                                  ],
+                                // color: Colors.blue,
+                                child: Text(
+                                  'Employee Data',
+                                  style: TextStyle(
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Container(
+                                  // height: 56,
+                                  // color: Colors.green,
+                                  child: Wrap(
+                                    alignment: WrapAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
+                        // Container(
+                        //   color: Colors.blue,
+                        //   child: Text(
+                        //     'Employee',
+                        //     style: pageTitle,
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(top: 20),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       Container(
+                        //         color: Colors.green,
+                        //         child: Wrap(
+                        //           alignment: WrapAlignment.start,
+                        //           // runAlignment: WrapAlignment.start,
+                        //           // crossAxisAlignment: WrapCrossAlignment.start,
+                        //           children: [
+                        //             Text(
+                        //               'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
+                        //               style: pageSubtitle,
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              top: 40, left: 100, right: 100),
+                              top: 30, left: 100, right: 100),
                           child: Column(
                             // crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -193,7 +236,7 @@ class _EmployeePageState extends State<EmployeePage> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                  top: 30,
+                                  top: 20,
                                 ),
                                 child: SizedBox(
                                   width: 450,
@@ -209,37 +252,47 @@ class _EmployeePageState extends State<EmployeePage> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 80, bottom: 30),
-                                child: SizedBox(
-                                  width: 200,
-                                  height: 50,
-                                  child: RegularButton(
-                                    title: 'Confirm',
-                                    sizeFont: 24,
-                                    onTap: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        _formKey.currentState!.save();
-                                        updateDataEmployee(
-                                                phoneCode, phoneNumber, email)
-                                            .then((value) {
-                                          print(value);
-                                          if (value['Status'] == "200") {
-                                            Navigator.of(context).push(
-                                                NotifProcessDialog(
-                                                    isSuccess: true,
-                                                    message:
-                                                        "Data has been updated!"));
-                                          } else {
-                                            Navigator.of(context).push(
-                                                NotifProcessDialog(
-                                                    isSuccess: false,
-                                                    message:
-                                                        "Somethin wrong!"));
-                                          }
-                                        });
-                                      }
-                                    },
-                                  ),
-                                ),
+                                child: isLoading
+                                    ? CircularProgressIndicator(
+                                        color: eerieBlack,
+                                      )
+                                    : SizedBox(
+                                        width: 200,
+                                        height: 50,
+                                        child: RegularButton(
+                                          title: 'Confirm',
+                                          sizeFont: 24,
+                                          onTap: () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              _formKey.currentState!.save();
+                                              setState(() {
+                                                isLoading = true;
+                                              });
+                                              updateDataEmployee(phoneCode,
+                                                      phoneNumber, email)
+                                                  .then((value) {
+                                                print(value);
+                                                setState(() {});
+                                                isLoading = false;
+                                                if (value['Status'] == "200") {
+                                                  Navigator.of(context).push(
+                                                      NotifProcessDialog(
+                                                          isSuccess: true,
+                                                          message:
+                                                              "Data has been updated!"));
+                                                } else {
+                                                  Navigator.of(context).push(
+                                                      NotifProcessDialog(
+                                                          isSuccess: false,
+                                                          message:
+                                                              "Somethin wrong!"));
+                                                }
+                                              });
+                                            }
+                                          },
+                                        ),
+                                      ),
                               )
                             ],
                           ),
@@ -271,7 +324,7 @@ class _EmployeePageState extends State<EmployeePage> {
                 index: 2,
               ),
               Padding(
-                padding: EdgeInsets.only(top: 10, left: 20, right: 20),
+                padding: EdgeInsets.only(top: 10, left: 35, right: 35),
                 child: Form(
                   key: _formKey,
                   child: Container(
@@ -282,7 +335,7 @@ class _EmployeePageState extends State<EmployeePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              'Employee',
+                              'Employee Data',
                               style: TextStyle(
                                   fontSize: 24, fontWeight: FontWeight.w700),
                             ),
@@ -311,7 +364,7 @@ class _EmployeePageState extends State<EmployeePage> {
                                   phoneNoFieldMobile(),
                                   Padding(
                                     padding: EdgeInsets.only(
-                                      top: 10,
+                                      top: 20,
                                     ),
                                     child: InputVisitor(
                                       controller: _email,
@@ -399,7 +452,7 @@ class _EmployeePageState extends State<EmployeePage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 30),
+            padding: EdgeInsets.only(top: 20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -449,7 +502,7 @@ class _EmployeePageState extends State<EmployeePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 30),
+              padding: const EdgeInsets.only(left: 20, top: 20),
               child: Text(
                 'Phone Number',
                 style: TextStyle(
@@ -465,13 +518,13 @@ class _EmployeePageState extends State<EmployeePage> {
             children: [
               SizedBox(
                 // padding: EdgeInsets.zero,
-                width: 100,
+                width: 80,
                 // height: 50,
                 child: phoneCodeInput(),
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 10),
                   child: Container(
                     padding: EdgeInsets.zero,
                     width: Responsive.isDesktop(context) ? 330 : null,
@@ -497,12 +550,13 @@ class _EmployeePageState extends State<EmployeePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 20, top: 30),
+                padding: const EdgeInsets.only(left: 20, top: 20),
                 child: Text(
                   'Phone Number',
                   style: TextStyle(
                       fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                      fontWeight: FontWeight.w700),
+                      fontWeight: FontWeight.w700,
+                      color: onyxBlack),
                 ),
               ),
             ],
@@ -514,15 +568,15 @@ class _EmployeePageState extends State<EmployeePage> {
                 SizedBox(
                   // padding: EdgeInsets.zero,
                   width: 100,
-                  // height: 50,
+                  height: 50,
                   child: phoneCodeInput(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: Container(
-                    padding: EdgeInsets.zero,
+                    // padding: EdgeInsets.zero,
                     width: Responsive.isDesktop(context) ? 330 : null,
-                    // height: 50,
+                    height: 50,
                     child: phoneNumberInput(),
                   ),
                 ),
@@ -549,8 +603,18 @@ class _EmployeePageState extends State<EmployeePage> {
       decoration: InputDecoration(
         isDense: true,
         contentPadding: Responsive.isDesktop(context)
-            ? EdgeInsets.symmetric(vertical: 20, horizontal: 20)
-            : EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            ? EdgeInsets.only(
+                top: 17,
+                bottom: 15,
+                left: 20,
+                right: 20,
+              )
+            : EdgeInsets.only(
+                top: 16,
+                bottom: 17,
+                left: 20,
+                right: 20,
+              ),
         isCollapsed: true,
         focusColor: eerieBlack,
         focusedErrorBorder: OutlineInputBorder(
@@ -670,11 +734,15 @@ class _EmployeePageState extends State<EmployeePage> {
       },
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
+        prefixStyle: TextStyle(
+            fontSize: Responsive.isDesktop(context) ? 20 : 14,
+            fontWeight: FontWeight.w700,
+            color: eerieBlack),
         counterText: "",
         prefixIcon: Padding(
           padding: Responsive.isDesktop(context)
-              ? EdgeInsets.only(bottom: 5)
-              : EdgeInsets.only(bottom: 3),
+              ? EdgeInsets.only(bottom: 3, left: 0, right: 0)
+              : EdgeInsets.only(bottom: 1),
           child: Icon(
             Icons.add,
             size: Responsive.isDesktop(context) ? 20 : 14,
@@ -684,8 +752,18 @@ class _EmployeePageState extends State<EmployeePage> {
         prefixIconColor: eerieBlack,
         isDense: true,
         contentPadding: Responsive.isDesktop(context)
-            ? EdgeInsets.symmetric(vertical: 20, horizontal: 17)
-            : EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            ? EdgeInsets.only(
+                top: 17,
+                bottom: 15,
+                left: 10,
+                right: 10,
+              )
+            : EdgeInsets.only(
+                top: 16,
+                bottom: 17,
+                left: 10,
+                right: 10,
+              ),
         isCollapsed: true,
         focusColor: eerieBlack,
         focusedErrorBorder: OutlineInputBorder(
@@ -722,7 +800,7 @@ class _EmployeePageState extends State<EmployeePage> {
       ),
       style: TextStyle(
           fontSize: Responsive.isDesktop(context) ? 20 : 14,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w700,
           color: eerieBlack),
     );
   }

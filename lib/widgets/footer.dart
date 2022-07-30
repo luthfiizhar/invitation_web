@@ -12,7 +12,7 @@ class FooterInviteWeb extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.zero,
-      height: Responsive.isDesktop(context) ? 90 : 50,
+      height: Responsive.isDesktop(context) ? 65 : 50,
       decoration: BoxDecoration(
           // border: Border()
           borderRadius: BorderRadius.only(
@@ -24,11 +24,12 @@ class FooterInviteWeb extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            left: Responsive.isDesktop(context) ? -15 : 5,
-            top: Responsive.isDesktop(context) ? 10 : 5,
+            left: Responsive.isDesktop(context) ? 0 : 0,
+            top: Responsive.isDesktop(context) ? 0 : 0,
             child: Container(
-              width: Responsive.isDesktop(context) ? 270 : 100,
-              height: Responsive.isDesktop(context) ? 75 : 35,
+              // color: Colors.red,
+              width: Responsive.isDesktop(context) ? 200 : 150,
+              height: Responsive.isDesktop(context) ? 70 : 45,
               child: SvgPicture.asset(
                 'assets/KLG_logo_white.svg',
                 // color: Colors.white,
@@ -38,7 +39,7 @@ class FooterInviteWeb extends StatelessWidget {
           ),
           Positioned(
             right: Responsive.isDesktop(context) ? 30 : 15,
-            top: Responsive.isDesktop(context) ? 30 : 15,
+            top: Responsive.isDesktop(context) ? 25 : 12,
             child: Container(
               // color: Colors.red,
               height: Responsive.isDesktop(context) ? 23 : 15,
@@ -49,7 +50,7 @@ class FooterInviteWeb extends StatelessWidget {
                   Text(
                     'Facility Management',
                     style: TextStyle(
-                      fontSize: Responsive.isDesktop(context) ? 20 : 12,
+                      fontSize: Responsive.isDesktop(context) ? 18 : 12,
                       color: Color(0xFFF5F5F5),
                     ),
                   ),

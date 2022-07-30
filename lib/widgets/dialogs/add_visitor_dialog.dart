@@ -25,7 +25,7 @@ class AddVisitorOverlay extends ModalRoute<void> {
 
   @override
   // TODO: implement barrierDismissible
-  bool get barrierDismissible => false;
+  bool get barrierDismissible => true;
 
   @override
   // TODO: implement barrierLabel
@@ -157,143 +157,154 @@ class AddVisitorOverlay extends ModalRoute<void> {
                   borderRadius: BorderRadius.circular(15),
                   color: scaffoldBg,
                 ),
-                child: ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context)
-                      .copyWith(scrollbars: false),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(left: 50, right: 50, top: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                child: Stack(
+                  children: [
+                    ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(scrollbars: false),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: Responsive.isDesktop(context)
+                              ? EdgeInsets.only(left: 50, right: 50, top: 40)
+                              : EdgeInsets.only(left: 25, right: 25, top: 25),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextButton.icon(
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                                icon: Icon(
-                                  Icons.close,
-                                  color: eerieBlack,
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Add Visitor',
+                                      style: dialogTitle,
+                                    ),
+                                  ],
                                 ),
-                                label: Text(''),
+                              ),
+                              Form(
+                                key: _formKey,
+                                child: ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: formList.length,
+                                  itemBuilder: (context, index) {
+                                    return formList[index];
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, bottom: 30),
+                                child: Center(
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {
+                                      setState(() {
+                                        _visitorModel =
+                                            Visitor(number: formList.length);
+
+                                        formList.add(MultiVisitorFOrm(
+                                          visitorModel: _visitorModel,
+                                          index: formList.length,
+                                          onRemove: () {
+                                            onRemove(_visitorModel!);
+                                            setState(
+                                              () {},
+                                            );
+                                          },
+                                        ));
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.add_circle_outline,
+                                      size: Responsive.isDesktop(context)
+                                          ? 40
+                                          : 35,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: SizedBox(
+                                  height:
+                                      Responsive.isDesktop(context) ? 50 : 40,
+                                  width: Responsive.isDesktop(context)
+                                      ? 275
+                                      : null,
+                                  child: RegularButton(
+                                    title: 'Next',
+                                    sizeFont:
+                                        Responsive.isDesktop(context) ? 24 : 16,
+                                    onTap: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        _formKey.currentState!.save();
+                                        onSave();
+
+                                        var json = jsonEncode(visitorList);
+                                        saveInviteVisitorData(json);
+                                        model.listInvite = json;
+                                        print(visitorList.toList());
+
+                                        Navigator.of(context)
+                                            .push(AddNewInviteConfirmDialog(
+                                                eventID: inviteCode))
+                                            .then((_) {
+                                          // model.listInvite = "";
+                                          // setState(
+                                          //   () {
+                                          visitorList.clear();
+                                          clearVisitorData();
+                                          Navigator.of(context).pop(false);
+                                          //   },
+                                          // );
+                                        });
+                                      } else {
+                                        print('failed');
+                                      }
+
+                                      // Navigator.pushNamed(context, routeConfiemInvite)
+                                      //     .then((value) {
+                                      //   setState(() {
+                                      //     visitorList.clear();
+                                      //     clearVisitorData();
+                                      //   });
+                                      // });
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (BuildContext context) =>
+                                      //             ConfirmInvitePage()));
+
+                                      // print(json);
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 40,
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 30),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Add Visitor',
-                                  style: dialogTitle,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Form(
-                            key: _formKey,
-                            child: ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: formList.length,
-                              itemBuilder: (context, index) {
-                                return formList[index];
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20, bottom: 30),
-                            child: Center(
-                              child: IconButton(
-                                padding: EdgeInsets.zero,
-                                onPressed: () {
-                                  setState(() {
-                                    _visitorModel =
-                                        Visitor(number: formList.length);
-
-                                    formList.add(MultiVisitorFOrm(
-                                      visitorModel: _visitorModel,
-                                      index: formList.length,
-                                      onRemove: () {
-                                        onRemove(_visitorModel!);
-                                        setState(
-                                          () {},
-                                        );
-                                      },
-                                    ));
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.add_circle_outline,
-                                  size: Responsive.isDesktop(context) ? 40 : 35,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: SizedBox(
-                              height: Responsive.isDesktop(context) ? 50 : 40,
-                              width: Responsive.isDesktop(context) ? 275 : null,
-                              child: RegularButton(
-                                title: 'Next',
-                                sizeFont:
-                                    Responsive.isDesktop(context) ? 24 : 16,
-                                onTap: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    _formKey.currentState!.save();
-                                    onSave();
-
-                                    var json = jsonEncode(visitorList);
-                                    saveInviteVisitorData(json);
-                                    model.listInvite = json;
-                                    print(visitorList.toList());
-
-                                    Navigator.of(context)
-                                        .push(AddNewInviteConfirmDialog(
-                                            eventID: inviteCode))
-                                        .then((_) {
-                                      // model.listInvite = "";
-                                      // setState(
-                                      //   () {
-                                      visitorList.clear();
-                                      clearVisitorData();
-                                      Navigator.of(context).pop(false);
-                                      //   },
-                                      // );
-                                    });
-                                  } else {
-                                    print('failed');
-                                  }
-
-                                  // Navigator.pushNamed(context, routeConfiemInvite)
-                                  //     .then((value) {
-                                  //   setState(() {
-                                  //     visitorList.clear();
-                                  //     clearVisitorData();
-                                  //   });
-                                  // });
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (BuildContext context) =>
-                                  //             ConfirmInvitePage()));
-
-                                  // print(json);
-                                },
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                    Positioned(
+                      right: 20,
+                      top: 20,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop(false);
+                        },
+                        child: Container(
+                          child: Icon(
+                            Icons.close,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );

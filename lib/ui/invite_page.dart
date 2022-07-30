@@ -356,38 +356,93 @@ class _InvitePageState extends State<InvitePage> {
                         isCollapsed: true,
                         hintText: 'Click here to select start date',
                         hintStyle: TextStyle(
-                          fontSize: 20,
+                          fontSize: Responsive.isDesktop(context) ? 20 : 14,
                           fontWeight: FontWeight.w400,
                         ),
-                        contentPadding: EdgeInsets.only(
-                            top: 21, bottom: 17, left: 30, right: 30),
+                        contentPadding: Responsive.isDesktop(context)
+                            ? EdgeInsets.only(
+                                top: 17,
+                                bottom: 15,
+                                left: 20,
+                                right: 20,
+                              )
+                            : EdgeInsets.only(
+                                top: 16,
+                                bottom: 17,
+                                left: 20,
+                                right: 20,
+                              ),
                         focusColor: onyxBlack,
                         focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(
+                                Responsive.isDesktop(context) ? 10 : 7),
                             borderSide: BorderSide(
                               color: eerieBlack,
                               width: 2.5,
                             )),
                         focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(
+                                Responsive.isDesktop(context) ? 10 : 7),
                             borderSide:
                                 BorderSide(color: eerieBlack, width: 2.5)),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(
+                                Responsive.isDesktop(context) ? 10 : 7),
                             borderSide: BorderSide(
                                 color: Color(0xFF929AAB), width: 2.5)),
                         fillColor: graySand,
                         filled: true,
                         errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(
+                                Responsive.isDesktop(context) ? 10 : 7),
                             borderSide:
                                 BorderSide(color: eerieBlack, width: 2.5)),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(
+                                Responsive.isDesktop(context) ? 10 : 7),
                             borderSide: BorderSide(
                                 color: Color(0xFF929AAB), width: 2.5)),
-                        errorStyle: TextStyle(color: silver, fontSize: 18),
+                        errorStyle: TextStyle(
+                            color: orangeRed,
+                            fontSize: Responsive.isDesktop(context) ? 18 : 14),
                       ),
+                      // InputDecoration(
+                      //   isDense: true,
+                      //   // isCollapsed: true,
+                      //   hintText: 'Click here to select start date',
+                      //   hintStyle: TextStyle(
+                      //     fontSize: 20,
+                      //     fontWeight: FontWeight.w400,
+                      //   ),
+                      //   contentPadding: EdgeInsets.only(
+                      //       top: 17, bottom: 15, left: 20, right: 20),
+                      //   focusColor: onyxBlack,
+                      //   focusedErrorBorder: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(10),
+                      //       borderSide: BorderSide(
+                      //         color: eerieBlack,
+                      //         width: 2.5,
+                      //       )),
+                      //   focusedBorder: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(10),
+                      //       borderSide:
+                      //           BorderSide(color: eerieBlack, width: 2.5)),
+                      //   enabledBorder: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(10),
+                      //       borderSide: BorderSide(
+                      //           color: Color(0xFF929AAB), width: 2.5)),
+                      //   fillColor: graySand,
+                      //   filled: true,
+                      //   errorBorder: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(10),
+                      //       borderSide:
+                      //           BorderSide(color: eerieBlack, width: 2.5)),
+                      //   border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(15),
+                      //       borderSide: BorderSide(
+                      //           color: Color(0xFF929AAB), width: 2.5)),
+                      //   errorStyle: TextStyle(color: silver, fontSize: 18),
+                      // ),
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,
@@ -446,7 +501,7 @@ class _InvitePageState extends State<InvitePage> {
                           fontWeight: FontWeight.w400,
                         ),
                         contentPadding: EdgeInsets.only(
-                            top: 21, bottom: 17, left: 30, right: 30),
+                            top: 17, bottom: 15, left: 20, right: 20),
                         focusColor: onyxBlack,
                         focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -472,7 +527,7 @@ class _InvitePageState extends State<InvitePage> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
                                 color: Color(0xFF929AAB), width: 2.5)),
-                        errorStyle: TextStyle(color: silver, fontSize: 18),
+                        errorStyle: TextStyle(color: orangeRed, fontSize: 18),
                       ),
                       style: TextStyle(
                           fontSize: 20,
@@ -500,81 +555,100 @@ class _InvitePageState extends State<InvitePage> {
               ),
               Padding(
                 padding: Responsive.isBigDesktop(context)
-                    ? EdgeInsets.only(top: 50, left: 500, right: 500)
-                    : EdgeInsets.only(top: 50, left: 300, right: 300),
+                    ? EdgeInsets.only(top: 5, left: 350, right: 350)
+                    : EdgeInsets.only(top: 5, left: 350, right: 350),
                 child: Container(
-                  // color: Colors.red,
+                  // color: Colors.orange,
+                  width: Responsive.isBigDesktop(context) ? 650 : 650,
+                  // color: Colors.blue,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'Invite Visitor',
-                        style: TextStyle(
-                            fontSize: 48, fontWeight: FontWeight.w700),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Container(
-                          height: 60,
-                          child: Wrap(
-                            children: [
-                              Text(
-                                'Please fill visitor\'s name & email below. We will send them an email to complete their data.',
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.w300),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: Container(
+                      Container(
+                        // color: Colors.blue,
+                        // padding: EdgeInsets.symmetric(horizontal: 50),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
                               // color: Colors.amber,
-                              width: 650,
-                              child: Form(
-                                key: _formKey,
-                                child: Column(
+                              child: Text(
+                                'Invite Visitor',
+                                style: TextStyle(
+                                    fontSize: 36, fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Container(
+                                // height: 56,
+                                // color: Colors.green,
+                                child: Wrap(
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          inputDateContainer(),
-                                        ],
-                                      ),
-                                    ),
-                                    formList.length > 0
-                                        ? Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 30),
-                                            child: Divider(
-                                              thickness: 2,
-                                              color: spanishGray,
-                                            ),
-                                          )
-                                        : SizedBox(),
-                                    ListView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemCount: formList.length,
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                            // color: Colors.lightBlue,
-                                            child: formList[index]);
-                                      },
+                                    Text(
+                                      'Please fill visitor\'s name & email below. We will send them an email to complete their data.',
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w300),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                      ),
+                      Container(
+                        // color: Colors.red,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 0, bottom: 10),
+                              child: Container(
+                                // color: Colors.amber,
+                                width: 650,
+                                child: Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            inputDateContainer(),
+                                          ],
+                                        ),
+                                      ),
+                                      formList.length > 0
+                                          ? Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 10),
+                                              child: Divider(
+                                                thickness: 2,
+                                                color: spanishGray,
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                      ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: formList.length,
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                              // color: Colors.lightBlue,
+                                              child: formList[index]);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 30),
@@ -711,7 +785,7 @@ class _InvitePageState extends State<InvitePage> {
                       fontWeight: FontWeight.w400,
                     ),
                     contentPadding: EdgeInsets.only(
-                        top: 20, bottom: 20, left: 30, right: 30),
+                        top: 17, bottom: 17, left: 20, right: 20),
                     focusColor: onyxBlack,
                     focusedErrorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(7),
@@ -735,7 +809,7 @@ class _InvitePageState extends State<InvitePage> {
                         borderRadius: BorderRadius.circular(15),
                         borderSide:
                             BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-                    errorStyle: TextStyle(color: silver, fontSize: 14),
+                    errorStyle: TextStyle(color: orangeRed, fontSize: 14),
                   ),
                   style: TextStyle(
                       fontSize: 14,
@@ -793,7 +867,7 @@ class _InvitePageState extends State<InvitePage> {
                         fontWeight: FontWeight.w400,
                       ),
                       contentPadding: EdgeInsets.only(
-                          top: 20, bottom: 20, left: 30, right: 30),
+                          top: 17, bottom: 17, left: 20, right: 20),
                       focusColor: onyxBlack,
                       focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -819,7 +893,7 @@ class _InvitePageState extends State<InvitePage> {
                           borderRadius: BorderRadius.circular(7),
                           borderSide:
                               BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-                      errorStyle: TextStyle(color: silver, fontSize: 14),
+                      errorStyle: TextStyle(color: orangeRed, fontSize: 14),
                     ),
                     style: TextStyle(
                         fontSize: 14,
@@ -857,7 +931,7 @@ class _InvitePageState extends State<InvitePage> {
                       Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: Container(
-                          height: 60,
+                          height: 40,
                           child: Wrap(
                             children: [
                               Text(
@@ -874,12 +948,12 @@ class _InvitePageState extends State<InvitePage> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(top: 20),
+                              padding: EdgeInsets.only(top: 10),
                               child: inputDateContainerMobile(),
                             ),
                             formList.length > 0
                                 ? Padding(
-                                    padding: const EdgeInsets.only(top: 30),
+                                    padding: const EdgeInsets.only(top: 15),
                                     child: Divider(
                                       thickness: 2,
                                       color: spanishGray,
@@ -887,6 +961,7 @@ class _InvitePageState extends State<InvitePage> {
                                   )
                                 : SizedBox(),
                             ListView.builder(
+                              padding: EdgeInsets.zero,
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: formList.length,
@@ -934,7 +1009,7 @@ class _InvitePageState extends State<InvitePage> {
                       // ),
                       Center(
                         child: SizedBox(
-                          height: 40,
+                          height: 50,
                           // width: 275,
                           child: RegularButton(
                             title: 'Next',
