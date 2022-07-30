@@ -188,10 +188,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                 child: Padding(
                                   padding: Responsive.isBigDesktop(context)
                                       ? EdgeInsets.only(
-                                          top: 0,
-                                          left: 200,
-                                          right: 200,
-                                          bottom: 20)
+                                          top: 0, left: 0, right: 0, bottom: 20)
                                       : EdgeInsets.only(
                                           top: 0,
                                           left: 0,
@@ -211,8 +208,8 @@ class _WelcomePageState extends State<WelcomePage> {
                                           //     EdgeInsets.only(right: 70, top: 30),
                                           width:
                                               Responsive.isBigDesktop(context)
-                                                  ? 650
-                                                  : 550,
+                                                  ? 600
+                                                  : 500,
                                           height:
                                               Responsive.isBigDesktop(context)
                                                   ? 600
@@ -221,166 +218,158 @@ class _WelcomePageState extends State<WelcomePage> {
                                               'assets/Ilustrasi Welcome Website B.svg',
                                               fit: BoxFit.fitHeight),
                                         ),
-                                        Expanded(
-                                          // flex: 9,
-                                          child: Container(
-                                            // color: Colors.blue,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 15.0, top: 15),
-                                                  child: Container(
-                                                    // color: Colors.yellow,
-                                                    // height: 200,
-                                                    // width: 620,
-                                                    padding: EdgeInsets.zero,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Container(
-                                                          width: 600,
-                                                          child: Wrap(
-                                                            children: [
-                                                              Text(
-                                                                'Kawan Lama Group',
-                                                                style:
-                                                                    TextStyle(
-                                                                  // letterSpacing: 1,
-                                                                  fontSize: 56,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      eerieBlack,
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                'Visitor Invitation',
-                                                                style:
-                                                                    TextStyle(
-                                                                  // letterSpacing: 1,
-                                                                  fontSize: 56,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      eerieBlack,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: 50, left: 15),
-                                                  child: Container(
-                                                    child: Text(
-                                                      'Please login using HC Plus for using the site',
-                                                      style: TextStyle(
-                                                        fontSize: 22,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        color: onyxBlack,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                    top: 20,
-                                                  ),
-                                                  child: Row(
+                                        Container(
+                                          // color: Colors.blue,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15.0, top: 15),
+                                                child: Container(
+                                                  // color: Colors.yellow,
+                                                  // height: 200,
+                                                  // width: 620,
+                                                  padding: EdgeInsets.zero,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Container(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 15),
-                                                        width: 300,
-                                                        // height: 70,
-                                                        child: InputField(
-                                                          onSubmitted: (data) {
-                                                            login(context);
-                                                          },
-                                                          controller: _username,
-                                                          label: 'Username',
-                                                          focusNode:
-                                                              userNameNode,
-                                                          hintText:
-                                                              'Username here...',
-                                                          onSaved: (value) {
-                                                            userName = value;
-                                                          },
-                                                          obsecureText: false,
-                                                          validator: (value) =>
-                                                              value == ""
-                                                                  ? "This field is required"
-                                                                  : null,
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Container(
-                                                        width: 300,
-                                                        child: InputField(
-                                                          onSubmitted: (data) {
-                                                            login(context);
-                                                          },
-                                                          controller: _password,
-                                                          label: 'Password',
-                                                          focusNode: passNode,
-                                                          hintText:
-                                                              'Password here...',
-                                                          onSaved: (value) {
-                                                            password = value;
-                                                          },
-                                                          obsecureText: true,
-                                                          validator: (value) =>
-                                                              value == ""
-                                                                  ? "This field is required"
-                                                                  : null,
+                                                        width: 600,
+                                                        child: Wrap(
+                                                          children: [
+                                                            Text(
+                                                              'Kawan Lama Group',
+                                                              style: TextStyle(
+                                                                // letterSpacing: 1,
+                                                                fontSize: 56,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color:
+                                                                    eerieBlack,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              'Visitor Invitation',
+                                                              style: TextStyle(
+                                                                // letterSpacing: 1,
+                                                                fontSize: 56,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color:
+                                                                    eerieBlack,
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: 35,
-                                                      left: 15,
-                                                      right: 15,
-                                                      bottom: 40),
-                                                  child: isLoading
-                                                      ? CircularProgressIndicator(
-                                                          color: eerieBlack,
-                                                        )
-                                                      : SizedBox(
-                                                          width: 140,
-                                                          height: 50,
-                                                          //Tombol Login Desktop Layout
-                                                          child: RegularButton(
-                                                            title: 'Login',
-                                                            sizeFont: 20,
-                                                            onTap: () {
-                                                              login(context);
-                                                            },
-                                                          ),
-                                                        ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 50, left: 15),
+                                                child: Container(
+                                                  child: Text(
+                                                    'Please login using HC Plus for using the site',
+                                                    style: TextStyle(
+                                                      fontSize: 22,
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      color: onyxBlack,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                  top: 20,
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      padding: EdgeInsets.only(
+                                                          left: 15),
+                                                      width: 300,
+                                                      // height: 70,
+                                                      child: InputField(
+                                                        onSubmitted: (data) {
+                                                          login(context);
+                                                        },
+                                                        controller: _username,
+                                                        label: 'Username',
+                                                        focusNode: userNameNode,
+                                                        hintText:
+                                                            'Username here...',
+                                                        onSaved: (value) {
+                                                          userName = value;
+                                                        },
+                                                        obsecureText: false,
+                                                        validator: (value) =>
+                                                            value == ""
+                                                                ? "This field is required"
+                                                                : null,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Container(
+                                                      width: 300,
+                                                      child: InputField(
+                                                        onSubmitted: (data) {
+                                                          login(context);
+                                                        },
+                                                        controller: _password,
+                                                        label: 'Password',
+                                                        focusNode: passNode,
+                                                        hintText:
+                                                            'Password here...',
+                                                        onSaved: (value) {
+                                                          password = value;
+                                                        },
+                                                        obsecureText: true,
+                                                        validator: (value) =>
+                                                            value == ""
+                                                                ? "This field is required"
+                                                                : null,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 35,
+                                                    left: 15,
+                                                    right: 15,
+                                                    bottom: 40),
+                                                child: isLoading
+                                                    ? CircularProgressIndicator(
+                                                        color: eerieBlack,
+                                                      )
+                                                    : SizedBox(
+                                                        width: 140,
+                                                        height: 50,
+                                                        //Tombol Login Desktop Layout
+                                                        child: RegularButton(
+                                                          title: 'Login',
+                                                          sizeFont: 20,
+                                                          onTap: () {
+                                                            login(context);
+                                                          },
+                                                        ),
+                                                      ),
+                                              ),
+                                            ],
                                           ),
                                         )
                                       ],
