@@ -148,6 +148,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               onHighlight: onHighlight,
               onTap: () {
                 logout().then((value) {
+                  Scaffold.of(context).closeEndDrawer();
                   Navigator.pushReplacementNamed(
                       navKey.currentState!.context, routeLogin);
                 });

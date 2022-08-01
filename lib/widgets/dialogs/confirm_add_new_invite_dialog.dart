@@ -15,11 +15,10 @@ import 'package:navigation_example/widgets/text_button.dart';
 import 'package:provider/provider.dart';
 
 class AddNewInviteConfirmDialog extends ModalRoute<void> {
-  AddNewInviteConfirmDialog({this.eventID});
+  AddNewInviteConfirmDialog({this.eventID, this.visitDate});
   String? eventID;
   String? visitorList;
-  String? startDate;
-  String? endDate;
+  String? visitDate;
   List? list = [];
   bool isLoading = false;
 
@@ -67,13 +66,13 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
     );
   }
 
-  Future saveAddVisitor(String eventId, String newList) async {
+  Future saveAddVisitor(String eventId) async {
     var box = await Hive.openBox('userLogin');
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     final url = Uri.https(
         apiUrl, '/VisitorManagementBackend/public/api/visitor/add-new-visitor');
 
-    newList = json.encode(list);
+    var newList = json.encode(list);
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -111,7 +110,9 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
             return Center(
                 child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: Responsive.isDesktop(context)
+                    ? BorderRadius.circular(15)
+                    : BorderRadius.circular(10),
                 color: eerieBlack,
               ),
               width: 600,
@@ -152,7 +153,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                                   color: scaffoldBg),
                             ),
                             Text(
-                              '$startDate - $endDate',
+                              '$visitDate',
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w300,
@@ -356,7 +357,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 10),
       leading: Text(
-        '$no',
+        no < 10 ? '0$no' : '$no',
         style: TextStyle(
           fontSize:
               Responsive.isDesktop(navKey.currentState!.context) ? 48 : 28,
@@ -434,7 +435,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
     return confirmDialog(context, 'Are you sure the data is correct?', true)
         .then((value) {
       if (value) {
-        saveAddVisitor(eventID!, "").then((value) {
+        saveAddVisitor(eventID!).then((value) {
           print(value);
           setState(() {
             isLoading = false;

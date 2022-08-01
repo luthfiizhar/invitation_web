@@ -55,7 +55,9 @@ class NotifProcessDialog extends ModalRoute<void> {
           return Center(
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: Responsive.isDesktop(context)
+                    ? BorderRadius.circular(15)
+                    : BorderRadius.circular(10),
                 color: scaffoldBg,
               ),
               width: Responsive.isDesktop(context)
@@ -84,7 +86,7 @@ class NotifProcessDialog extends ModalRoute<void> {
                     ),
                     Container(
                       padding: EdgeInsets.only(
-                        top: 80,
+                        top: 20,
                       ),
                       height: 320,
                       width: 300,

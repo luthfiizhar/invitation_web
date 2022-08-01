@@ -62,12 +62,12 @@ Future getVisitorApprovedData(String visitorId) async {
   print(bodySend);
   var response = await http.post(url, headers: requestHeader, body: bodySend);
   var data = json.decode(response.body);
-  print('first name' + data['Data']['FirstName']);
+  // print('first name' + data['Data']['FirstName']);
   // if (data['Status'] == '200') {
   //   isLoading = false;
   // } else {
   //   isLoading = false;
   // }
   // setState(() {});
-  return data['Data'];
+  return data;
 }

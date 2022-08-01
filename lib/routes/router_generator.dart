@@ -26,7 +26,7 @@ class RouteGenerator {
       case routeInvite:
         // return MaterialPageRoute(builder: (_) => InvitePage());
         return PageRouteBuilder(
-          settings: settings,
+          // settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) => InvitePage(),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
@@ -35,7 +35,7 @@ class RouteGenerator {
       case routeMyInvite:
         // return MaterialPageRoute(builder: (_) => MyInvitationPage());
         return PageRouteBuilder(
-          settings: settings,
+          // settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               MyInvitationPage(),
           transitionDuration: Duration.zero,
@@ -45,7 +45,7 @@ class RouteGenerator {
       case routeConfiemInvite:
         // return MaterialPageRoute(builder: (_) => ConfirmInvitePage());
         return PageRouteBuilder(
-          settings: settings,
+          // settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               ConfirmInvitePage(),
           transitionDuration: Duration.zero,
@@ -55,7 +55,7 @@ class RouteGenerator {
       case routeEmployee:
         // return MaterialPageRoute(builder: (_) => EmployeePage());
         return PageRouteBuilder(
-          settings: settings,
+          // settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               EmployeePage(),
           transitionDuration: Duration.zero,
@@ -65,7 +65,7 @@ class RouteGenerator {
       case routeLogin:
         // return MaterialPageRoute(builder: (_) => WelcomePage());
         return PageRouteBuilder(
-          settings: settings,
+          // settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               WelcomePage(),
           transitionDuration: Duration.zero,

@@ -85,9 +85,11 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
         builder: (context, constraints) {
           return Center(
             child: Container(
-              width: Responsive.isDesktop(context) ? 600 : 550,
+              width: Responsive.isDesktop(context) ? 600 : null,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: Responsive.isDesktop(context)
+                    ? BorderRadius.circular(15)
+                    : BorderRadius.circular(10),
                 color: scaffoldBg,
               ),
               child: Stack(
@@ -102,12 +104,14 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
                                 left: paddingSampingDialog,
                                 right: paddingSampingDialog,
                                 top: paddingAtasDialog)
-                            : EdgeInsets.only(left: 25, right: 25, top: 30),
+                            : EdgeInsets.only(left: 25, right: 25, top: 25),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 25),
+                              padding: Responsive.isDesktop(context)
+                                  ? EdgeInsets.only(bottom: 25)
+                                  : EdgeInsets.only(bottom: 15),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -365,28 +369,28 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(top: 20),
           child: detailInfo(
             'First Name',
             detailList["FirstName"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: 15),
           child: detailInfo(
             'Last Name',
             detailList["LastName"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: 15),
           child: detailInfo(
             'Gender',
             detailList["Gender"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: 15),
           child: detailInfo(
             'Email',
             detailList["Email"],
@@ -400,7 +404,7 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
         //   ),
         // ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: 15),
           child: phoneInfo(
             'Phone Number',
             detailList['PhoneNumber'] == null
@@ -409,35 +413,35 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: 10),
           child: Divider(
             thickness: 2,
             color: spanishGray,
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: 10),
           child: detailInfo(
             'Origin Company',
             detailList["CompanyName"].toString(),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: 15),
           child: detailInfo(
             'Visit Reason',
             detailList["VisitReason"].toString(),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: 15),
           child: detailInfo(
             'Visit Date',
             detailList["VisitTime"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: 15),
           child: detailInfo(
             'Meeting With',
             detailList["MeetingWith"],
@@ -490,7 +494,9 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10),
+            padding: Responsive.isDesktop(navKey.currentState!.context)
+                ? EdgeInsets.only(top: 10)
+                : EdgeInsets.only(top: 7),
             child: Text(
               '$content',
               style: TextStyle(

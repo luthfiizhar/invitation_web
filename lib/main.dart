@@ -33,7 +33,7 @@ jwtCheck() async {
 
   // var newList = json.encode(list);
   // print(newList);
-
+  // jwt = 'aaa';
   final url = Uri.https(
       apiUrl, '/VisitorManagementBackend/public/api/check-token-website');
   Map<String, String> requestHeader = {
@@ -54,6 +54,7 @@ jwtCheck() async {
     isExpired = false;
   } else {
     isExpired = true;
+    // Navigator.of(navKey.currentState!.context).pushReplacementNamed(routeLogin);
   }
 }
 

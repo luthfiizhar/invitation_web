@@ -16,9 +16,10 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 class AddVisitorOverlay extends ModalRoute<void> {
-  AddVisitorOverlay({this.inviteCode});
+  AddVisitorOverlay({this.inviteCode, this.visitDate});
 
   final String? inviteCode;
+  final String? visitDate;
   @override
   // TODO: implement barrierColor
   Color? get barrierColor => Colors.black.withOpacity(0.5);
@@ -154,7 +155,9 @@ class AddVisitorOverlay extends ModalRoute<void> {
               child: Container(
                 width: 730,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: Responsive.isDesktop(context)
+                      ? BorderRadius.circular(15)
+                      : BorderRadius.circular(10),
                   color: scaffoldBg,
                 ),
                 child: Stack(
@@ -248,7 +251,8 @@ class AddVisitorOverlay extends ModalRoute<void> {
 
                                         Navigator.of(context)
                                             .push(AddNewInviteConfirmDialog(
-                                                eventID: inviteCode))
+                                                eventID: inviteCode,
+                                                visitDate: visitDate))
                                             .then((_) {
                                           // model.listInvite = "";
                                           // setState(

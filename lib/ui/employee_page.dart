@@ -27,6 +27,7 @@ class _EmployeePageState extends State<EmployeePage> {
   late String phoneCode;
   late String phoneNumber;
   late String email;
+  late bool firstLogin;
 
   late String name = "";
   late String nip = "";
@@ -49,10 +50,47 @@ class _EmployeePageState extends State<EmployeePage> {
       phoneCode = "62";
       phoneNumber = box.get('phoneNumber') != "" ? box.get('phoneNumber') : "";
       email = box.get('email') != "" ? box.get('email') : "";
+      firstLogin = box.get('firstLogin') != "" ? box.get('firstLogin') : "";
     });
-    _phoneNumberCode.text = phoneCode;
-    _phoneNumber.text = phoneNumber.substring(1);
-    _email.text = email;
+    if (firstLogin) {
+      _phoneNumberCode.text = phoneCode;
+      _phoneNumber.text = phoneNumber.substring(1);
+      _email.text = email;
+    } else {
+      getDataEmployeeLocal().then((value) {
+        print(value);
+        _phoneNumberCode.text = value['Data']['CountryCode'];
+        _phoneNumber.text = value['Data']['PhoneNumber'];
+        _email.text = value['Data']['Email'];
+      });
+    }
+  }
+
+  Future getDataEmployeeLocal() async {
+    var box = await Hive.openBox('userLogin');
+    var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
+    // print(visitorId);
+
+    final url = Uri.https(
+        apiUrl, '/VisitorManagementBackend/public/api/get-employee-data');
+    Map<String, String> requestHeader = {
+      'Authorization': 'Bearer $jwt',
+      'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
+      'Content-Type': 'application/json'
+    };
+    var bodySend = """ 
+      
+    """;
+    var response = await http.get(url, headers: requestHeader);
+    var data = json.decode(response.body);
+    // print('first name' + data['Data']['FirstName']);
+    // if (data['Status'] == '200') {
+    //   isLoading = false;
+    // } else {
+    //   isLoading = false;
+    // }
+    // setState(() {});
+    return data;
   }
 
   Future updateDataEmployee(String code, String number, String email) async {
@@ -762,18 +800,17 @@ class _EmployeePageState extends State<EmployeePage> {
                 top: 16,
                 bottom: 17,
                 left: 10,
-                right: 10,
+                right: 2,
               ),
         isCollapsed: true,
         focusColor: eerieBlack,
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius:
-              BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-          borderSide: BorderSide(
-            color: eerieBlack,
-            width: 2.5,
-          ),
-        ),
+            borderRadius:
+                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
+            borderSide: BorderSide(
+              color: eerieBlack,
+              width: 2.5,
+            )),
         focusedBorder: OutlineInputBorder(
             borderRadius:
                 BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),

@@ -18,205 +18,6 @@ import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
 import 'package:http/http.dart' as http;
 
-Widget listVisitorDetailDialog(
-  bool isHover,
-  String name,
-  String email,
-  String verified,
-  String visitorId,
-  int index,
-  int length,
-) {
-  return Container(
-    child: Column(
-      children: [
-        StatefulBuilder(builder: (context, StateSetter setState) {
-          bool removeVisible = false;
-          return Stack(
-            children: [
-              Positioned(
-                right: 0,
-                top: 25,
-                child: Row(
-                  children: [
-                    // Icon(Icons.check),
-                    verified == "APPROVED"
-                        ? SizedBox(
-                            width: Responsive.isDesktop(context) ? 30 : 20,
-                            child: ImageIcon(
-                              AssetImage('assets/icon_verified.png'),
-                            ),
-                          )
-                        : SizedBox(
-                            width: Responsive.isDesktop(context) ? 30 : 20,
-                          ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Visibility(
-                        visible: Responsive.isMobile(context)
-                            ? true
-                            : isHover
-                                ? true
-                                : false,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(
-                              () {
-                                // name = 'hahahaha';
-                              },
-                            );
-                          },
-                          child: Icon(Icons.close),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              InkWell(
-                onHover: (value) {
-                  setState(() {
-                    isHover = value;
-                  });
-                },
-                onTap: () {
-                  if (verified == "APPROVED") {
-                    // getVisitorApprovedData(visitorId).then((value) {
-                    // dynamic listDetail = json.encode(value);
-                    // print("list Detail Approved -> " + listDetail.toString());
-                    Navigator.of(context)
-                        .push(VisitorDataOverlay(listDetail: ""));
-                    // }).onError((error, stackTrace) {
-                    //   Navigator.of(context)
-                    //       .push(VisitorDataOverlay(listDetail: ""));
-                    // });
-                  } else {
-                    getVisitorData(visitorId).then((value) {
-                      dynamic listDetail = json.encode(value);
-                      print("list Detail not approved -> " +
-                          listDetail.toString());
-                      Navigator.of(context).push(
-                        VisitorConfirmationOverlay(listDetail: listDetail),
-                      );
-                    });
-                  }
-
-                  // Navigator.of(context).push(VisitorDataOverlay());
-                  // getVisitorData(visitorId);
-                  // verified == "APPROVED"
-                  //     ? Navigator.of(context).push(VisitorDataOverlay())
-                  //     : Navigator.of(context).push(VisitorConfirmationOverlay());
-                },
-                child: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: Responsive.isDesktop(context) ? 10 : 9,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '$name',
-                              style: TextStyle(
-                                fontSize:
-                                    Responsive.isDesktop(context) ? 20 : 16,
-                                fontWeight: FontWeight.w700,
-                                color: onyxBlack,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 7),
-                              child: Text(
-                                '$email',
-                                style: TextStyle(
-                                  fontSize:
-                                      Responsive.isDesktop(context) ? 20 : 16,
-                                  fontWeight: FontWeight.w300,
-                                  color: onyxBlack,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Text(
-                                verified == "APPROVED"
-                                    ? 'Visitor Verified'
-                                    : 'Visitor not yet Verified',
-                                style: TextStyle(
-                                  fontSize:
-                                      Responsive.isDesktop(context) ? 16 : 14,
-                                  fontWeight: FontWeight.w300,
-                                  color: verified == "APPROVED"
-                                      ? Color(0xFF0DB14B)
-                                      : Color(0xFFF26529),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Expanded(
-                      //   flex: Responsive.isDesktop(context) ? 2 : 3,
-                      //   child: Row(
-                      //     children: [
-                      //       // Icon(Icons.check),
-                      //       verified == "APPROVED"
-                      //           ? SizedBox(
-                      //               width:
-                      //                   Responsive.isDesktop(context) ? 30 : 20,
-                      //               child: ImageIcon(
-                      //                 AssetImage('assets/icon_verified.png'),
-                      //               ),
-                      //             )
-                      //           : SizedBox(
-                      //               width:
-                      //                   Responsive.isDesktop(context) ? 30 : 20,
-                      //             ),
-                      //       Padding(
-                      //         padding: const EdgeInsets.only(left: 10),
-                      //         child: Visibility(
-                      //           visible: Responsive.isMobile(context)
-                      //               ? true
-                      //               : isHover
-                      //                   ? true
-                      //                   : false,
-                      //           child: GestureDetector(
-                      //             onTap: () {
-                      //               setState(
-                      //                 () {
-                      //                   // name = 'hahahaha';
-                      //                 },
-                      //               );
-                      //             },
-                      //             child: Icon(Icons.close),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
-        }),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 7.5),
-          child: index == length - 1
-              ? SizedBox()
-              : Divider(
-                  thickness: 1,
-                  color: spanishGray,
-                ),
-        ),
-      ],
-    ),
-  );
-}
-
 class DetailVisitorOverlay extends ModalRoute<void> {
   DetailVisitorOverlay(
       {this.visitorList,
@@ -233,8 +34,234 @@ class DetailVisitorOverlay extends ModalRoute<void> {
   String? employeeName;
   bool? isHover = false;
   String? isVerified = 'AAA';
+  bool? cancelButtonLoading = false;
 
   bool isLoading = false;
+  Widget listVisitorDetailDialog(
+    bool isHover,
+    String name,
+    String email,
+    String verified,
+    String visitorId,
+    int index,
+    int length,
+  ) {
+    return Container(
+      child: Column(
+        children: [
+          StatefulBuilder(builder: (context, StateSetter setState) {
+            bool removeVisible = false;
+            return InkWell(
+              onHover: (value) {
+                setState(() {
+                  isHover = value;
+                });
+              },
+              onTap: () {
+                if (verified == "APPROVED") {
+                  getVisitorData(visitorId).then((value) {
+                    // print(value["Status"]);
+                    dynamic listDetail = json.encode(value);
+                    // print("list Detail Approved -> " + listDetail.toString());
+                    Navigator.of(context)
+                        .push(VisitorDataOverlay(listDetail: listDetail));
+                    // }).onError((error, stackTrace) {
+                    //   Navigator.of(context)
+                    //       .push(VisitorDataOverlay(listDetail: ""));
+                  }).onError((error, stackTrace) {
+                    print(error);
+                  });
+                } else {
+                  getVisitorData(visitorId).then((value) {
+                    dynamic listDetail = json.encode(value);
+                    print(
+                        "list Detail not approved -> " + listDetail.toString());
+                    Navigator.of(context).push(
+                      VisitorConfirmationOverlay(listDetail: listDetail),
+                    );
+                  });
+                }
+
+                // Navigator.of(context).push(VisitorDataOverlay());
+                // getVisitorData(visitorId);
+                // verified == "APPROVED"
+                //     ? Navigator.of(context).push(VisitorDataOverlay())
+                //     : Navigator.of(context).push(VisitorConfirmationOverlay());
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: Responsive.isDesktop(context) ? 10 : 9,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '$name',
+                          style: TextStyle(
+                            fontSize: Responsive.isDesktop(context) ? 20 : 16,
+                            fontWeight: FontWeight.w700,
+                            color: onyxBlack,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 7),
+                          child: Text(
+                            '$email',
+                            style: TextStyle(
+                              fontSize: Responsive.isDesktop(context) ? 20 : 16,
+                              fontWeight: FontWeight.w300,
+                              color: onyxBlack,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            verified == "APPROVED"
+                                ? 'Visitor Verified'
+                                : 'Visitor not yet Verified',
+                            style: TextStyle(
+                              fontSize: Responsive.isDesktop(context) ? 16 : 14,
+                              fontWeight: FontWeight.w300,
+                              color: verified == "APPROVED"
+                                  ? Color(0xFF0DB14B)
+                                  : Color(0xFFF26529),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: Responsive.isDesktop(context) ? 2 : 3,
+                    child: Row(
+                      children: [
+                        // Icon(Icons.check),
+                        verified == "APPROVED"
+                            ? SizedBox(
+                                width: Responsive.isDesktop(context) ? 30 : 20,
+                                child: ImageIcon(
+                                  AssetImage('assets/icon_verified.png'),
+                                ),
+                              )
+                            : SizedBox(
+                                width: Responsive.isDesktop(context) ? 30 : 20,
+                              ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Visibility(
+                            visible: Responsive.isMobile(context)
+                                ? true
+                                : isHover
+                                    ? true
+                                    : false,
+                            child: GestureDetector(
+                              onTap: () {
+                                removeVisitorConfirmDialog(context, visitorId)
+                                    .then((value) {
+                                  getInvitationDetail(eventID!).then(
+                                    (value) {
+                                      setState(
+                                        () {
+                                          visitorList = value['Visitors'];
+                                          totalPerson =
+                                              visitorList!.length.toString();
+                                        },
+                                      );
+                                    },
+                                  );
+                                });
+                                setState(
+                                  () {},
+                                );
+                              },
+                              child: Icon(Icons.close),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7.5),
+            child: index == length - 1
+                ? SizedBox()
+                : Divider(
+                    thickness: 1,
+                    color: spanishGray,
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future getInvitationDetail(String eventId) async {
+    print('hahaha');
+    var box = await Hive.openBox('userLogin');
+    var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
+    // print(jwt);
+
+    final url = Uri.https(apiUrl,
+        '/VisitorManagementBackend/public/api/invitation/get-invitation-detail');
+    Map<String, String> requestHeader = {
+      'Authorization': 'Bearer $jwt',
+      'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
+      'Content-Type': 'application/json'
+    };
+    var bodySend = """
+      {
+          "EventID" : "$eventId"
+      }
+    """;
+
+    var response = await http.post(url, headers: requestHeader, body: bodySend);
+    var data = json.decode(response.body);
+    // print('data->' + data['Data'].toString());
+
+    // final response = await http.get(requestUri);
+    if (data['Status'] == '200') {
+      setState(() {
+        visitorList = [data['Data']];
+        // contohData = data['Data']['Invitations'];
+      });
+      return data['Data'];
+    } else {}
+  }
+
+  Future removeVisitorConfirmDialog(BuildContext context, String visitorId) {
+    return confirmDialog(
+            context, 'Are you sure want to remove this guest?', true)
+        .then((value) {
+      if (value) {
+        removeVisitor(visitorId).then((value) {
+          print(value);
+          if (value['Status'] == "200") {
+            Navigator.of(context)
+                .push(NotifProcessDialog(
+                    message: '${value['Message']}', isSuccess: true))
+                .then((value) {});
+          } else {
+            Navigator.of(context)
+                .push(NotifProcessDialog(
+                    message: '${value['Message']}', isSuccess: false))
+                .then((value) {
+              setState(
+                () {},
+              );
+            });
+          }
+        });
+      } else {
+        // Navigator.of(context).pop();
+      }
+    });
+  }
 
   showConfirmDialog(BuildContext context) {
     return confirmDialog(
@@ -243,6 +270,8 @@ class DetailVisitorOverlay extends ModalRoute<void> {
       if (value) {
         cancelInvitation(eventID!).then((value) {
           print(value);
+          setState(() {});
+          cancelButtonLoading = false;
           if (value['Status'] == '200') {
             Navigator.push(
                     context,
@@ -299,16 +328,13 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     return data;
   }
 
-  Future getInvitationDetail(String inviteCode) async {
-    setState(() {
-      isLoading = true;
-    });
+  Future removeVisitor(String visitorId) async {
     var box = await Hive.openBox('userLogin');
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(jwt);
 
-    final url = Uri.https(apiUrl,
-        '/VisitorManagementBackend/public/api/invitation/get-invitation-detail');
+    final url = Uri.https(
+        apiUrl, '/VisitorManagementBackend/public/api/visitor/remove-visitor');
     Map<String, String> requestHeader = {
       'Authorization': 'Bearer $jwt',
       'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
@@ -316,7 +342,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     };
     var bodySend = """ 
       {
-          "EventID" : "$inviteCode"
+        "VisitorID" : "$visitorId"
       }
     """;
 
@@ -330,9 +356,43 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     } else {
       isLoading = false;
     }
-    setState(() {});
-    return data['Data'];
+    return data;
   }
+
+  // Future getInvitationDetail(String inviteCode) async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   var box = await Hive.openBox('userLogin');
+  //   var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
+  //   // print(jwt);
+
+  //   final url = Uri.https(apiUrl,
+  //       '/VisitorManagementBackend/public/api/invitation/get-invitation-detail');
+  //   Map<String, String> requestHeader = {
+  //     'Authorization': 'Bearer $jwt',
+  //     'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
+  //     'Content-Type': 'application/json'
+  //   };
+  //   var bodySend = """
+  //     {
+  //         "EventID" : "$inviteCode"
+  //     }
+  //   """;
+
+  //   var response = await http.post(url, headers: requestHeader, body: bodySend);
+  //   var data = json.decode(response.body);
+  //   // print('data->' + data['Data'].toString());
+
+  //   // final response = await http.get(requestUri);
+  //   if (data['Status'] == '200') {
+  //     isLoading = false;
+  //   } else {
+  //     isLoading = false;
+  //   }
+  //   setState(() {});
+  //   return data['Data'];
+  // }
 
   @override
   // TODO: implement barrierColor
@@ -364,7 +424,9 @@ class DetailVisitorOverlay extends ModalRoute<void> {
               width: 500,
               // color: scaffoldBg,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: Responsive.isDesktop(context)
+                    ? BorderRadius.circular(15)
+                    : BorderRadius.circular(10),
                 color: scaffoldBg,
               ),
               child: Stack(
@@ -642,6 +704,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                       Navigator.of(context)
                                           .push(AddVisitorOverlay(
                                         inviteCode: eventID,
+                                        visitDate: visitDate,
                                       ))
                                           .then((_) {
                                         getInvitationDetail(eventID!)
@@ -751,24 +814,34 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10),
-                                      child: SizedBox(
-                                        height: Responsive.isDesktop(context)
-                                            ? 50
-                                            : 40,
-                                        width: Responsive.isDesktop(context)
-                                            ? 250
-                                            : null,
-                                        child: CustTextButon(
-                                          fontSize:
-                                              Responsive.isDesktop(context)
-                                                  ? 20
-                                                  : 16,
-                                          label: 'Cancel Invitation',
-                                          onTap: () {
-                                            showConfirmDialog(context);
-                                          },
-                                        ),
-                                      ),
+                                      child: cancelButtonLoading!
+                                          ? CircularProgressIndicator(
+                                              color: eerieBlack,
+                                            )
+                                          : SizedBox(
+                                              height:
+                                                  Responsive.isDesktop(context)
+                                                      ? 50
+                                                      : 40,
+                                              width:
+                                                  Responsive.isDesktop(context)
+                                                      ? 250
+                                                      : null,
+                                              child: CustTextButon(
+                                                fontSize: Responsive.isDesktop(
+                                                        context)
+                                                    ? 20
+                                                    : 16,
+                                                label: 'Cancel Invitation',
+                                                onTap: () {
+                                                  setState(
+                                                    () {},
+                                                  );
+                                                  cancelButtonLoading = true;
+                                                  showConfirmDialog(context);
+                                                },
+                                              ),
+                                            ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(

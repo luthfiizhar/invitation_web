@@ -577,7 +577,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 10),
       leading: Text(
-        '$no',
+        no < 10 ? '0$no' : '$no',
         style: TextStyle(
           fontSize: Responsive.isDesktop(context) ? 48 : 28,
           fontWeight: FontWeight.w700,

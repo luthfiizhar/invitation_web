@@ -228,7 +228,9 @@ class ChangeVisitDialog extends ModalRoute<void> {
               child: Container(
                 width: 650,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: Responsive.isDesktop(context)
+                      ? BorderRadius.circular(15)
+                      : BorderRadius.circular(10),
                   color: scaffoldBg,
                 ),
                 child: Stack(

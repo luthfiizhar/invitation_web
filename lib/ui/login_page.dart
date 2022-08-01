@@ -57,7 +57,7 @@ class _WelcomePageState extends State<WelcomePage> {
       box.put('jwtToken',
           data['Data']['Token'] != null ? data['Data']['Token'] : "");
       box.put('firstLogin',
-          data['Data']['FirstLogin'] != null ? data['Data']['FirsLogin'] : "");
+          data['Data']['FirstLogin'] != null ? data['Data']['FirstLogin'] : "");
 
       return data;
     } else {
@@ -215,8 +215,8 @@ class _WelcomePageState extends State<WelcomePage> {
                                                   ? 600
                                                   : 500,
                                           child: SvgPicture.asset(
-                                              'assets/Ilustrasi Welcome Website B.svg',
-                                              fit: BoxFit.fitHeight),
+                                              'assets/ilus 2.svg',
+                                              fit: BoxFit.contain),
                                         ),
                                         Container(
                                           // color: Colors.blue,
@@ -434,9 +434,8 @@ class _WelcomePageState extends State<WelcomePage> {
                         //   width: 250,
                         //   height: 250,
                         // child:
-                        SvgPicture.asset(
-                            'assets/Ilustrasi Welcome Website B.svg',
-                            fit: BoxFit.cover,
+                        SvgPicture.asset('assets/ilus 2.svg',
+                            fit: BoxFit.contain,
                             width: MediaQuery.of(context).size.width * 0.65),
                         // ),
                         Row(
@@ -565,7 +564,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.only(top: 70, bottom: 20, right: 20),
+                      const EdgeInsets.only(top: 100, bottom: 20, right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

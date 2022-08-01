@@ -810,10 +810,17 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text(
-                    '',
-                    style: tableHeader,
-                  ),
+                  child: InkWell(
+                      // onTap: () {
+                      //   // getActiveInvitations(
+                      //   //   myActiveInvitePage.toString(),
+                      //   //   rowPerPage.toString(),
+                      //   //   sortBy,
+                      //   //   sortAscTemp,
+                      //   //   selectedMenu,
+                      //   // );
+                      // },
+                      child: Text('')), //Icon(Icons.refresh)),
                 ),
               ),
             ],
@@ -832,28 +839,54 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 0),
-                      // child: listContentDesktop(
-                      //     data[index]['EventID'],
-                      //     data[index]['InvitationID'],
-                      //     data[index]['VisitTime'],
-                      //     data[index]['TotalVisitor'].toString(),
-                      //     visitor,
-                      //     index),
-                      child: ListItemMyInvititationDesktop(
-                        eventId: data[index]['EventID'],
-                        index: index,
-                        inviteId: data[index]['InvitationID'],
-                        totalVisitor: data[index]['TotalVisitor'].toString(),
-                        visitTime: data[index]['VisitTime'],
-                        visitor: visitor,
-                        // getActiveInvite: getActiveInvitations(
-                        //   myActiveInvitePage.toString(),
-                        //   rowPerPage.toString(),
-                        //   sortBy,
-                        //   sortAscTemp,
-                        //   selectedMenu,
-                        // ),
-                      ),
+                      child: listContentDesktop(
+                          data[index]['EventID'],
+                          data[index]['InvitationID'],
+                          data[index]['VisitTime'],
+                          data[index]['TotalVisitor'].toString(),
+                          visitor,
+                          index),
+                      // child: ListItemMyInvititationDesktop(
+                      //   eventId: data[index]['EventID'],
+                      //   index: index,
+                      //   inviteId: data[index]['InvitationID'],
+                      //   totalVisitor: data[index]['TotalVisitor'].toString(),
+                      //   visitTime: data[index]['VisitTime'],
+                      //   visitor: visitor,
+                      //   // getInvitationDetail:
+                      //   //     getInvitationDetail(data[index]['InvitationID'])
+                      //   //         .then((value) {
+                      //   //   // print('visitor -> ' + visitor.toString());
+                      //   //   // setState(() {
+                      //   //   //   detailIsLoading = false;
+                      //   //   // });
+                      //   //   dynamic listVisitor = value['Visitors'];
+                      //   //   print('listVisitor - >' + listVisitor.toString());
+                      //   //   Navigator.of(navKey.currentState!.overlay!.context)
+                      //   //       .push(DetailVisitorOverlay(
+                      //   //     visitorList: listVisitor,
+                      //   //     eventID: data[index]['EventID'],
+                      //   //     inviteCode: data[index]['InvitationID'],
+                      //   //     totalPerson: data[index]['TotalVisitor'].toString(),
+                      //   //     visitDate: data[index]['VisitTime'],
+                      //   //     employeeName: value['EmployeeName'],
+                      //   //   ))
+                      //   //       .then((value) {
+                      //   //     setState(() {});
+                      //   //   });
+                      //   // }).onError((error, stackTrace) {
+                      //   //   setState(() {
+                      //   //     detailIsLoading = false;
+                      //   //   });
+                      //   // }),
+                      //   // getActiveInvite: getActiveInvitations(
+                      //   //   myActiveInvitePage.toString(),
+                      //   //   rowPerPage.toString(),
+                      //   //   sortBy,
+                      //   //   sortAscTemp,
+                      //   //   selectedMenu,
+                      //   // ),
+                      // ),
                     );
                   },
                 )
@@ -1020,6 +1053,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
       child: Column(
         children: [
           ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
             itemCount: data.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
@@ -1034,6 +1068,14 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                         data[index]['TotalVisitor'].toString(),
                         visitor,
                         index),
+                    // ListItemMyInviteMobile(
+                    //   eventId: data[index]['EventID'],
+                    //   index: index,
+                    //   inviteId: data[index]['InvitationID'],
+                    //   totalVisitor: data[index]['TotalVisitor'].toString(),
+                    //   visitTime: data[index]['VisitTime'],
+                    //   visitor: visitor,
+                    // ),
                     index != data.length - 1
                         ? Padding(
                             padding: const EdgeInsets.symmetric(vertical: 7),
@@ -1049,7 +1091,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
             },
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -1270,13 +1312,13 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                       label: 'Detail',
                       onTap: () {
                         setState(() {
-                          detailIsLoading = true;
+                          isLoading = true;
                         });
                         print(inviteId);
                         getInvitationDetail(eventId).then((value) {
                           // print('visitor -> ' + visitor.toString());
                           setState(() {
-                            detailIsLoading = false;
+                            isLoading = false;
                           });
                           dynamic listVisitor = value['Visitors'];
                           print('listVisitor - >' + listVisitor.toString());
@@ -1321,14 +1363,14 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
     List visitor,
     int index,
   ) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         setState(() {
-          detailIsLoading = true;
+          isLoading = true;
         });
         getInvitationDetail(eventId).then((value) {
           setState(() {});
-          detailIsLoading = false;
+          isLoading = false;
           dynamic listVisitor = value['Visitors'];
           Navigator.of(navKey.currentState!.overlay!.context)
               .push(DetailVisitorOverlay(
@@ -1337,13 +1379,37 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
             totalPerson: totalVisitor,
             visitDate: visitTime,
             employeeName: value['EmployeeName'],
-          ));
+          ))
+              .then((value) {
+            getActiveInvitations(
+              myActiveInvitePage.toString(),
+              rowPerPage.toString(),
+              sortBy,
+              sortAscTemp,
+              selectedMenu,
+            ).then((value) {
+              setState(() {
+                isLoading = false;
+              });
+            });
+          });
         });
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: Stack(
           children: [
+            Positioned(
+              right: 0,
+              top: 20,
+              child: detailIsLoading
+                  ? CircularProgressIndicator(
+                      color: eerieBlack,
+                    )
+                  : ImageIcon(
+                      AssetImage('assets/Forward.png'),
+                    ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -1385,17 +1451,6 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                 //         ),
                 // )
               ],
-            ),
-            Positioned(
-              right: 0,
-              top: 20,
-              child: detailIsLoading
-                  ? CircularProgressIndicator(
-                      color: eerieBlack,
-                    )
-                  : ImageIcon(
-                      AssetImage('assets/Forward.png'),
-                    ),
             ),
           ],
         ),

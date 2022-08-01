@@ -6,6 +6,12 @@ import 'package:navigation_example/routes/routes.dart';
 final double paddingAtasDialog = 25;
 final double paddingSampingDialog = 50;
 
+final EdgeInsets contentPaddingInputMobile =
+    EdgeInsets.only(top: 16, bottom: 17, left: 10, right: 10);
+
+final EdgeInsets contentPaddingInputDesktop =
+    EdgeInsets.only(top: 17, bottom: 15, left: 10, right: 10);
+
 final double textSizeTitleContent =
     Responsive.isDesktop(navKey.currentState!.context) ? 18 : 14;
 
