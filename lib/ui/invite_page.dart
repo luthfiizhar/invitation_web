@@ -589,7 +589,8 @@ class _InvitePageState extends State<InvitePage> {
                                       'Please fill visitor\'s name & email below. We will send them an email to complete their data.',
                                       style: TextStyle(
                                           fontSize: 22,
-                                          fontWeight: FontWeight.w300),
+                                          fontWeight: FontWeight.w300,
+                                          color: onyxBlack),
                                     ),
                                   ],
                                 ),
@@ -761,6 +762,7 @@ class _InvitePageState extends State<InvitePage> {
                 // height: 50,
                 padding: EdgeInsets.zero,
                 child: TextFormField(
+                  keyboardType: TextInputType.none,
                   validator: (value) =>
                       value == "" ? "This field is required" : null,
                   cursorColor: onyxBlack,
@@ -845,6 +847,7 @@ class _InvitePageState extends State<InvitePage> {
                   // height: 50,
                   padding: EdgeInsets.zero,
                   child: TextFormField(
+                    keyboardType: TextInputType.none,
                     validator: (value) =>
                         value == "" ? "This field is required" : null,
                     cursorColor: onyxBlack,
@@ -937,7 +940,9 @@ class _InvitePageState extends State<InvitePage> {
                               Text(
                                 'Please fill visitor\'s name & email below. We will send them an email to complete their data.',
                                 style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w300),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                    color: onyxBlack),
                               ),
                             ],
                           ),

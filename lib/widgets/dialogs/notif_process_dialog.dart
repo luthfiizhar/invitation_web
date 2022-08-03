@@ -63,76 +63,88 @@ class NotifProcessDialog extends ModalRoute<void> {
               width: Responsive.isDesktop(context)
                   ? 700
                   : MediaQuery.of(context).size.width * 0.95,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(25),
-                          child: TextButton.icon(
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                            icon: Icon(
-                              Icons.close,
-                              color: eerieBlack,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(scrollbars: false),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.only(
+                                top: 30,
+                              ),
+                              height: 320,
+                              width: 300,
+                              child: isSuccess!
+                                  ? SvgPicture.asset(
+                                      'assets/Email confirmed.svg')
+                                  : SvgPicture.asset('assets/email failed.svg'),
                             ),
-                            label: Text(''),
-                          ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 60),
+                              child: Text(
+                                isSuccess! ? 'Success' : 'Failed',
+                                style: TextStyle(
+                                  fontSize:
+                                      Responsive.isDesktop(context) ? 48 : 24,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Container(
+                                child: Text(
+                                  isSuccess! ? '$message' : 'Something wrong!',
+                                  style: TextStyle(
+                                    fontSize:
+                                        Responsive.isDesktop(context) ? 24 : 14,
+                                    fontWeight: FontWeight.w300,
+                                    color: onyxBlack,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 60, bottom: 40),
+                              child: SizedBox(
+                                height: 50,
+                                width: 250,
+                                child: RegularButton(
+                                  sizeFont:
+                                      Responsive.isDesktop(context) ? 24 : 16,
+                                  title: 'OK',
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(
-                        top: 20,
-                      ),
-                      height: 320,
-                      width: 300,
-                      child: isSuccess!
-                          ? SvgPicture.asset('assets/Email confirmed.svg')
-                          : SvgPicture.asset('assets/email failed.svg'),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 60),
-                      child: Text(
-                        isSuccess! ? 'Success' : 'Failed',
-                        style: TextStyle(
-                          fontSize: Responsive.isDesktop(context) ? 48 : 24,
-                          fontWeight: FontWeight.w700,
-                        ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
+                  ),
+                  Positioned(
+                    right: 20,
+                    top: 20,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop(false);
+                      },
                       child: Container(
-                        child: Text(
-                          isSuccess! ? '$message' : 'Something wrong!',
-                          style: TextStyle(
-                            fontSize: Responsive.isDesktop(context) ? 24 : 14,
-                            fontWeight: FontWeight.w300,
-                            color: onyxBlack,
-                          ),
+                        child: Icon(
+                          Icons.close,
+                          size: 30,
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 60, bottom: 40),
-                      child: SizedBox(
-                        height: 50,
-                        width: 250,
-                        child: RegularButton(
-                          sizeFont: Responsive.isDesktop(context) ? 24 : 16,
-                          title: 'OK',
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );

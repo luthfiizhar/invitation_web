@@ -38,7 +38,7 @@ Future<bool> confirmDialog(
                 padding: Responsive.isDesktop(context)
                     ? EdgeInsets.symmetric(horizontal: 15)
                     : EdgeInsets.symmetric(horizontal: 7),
-                height: Responsive.isDesktop(context) ? 200 : 175,
+                height: Responsive.isDesktop(context) ? 200 : 200,
                 width: 400,
                 child: Column(
                   children: [
@@ -90,11 +90,6 @@ Future<bool> confirmDialog(
                           sizeFont: Responsive.isDesktop(context) ? 20 : 16,
                           title: 'Confirm',
                           onTap: () {
-                            setState(
-                              () {
-                                isLoading = true;
-                              },
-                            );
                             Navigator.of(context).pop(true);
                             // Navigator.pushReplacementNamed(
                             //     context, routeInvite);

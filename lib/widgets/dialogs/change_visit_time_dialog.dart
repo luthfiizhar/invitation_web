@@ -115,9 +115,9 @@ class ChangeVisitDialog extends ModalRoute<void> {
   String? endDate;
 
   Future changeVisitTime(String eventId, String start, String end) async {
-    // print('$start');
-    // print('$end');
-    // print('$eventId');
+    print('$start');
+    print('$end');
+    print('$eventId');
     var box = await Hive.openBox('userLogin');
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     final url = Uri.https(
@@ -300,6 +300,9 @@ class ChangeVisitDialog extends ModalRoute<void> {
                                                 isLoading = true;
                                               },
                                             );
+                                            print(startDate);
+                                            print(endDate);
+                                            print(eventID);
                                             showConfirmDialog(eventID!,
                                                 _startDate.text, _endDate.text);
                                           }
@@ -398,6 +401,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                     // height: 50,
                     padding: EdgeInsets.zero,
                     child: TextFormField(
+                      keyboardType: TextInputType.none,
                       cursorColor: onyxBlack,
                       focusNode: startDateNode,
                       controller: _startDate,
@@ -485,6 +489,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                     height: 50,
                     padding: EdgeInsets.zero,
                     child: TextFormField(
+                      keyboardType: TextInputType.none,
                       cursorColor: onyxBlack,
                       focusNode: endDateNode,
                       controller: _endDate,
@@ -584,6 +589,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                       // height: 50,
                       padding: EdgeInsets.zero,
                       child: TextFormField(
+                        keyboardType: TextInputType.none,
                         cursorColor: onyxBlack,
                         focusNode: startDateNode,
                         controller: _startDate,
@@ -674,6 +680,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                       // height: 50,
                       padding: EdgeInsets.zero,
                       child: TextFormField(
+                        keyboardType: TextInputType.none,
                         cursorColor: onyxBlack,
                         focusNode: endDateNode,
                         controller: _endDate,

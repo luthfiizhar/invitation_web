@@ -215,7 +215,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                                   ? 600
                                                   : 500,
                                           child: SvgPicture.asset(
-                                              'assets/ilus 2.svg',
+                                              'assets/login_ilustrasi.svg',
                                               fit: BoxFit.contain),
                                         ),
                                         Container(
@@ -434,7 +434,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         //   width: 250,
                         //   height: 250,
                         // child:
-                        SvgPicture.asset('assets/ilus 2.svg',
+                        SvgPicture.asset('assets/login_ilustrasi.svg',
                             fit: BoxFit.contain,
                             width: MediaQuery.of(context).size.width * 0.65),
                         // ),

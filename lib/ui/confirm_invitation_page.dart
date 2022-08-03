@@ -314,7 +314,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
               child: Text(
                 'Please confirm visitor data before send invitation.',
                 style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.w300,
                     color: scaffoldBg),
               ),
@@ -496,7 +496,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                         index != list!.length - 1
                             ? Padding(
                                 padding:
-                                    const EdgeInsets.only(top: 10, bottom: 10),
+                                    const EdgeInsets.only(top: 7, bottom: 7),
                                 child: Divider(
                                   thickness: 1,
                                   color: scaffoldBg,
@@ -576,20 +576,27 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
   Widget confirmList(int no, String firstName, String lastName, String email) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 10),
-      leading: Text(
-        no < 10 ? '0$no' : '$no',
-        style: TextStyle(
-          fontSize: Responsive.isDesktop(context) ? 48 : 28,
-          fontWeight: FontWeight.w700,
-          color: scaffoldBg,
+      horizontalTitleGap: Responsive.isDesktop(context) ? 25 : 5,
+      leading: Container(
+        padding: Responsive.isDesktop(context) ? null : EdgeInsets.only(top: 7),
+        // color: Colors.blue,
+        child: Text(
+          no < 10 ? '0$no' : '$no',
+          style: TextStyle(
+            fontSize: Responsive.isDesktop(context) ? 48 : 28,
+            fontWeight: FontWeight.w700,
+            color: scaffoldBg,
+          ),
         ),
       ),
       title: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: Responsive.isDesktop(context)
+            ? EdgeInsets.only(bottom: 10)
+            : EdgeInsets.only(bottom: 5),
         child: Text(
           '$firstName $lastName',
           style: TextStyle(
-            fontSize: Responsive.isDesktop(context) ? 28 : 14,
+            fontSize: Responsive.isDesktop(context) ? 28 : 16,
             fontWeight: FontWeight.w700,
             color: scaffoldBg,
           ),
@@ -598,7 +605,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
       subtitle: Text(
         '$email',
         style: TextStyle(
-          fontSize: Responsive.isDesktop(context) ? 20 : 12,
+          fontSize: Responsive.isDesktop(context) ? 20 : 14,
           fontWeight: FontWeight.w300,
           color: scaffoldBg,
         ),

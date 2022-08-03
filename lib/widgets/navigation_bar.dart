@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
@@ -61,7 +63,7 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
 
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(right: 30, bottom: 25),
+      padding: const EdgeInsets.only(right: 30, bottom: 25),
       color: scaffoldBg,
       height: 100.0,
       child: Row(
@@ -71,7 +73,7 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
             child: Container(
               width: 400,
               height: 40,
-              child: Text(
+              child: const Text(
                 'Visitor Invitation Web',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
               ),
@@ -91,7 +93,7 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
                     },
                     child: Container(
                       // color: Colors.amber,
-                      padding: EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(2),
                       width: 30,
                       height: 30,
                       child: Stack(
@@ -102,9 +104,9 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
                             child: Container(
                               width: 12,
                               height: 12,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   shape: BoxShape.circle, color: eerieBlack),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   '',
                                   style: TextStyle(
@@ -182,7 +184,7 @@ class NavigationBarMobile extends StatelessWidget {
             child: Container(
               width: 300,
               height: 40,
-              child: Text(
+              child: const Text(
                 'Visitor Invitation Web',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
               ),
@@ -190,13 +192,20 @@ class NavigationBarMobile extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 15, bottom: 20, top: 15),
-            child: GestureDetector(
+            child: InkWell(
               onTap: () {
                 Scaffold.of(context).openEndDrawer();
               },
-              child: Icon(
-                Icons.menu_sharp,
-                color: eerieBlack,
+              child: SizedBox(
+                height: 75,
+                width: 75,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Icon(
+                    Icons.menu_sharp,
+                    color: eerieBlack,
+                  ),
+                ),
               ),
             ),
           )

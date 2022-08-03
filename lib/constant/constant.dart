@@ -6,6 +6,15 @@ import 'package:navigation_example/routes/routes.dart';
 final double paddingAtasDialog = 25;
 final double paddingSampingDialog = 50;
 
+final double mobileContentTextSize = 14;
+final double mobileTitleTextSize = 28;
+final double mobileLabelTextSize = 16;
+
+final TextStyle mobileContentTextStyle = TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w300,
+);
+
 final EdgeInsets contentPaddingInputMobile =
     EdgeInsets.only(top: 16, bottom: 17, left: 10, right: 10);
 
@@ -44,18 +53,21 @@ final TextStyle pageTitle =
 
 final TextStyle pageSubtitle = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 20 : 14,
-    fontWeight: FontWeight.w300);
+    fontWeight: FontWeight.w300,
+    color: onyxBlack);
 
 final TextStyle tableBody = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 20 : 14,
-    fontWeight: FontWeight.w300);
+    fontWeight: FontWeight.w300,
+    color: onyxBlack);
 
 final TextStyle tableBodyCode = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 22 : 18,
-    fontWeight: FontWeight.w700);
+    fontWeight: FontWeight.w700,
+    color: onyxBlack);
 
 final TextStyle tableHeader =
-    TextStyle(fontSize: 22, fontWeight: FontWeight.w700);
+    TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: onyxBlack);
 
 final TextStyle textButton = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 20 : 18,

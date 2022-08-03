@@ -136,7 +136,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                         child: Text(
                           'Please confirm visitor data before send invitation.',
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 20,
                               fontWeight: FontWeight.w300,
                               color: scaffoldBg),
                         ),
@@ -371,7 +371,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
           '$firstName $lastName',
           style: TextStyle(
             fontSize:
-                Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
+                Responsive.isDesktop(navKey.currentState!.context) ? 24 : 16,
             fontWeight: FontWeight.w700,
             color: scaffoldBg,
           ),
@@ -381,7 +381,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
         '$email',
         style: TextStyle(
           fontSize:
-              Responsive.isDesktop(navKey.currentState!.context) ? 20 : 12,
+              Responsive.isDesktop(navKey.currentState!.context) ? 20 : 14,
           fontWeight: FontWeight.w300,
           color: scaffoldBg,
         ),

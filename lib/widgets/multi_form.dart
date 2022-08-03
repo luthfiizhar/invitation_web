@@ -170,16 +170,18 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
                 ),
               ),
-              TextButton.icon(
-                onPressed: () {
-                  widget.onRemove!();
-                },
-                icon: Icon(
-                  Icons.close,
-                  color: onyxBlack,
-                ),
-                label: Text(''),
-              ),
+              number == 1
+                  ? SizedBox()
+                  : TextButton.icon(
+                      onPressed: () {
+                        widget.onRemove!();
+                      },
+                      icon: Icon(
+                        Icons.close,
+                        color: onyxBlack,
+                      ),
+                      label: Text(''),
+                    ),
             ],
           ),
         ),
@@ -203,6 +205,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                             width: 300,
                             // height: 50,
                             child: InputVisitor(
+                              keyboardType: TextInputType.text,
                               validator: (value) =>
                                   value == "" ? "This field is required" : null,
                               controller: widget._firstName,
@@ -223,6 +226,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                             width: 300,
                             // height: 60,
                             child: InputVisitor(
+                              keyboardType: TextInputType.text,
                               controller: widget._lastName,
                               label: 'Last Name',
                               onSaved: (value) {
@@ -247,6 +251,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                         SizedBox(
                           width: 630,
                           child: InputVisitor(
+                            keyboardType: TextInputType.emailAddress,
                             validator: (value) =>
                                 value == "" ? "This field is required" : null,
                             controller: widget._email,
@@ -318,7 +323,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        widget.index == 0
+                        number == 1
                             ? SizedBox()
                             : GestureDetector(
                                 onTap: () {

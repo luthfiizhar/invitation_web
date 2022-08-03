@@ -606,7 +606,8 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                                     'All of your booking listing can be found here.',
                                     style: TextStyle(
                                         fontSize: 14,
-                                        fontWeight: FontWeight.w300),
+                                        fontWeight: FontWeight.w300,
+                                        color: onyxBlack),
                                   ),
                                 ),
                               ],
@@ -909,6 +910,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w300,
+                        color: onyxBlack,
                       ),
                     ),
                     DropdownButtonHideUnderline(
@@ -1101,16 +1103,16 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                       Text(
                         'Showing: ',
                         style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w300,
-                        ),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w300,
+                            color: onyxBlack),
                       ),
                       DropdownButtonHideUnderline(
                         child: DropdownButton<int>(
                           style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w300,
-                          ),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w300,
+                              color: onyxBlack),
                           value: rowPerPage,
                           items: [
                             // DropdownMenuItem(
@@ -1185,6 +1187,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                               child: Icon(
                                 Icons.chevron_left,
                                 size: 16,
+                                color: onyxBlack,
                               ),
                             ),
                             Align(
@@ -1192,9 +1195,9 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                               child: Text(
                                 'Prev',
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                ),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                    color: onyxBlack),
                               ),
                             ),
                           ],
@@ -1231,6 +1234,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300,
+                                color: onyxBlack,
                               ),
                             ),
                             Padding(
@@ -1238,6 +1242,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
                               child: Icon(
                                 Icons.chevron_right,
                                 size: 16,
+                                color: onyxBlack,
                               ),
                             ),
                           ],
@@ -1374,6 +1379,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
           dynamic listVisitor = value['Visitors'];
           Navigator.of(navKey.currentState!.overlay!.context)
               .push(DetailVisitorOverlay(
+            eventID: eventId,
             visitorList: listVisitor,
             inviteCode: inviteId,
             totalPerson: totalVisitor,

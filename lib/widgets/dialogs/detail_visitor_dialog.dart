@@ -58,7 +58,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                 });
               },
               onTap: () {
-                if (verified == "APPROVED") {
+                if (verified == "APPROVED" || verified == "CHECKED IN") {
                   getVisitorData(visitorId).then((value) {
                     // print(value["Status"]);
                     dynamic listDetail = json.encode(value);
@@ -118,13 +118,19 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: Text(
-                            verified == "APPROVED"
-                                ? 'Visitor Verified'
-                                : 'Visitor not yet Verified',
+                            verified == "INVITED"
+                                ? 'Visitor data not submitted'
+                                : verified == "RESERVED"
+                                    ? 'Visitor not yet Verified'
+                                    : verified == "APPROVED" ||
+                                            verified == "CHECKED IN"
+                                        ? 'Visitor Verified'
+                                        : "",
                             style: TextStyle(
                               fontSize: Responsive.isDesktop(context) ? 16 : 14,
                               fontWeight: FontWeight.w300,
-                              color: verified == "APPROVED"
+                              color: verified == "APPROVED" ||
+                                      verified == "CHECKED IN"
                                   ? Color(0xFF0DB14B)
                                   : Color(0xFFF26529),
                             ),
@@ -138,7 +144,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                     child: Row(
                       children: [
                         // Icon(Icons.check),
-                        verified == "APPROVED"
+                        verified == "APPROVED" || verified == "CHECKED IN"
                             ? SizedBox(
                                 width: Responsive.isDesktop(context) ? 30 : 20,
                                 child: ImageIcon(
@@ -263,15 +269,17 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     });
   }
 
-  showConfirmDialog(BuildContext context) {
+  Future showConfirmDialog(BuildContext context) {
     return confirmDialog(
             context, 'Are you sure want cancel the invitation?', true)
         .then((value) {
       if (value) {
         cancelInvitation(eventID!).then((value) {
           print(value);
-          setState(() {});
-          cancelButtonLoading = false;
+          setState(() {
+            cancelButtonLoading = false;
+          });
+
           if (value['Status'] == '200') {
             Navigator.push(
                     context,
@@ -293,6 +301,9 @@ class DetailVisitorOverlay extends ModalRoute<void> {
         });
       } else {
         // Navigator.of(context).pop();
+        setState(() {
+          cancelButtonLoading = false;
+        });
       }
     });
   }
@@ -492,7 +503,9 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.only(top: 7),
+                              padding: Responsive.isDesktop(context)
+                                  ? EdgeInsets.only(top: 12)
+                                  : EdgeInsets.only(top: 7),
                               child: Text(
                                 '$inviteCode',
                                 style: TextStyle(
@@ -532,8 +545,10 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                 ),
                                               ),
                                               Container(
-                                                padding:
-                                                    EdgeInsets.only(top: 7),
+                                                padding: Responsive.isDesktop(
+                                                        context)
+                                                    ? EdgeInsets.only(top: 12)
+                                                    : EdgeInsets.only(top: 7),
                                                 child: Text(
                                                   '$visitDate',
                                                   style: TextStyle(
@@ -572,8 +587,10 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                 ),
                                               ),
                                               Container(
-                                                padding:
-                                                    EdgeInsets.only(top: 7),
+                                                padding: Responsive.isDesktop(
+                                                        context)
+                                                    ? EdgeInsets.only(top: 12)
+                                                    : EdgeInsets.only(top: 7),
                                                 child: Text(
                                                   '$totalPerson Person',
                                                   style: TextStyle(
@@ -611,7 +628,9 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                           ),
                                         ),
                                         Container(
-                                          padding: EdgeInsets.only(top: 7),
+                                          padding: Responsive.isDesktop(context)
+                                              ? EdgeInsets.only(top: 12)
+                                              : EdgeInsets.only(top: 7),
                                           child: Text(
                                             '$visitDate',
                                             style: TextStyle(
@@ -643,7 +662,9 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                           ),
                                         ),
                                         Container(
-                                          padding: EdgeInsets.only(top: 7),
+                                          padding: Responsive.isDesktop(context)
+                                              ? EdgeInsets.only(top: 12)
+                                              : EdgeInsets.only(top: 7),
                                           child: Text(
                                             '$totalPerson Person',
                                             style: TextStyle(
@@ -667,12 +688,14 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                   fontSize:
                                       Responsive.isDesktop(context) ? 18 : 14,
                                   fontWeight: FontWeight.w700,
-                                  color: eerieBlack,
+                                  color: onyxBlack,
                                 ),
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 7),
+                              padding: Responsive.isDesktop(context)
+                                  ? EdgeInsets.only(top: 12)
+                                  : EdgeInsets.only(top: 7),
                               child: Text(
                                 '$employeeName',
                                 style: TextStyle(
@@ -696,7 +719,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                       fontSize: Responsive.isDesktop(context)
                                           ? 18
                                           : 14,
-                                      color: eerieBlack,
+                                      color: onyxBlack,
                                     ),
                                   ),
                                   TextButton(
@@ -731,7 +754,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                               Responsive.isDesktop(context)
                                                   ? 18
                                                   : 14,
-                                          color: eerieBlack),
+                                          color: onyxBlack),
                                     ),
                                   ),
                                   // GestureDetector(
@@ -792,6 +815,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                         onTap: () {
                                           // changeVisitDialog(context)
                                           //     .then((value) {});
+                                          print(eventID);
                                           Navigator.of(context)
                                               .push(ChangeVisitDialog(
                                                   eventID: eventID))
@@ -804,6 +828,11 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                   visitDate =
                                                       value['VisitTime'];
                                                   isLoading = false;
+                                                  visitorList =
+                                                      value['Visitors'];
+                                                  totalPerson = visitorList!
+                                                      .length
+                                                      .toString();
                                                 });
                                               });
                                             },
@@ -838,7 +867,15 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                     () {},
                                                   );
                                                   cancelButtonLoading = true;
-                                                  showConfirmDialog(context);
+                                                  showConfirmDialog(context)
+                                                      .then((value) {
+                                                    setState(
+                                                      () {
+                                                        cancelButtonLoading =
+                                                            false;
+                                                      },
+                                                    );
+                                                  });
                                                 },
                                               ),
                                             ),
