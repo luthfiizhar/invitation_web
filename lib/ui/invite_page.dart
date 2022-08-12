@@ -1,19 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
-import 'package:navigation_example/ui/confirm_invitation_page.dart';
 import 'package:navigation_example/visitor.dart';
 import 'package:navigation_example/widgets/footer.dart';
 import 'package:navigation_example/widgets/multi_form.dart';
 import 'package:navigation_example/widgets/navigation_bar.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
-import 'package:http/http.dart' as http;
 
 class InvitePage extends StatefulWidget {
   const InvitePage({Key? key}) : super(key: key);
@@ -36,8 +33,11 @@ class _InvitePageState extends State<InvitePage> {
   FocusNode endDateNode = FocusNode();
   FocusNode emailNode = FocusNode();
 
+  bool endDateEnable = false;
+
   String? startDate;
   String? endDate;
+  DateTime? startDateOriginal;
 
   final _formKey = new GlobalKey<FormState>();
   List<Visitor> visitorList = [];
@@ -49,22 +49,18 @@ class _InvitePageState extends State<InvitePage> {
 
   Future saveInviteVisitorData(var items) async {
     var box = await Hive.openBox('inputvisitorBox');
-    box.put('listInvite', items != null ? items : "");
-    box.put('startDate', startDate != null ? startDate : "");
-    box.put('endDate', endDate != null ? endDate : "");
+    box.put('listInvite', items ?? "");
+    box.put('startDate', startDate ?? "");
+    box.put('endDate', endDate ?? "");
 
     var name;
     name = box.get('listInvite');
     var date;
     date = box.get('startDate');
-    print(name);
-    print(date);
-    // print(name);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     formList.add(MultiVisitorFOrm(
       index: 0,
@@ -78,7 +74,6 @@ class _InvitePageState extends State<InvitePage> {
     box.delete('listInvite');
     box.delete('startDate');
     box.delete('endDate');
-    print('deleted');
   }
 
   @override
@@ -86,160 +81,13 @@ class _InvitePageState extends State<InvitePage> {
     return Responsive.isDesktop(context)
         ? desktopLayoutInvitePage(context)
         : mobileLayoutInvitePage(context);
-    // return SingleChildScrollView(
-    //   child: Column(
-    //     children: [
-    //       NavigationBarWeb(
-    //         index: 0,
-    //       ),
-    //       Padding(
-    //         padding: EdgeInsets.only(top: 50, left: 500, right: 500),
-    //         child: Container(
-    //           // color: Colors.red,
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               Text(
-    //                 'Invite Visitor',
-    //                 style: TextStyle(fontSize: 48, fontWeight: FontWeight.w700),
-    //               ),
-    //               Padding(
-    //                 padding: EdgeInsets.only(top: 10),
-    //                 child: Container(
-    //                   height: 60,
-    //                   child: Wrap(
-    //                     children: [
-    //                       Text(
-    //                         'Please fill visitor\'s name & email below. We will send them an email to complete their data.',
-    //                         style: TextStyle(
-    //                             fontSize: 24, fontWeight: FontWeight.w300),
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 ),
-    //               ),
-    //               Form(
-    //                 key: _formKey,
-    //                 child: Column(
-    //                   children: [
-    //                     Padding(
-    //                       padding: EdgeInsets.only(top: 10),
-    //                       child: inputDateContainer(),
-    //                     ),
-    //                     formList.length > 0
-    //                         ? Padding(
-    //                             padding: const EdgeInsets.only(top: 30),
-    //                             child: Divider(
-    //                               thickness: 2,
-    //                               color: spanishGray,
-    //                             ),
-    //                           )
-    //                         : SizedBox(),
-    //                     ListView.builder(
-    //                       shrinkWrap: true,
-    //                       itemCount: formList.length,
-    //                       itemBuilder: (context, index) {
-    //                         return formList[index];
-    //                       },
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ),
-    //               Padding(
-    //                 padding: const EdgeInsets.only(top: 20, bottom: 30),
-    //                 child: Center(
-    //                   child: IconButton(
-    //                     padding: EdgeInsets.zero,
-    //                     onPressed: () {
-    //                       setState(() {
-    //                         Visitor _visitorModel =
-    //                             Visitor(number: formList.length);
-
-    //                         formList.add(MultiVisitorFOrm(
-    //                           index: formList.length,
-    //                           visitorModel: _visitorModel,
-    //                           onRemove: () {
-    //                             onRemove(_visitorModel);
-    //                           },
-    //                         ));
-    //                       });
-    //                     },
-    //                     icon: Icon(
-    //                       Icons.add_circle_outline,
-    //                       size: 40,
-    //                     ),
-    //                   ),
-    //                 ),
-    //               ),
-    //               Center(
-    //                 child: SizedBox(
-    //                   height: 60,
-    //                   width: 275,
-    //                   child: RegularButton(
-    //                     title: 'Next',
-    //                     sizeFont: 24,
-    //                     onTap: () {
-    //                       if (_formKey.currentState!.validate()) {
-    //                         _formKey.currentState!.save();
-    //                         onSave();
-
-    //                         var json = jsonEncode(visitorList);
-    //                         saveInviteVisitorData(json);
-    //                         print(visitorList.toList());
-    //                         Navigator.pushNamed(context, routeConfiemInvite)
-    //                             .then((value) {
-    //                           setState(() {
-    //                             visitorList.clear();
-    //                             clearVisitorData().then((value) {
-    //                               setState(() {});
-    //                             });
-    //                           });
-    //                         });
-    //                       } else {
-    //                         print('gagal');
-    //                       }
-
-    //                       // Navigator.push(
-    //                       //     context,
-    //                       //     MaterialPageRoute(
-    //                       //         builder: (BuildContext context) =>
-    //                       //             ConfirmInvitePage()));
-
-    //                       // print(json);
-    //                     },
-    //                   ),
-    //                 ),
-    //               ),
-    //               SizedBox(
-    //                 height: 30,
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //       Padding(
-    //         padding: const EdgeInsets.only(top: 170),
-    //         child: FooterInviteWeb(),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
-
-  // bool validate() {
-  //   //Validate Form Fields by form key
-  //   bool validate = _formKey.currentState!.validate();
-  //   if (validate) _formKey.currentState!.save();
-  //   return validate;
-  // }
 
   onRemove(Visitor visitor) {
     setState(() {
       _visitorModel = Visitor(number: 1);
       int index =
           formList.indexWhere((element) => element.index == visitor.number);
-
-      print(index);
 
       if (formList != null) formList.removeAt(index);
     });
@@ -249,40 +97,25 @@ class _InvitePageState extends State<InvitePage> {
     bool allValid = true;
     print(formList);
 
-    //If any form validation function returns false means all forms are not valid
-    // formList
-    //     .forEach((element) => allValid = (allValid && element.isValidated()));
-
-    // if (allValid) {
     for (int i = 0; i < formList.length; i++) {
       items = formList[i];
-
-      // print("Name: ${item.visitorModel!.firstName}");
-      // print("Number: ${item.visitorModel!.lastName}");
-      // print("Email: ${item.visitorModel!.email}");
-      print(items!.visitorModel!);
       visitorList.add(Visitor(
           FirstName: items!.visitorModel!.FirstName,
           LastName: items!.visitorModel!.LastName,
           Email: items!.visitorModel!.Email));
     }
-
-    //Submit Form Here
-    // } else {
-    //   debugPrint("Form is Not Valid");
-    // }
   }
 
-  Future _selectDate(TextEditingController controller) async {
+  Future _selectStartDate() async {
     DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: new DateTime.now(),
-      firstDate: new DateTime.now(),
-      lastDate: new DateTime(2100),
+      initialDate: startDate != "" ? DateTime.now() : DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: eerieBlack, // <-- SEE HERE
               onPrimary: silver, // <-- SEE HERE
               onSurface: eerieBlack, // <-- SEE HERE
@@ -298,12 +131,55 @@ class _InvitePageState extends State<InvitePage> {
       },
     );
     String formattedDate = DateFormat('d MMMM yyyy').format(picked!);
-    if (picked != null) setState(() => controller.text = formattedDate);
+    if (picked != null)
+      setState(() {
+        _startDate.text = formattedDate;
+        startDateOriginal = picked;
+      });
+  }
+
+  Future _selectDate(
+      TextEditingController controller, DateTime startDate) async {
+    // if (startDate != "") {
+    // DateFormat format = DateFormat();
+    // var start = DateTime.tryParse(startDate);
+    print(startDate.toString());
+    // }
+
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: startDate,
+      firstDate: startDate,
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: eerieBlack, // <-- SEE HERE
+              onPrimary: silver, // <-- SEE HERE
+              onSurface: eerieBlack, // <-- SEE HERE
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: eerieBlack, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    String formattedDate = DateFormat('d MMMM yyyy').format(picked!);
+    if (picked != null)
+      setState(() {
+        controller.text = formattedDate;
+      });
+    // if (startDate == "") String startDateOriginal = picked.toString();
   }
 
   Widget inputDateContainer() {
     return Container(
-      padding: EdgeInsets.only(top: 40),
+      padding: const EdgeInsets.only(top: 40),
       // width: 700,
       // color: Colors.blue,
       child: Row(
@@ -316,9 +192,9 @@ class _InvitePageState extends State<InvitePage> {
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     Padding(
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(left: 20),
                       child: Text(
                         'Visitation Start',
                         style: TextStyle(
@@ -333,18 +209,21 @@ class _InvitePageState extends State<InvitePage> {
                   padding: const EdgeInsets.only(top: 15),
                   child: SizedBox(
                     width: 300,
-                    // height: 50,
-                    // padding: EdgeInsets.zero,
                     child: TextFormField(
+                      enabled: true,
                       validator: (value) =>
                           value == "" ? "This field is required" : null,
                       cursorColor: onyxBlack,
                       focusNode: startDateNode,
                       controller: _startDate,
+                      onChanged: (_) {},
                       onTap: () {
-                        // FocusScope.of(context)
-                        //     .requestFocus(new FocusNode());
-                        _selectDate(_startDate);
+                        _selectStartDate().then((value) {
+                          print(_startDate.text);
+                          setState(() {
+                            endDateEnable = true;
+                          });
+                        });
                       },
                       onSaved: (value) {
                         setState(() {
@@ -360,13 +239,13 @@ class _InvitePageState extends State<InvitePage> {
                           fontWeight: FontWeight.w400,
                         ),
                         contentPadding: Responsive.isDesktop(context)
-                            ? EdgeInsets.only(
+                            ? const EdgeInsets.only(
                                 top: 17,
                                 bottom: 15,
                                 left: 20,
                                 right: 20,
                               )
-                            : EdgeInsets.only(
+                            : const EdgeInsets.only(
                                 top: 16,
                                 bottom: 17,
                                 left: 20,
@@ -376,74 +255,37 @@ class _InvitePageState extends State<InvitePage> {
                         focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 Responsive.isDesktop(context) ? 10 : 7),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: eerieBlack,
                               width: 2.5,
                             )),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 Responsive.isDesktop(context) ? 10 : 7),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 2.5)),
+                            borderSide: const BorderSide(
+                                color: eerieBlack, width: 2.5)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 Responsive.isDesktop(context) ? 10 : 7),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(0xFF929AAB), width: 2.5)),
                         fillColor: graySand,
                         filled: true,
                         errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 Responsive.isDesktop(context) ? 10 : 7),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 2.5)),
+                            borderSide: const BorderSide(
+                                color: eerieBlack, width: 2.5)),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 Responsive.isDesktop(context) ? 10 : 7),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(0xFF929AAB), width: 2.5)),
                         errorStyle: TextStyle(
                             color: orangeRed,
                             fontSize: Responsive.isDesktop(context) ? 18 : 14),
                       ),
-                      // InputDecoration(
-                      //   isDense: true,
-                      //   // isCollapsed: true,
-                      //   hintText: 'Click here to select start date',
-                      //   hintStyle: TextStyle(
-                      //     fontSize: 20,
-                      //     fontWeight: FontWeight.w400,
-                      //   ),
-                      //   contentPadding: EdgeInsets.only(
-                      //       top: 17, bottom: 15, left: 20, right: 20),
-                      //   focusColor: onyxBlack,
-                      //   focusedErrorBorder: OutlineInputBorder(
-                      //       borderRadius: BorderRadius.circular(10),
-                      //       borderSide: BorderSide(
-                      //         color: eerieBlack,
-                      //         width: 2.5,
-                      //       )),
-                      //   focusedBorder: OutlineInputBorder(
-                      //       borderRadius: BorderRadius.circular(10),
-                      //       borderSide:
-                      //           BorderSide(color: eerieBlack, width: 2.5)),
-                      //   enabledBorder: OutlineInputBorder(
-                      //       borderRadius: BorderRadius.circular(10),
-                      //       borderSide: BorderSide(
-                      //           color: Color(0xFF929AAB), width: 2.5)),
-                      //   fillColor: graySand,
-                      //   filled: true,
-                      //   errorBorder: OutlineInputBorder(
-                      //       borderRadius: BorderRadius.circular(10),
-                      //       borderSide:
-                      //           BorderSide(color: eerieBlack, width: 2.5)),
-                      //   border: OutlineInputBorder(
-                      //       borderRadius: BorderRadius.circular(15),
-                      //       borderSide: BorderSide(
-                      //           color: Color(0xFF929AAB), width: 2.5)),
-                      //   errorStyle: TextStyle(color: silver, fontSize: 18),
-                      // ),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,
                           color: Color(0xFF393E46)),
@@ -459,9 +301,9 @@ class _InvitePageState extends State<InvitePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  children: [
+                  children: const [
                     Padding(
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(left: 20),
                       child: Text(
                         'Visitation End',
                         style: TextStyle(
@@ -476,18 +318,15 @@ class _InvitePageState extends State<InvitePage> {
                   padding: const EdgeInsets.only(top: 15),
                   child: SizedBox(
                     width: 300,
-                    // height: 50,
-                    // padding: EdgeInsets.zero,
                     child: TextFormField(
+                      enabled: endDateEnable,
                       validator: (value) =>
                           value == "" ? "This field is required" : null,
                       cursorColor: onyxBlack,
                       focusNode: endDateNode,
                       controller: _endDate,
                       onTap: () {
-                        // FocusScope.of(context)
-                        //     .requestFocus(new FocusNode());
-                        _selectDate(_endDate);
+                        _selectDate(_endDate, startDateOriginal!);
                       },
                       onSaved: (value) {
                         endDate = _endDate.text;
@@ -496,40 +335,40 @@ class _InvitePageState extends State<InvitePage> {
                         isDense: true,
                         isCollapsed: true,
                         hintText: 'Click here to select end date',
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,
                         ),
-                        contentPadding: EdgeInsets.only(
+                        contentPadding: const EdgeInsets.only(
                             top: 17, bottom: 15, left: 20, right: 20),
                         focusColor: onyxBlack,
                         focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: eerieBlack,
                               width: 2.5,
                             )),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 2.5)),
+                            borderSide: const BorderSide(
+                                color: eerieBlack, width: 2.5)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(0xFF929AAB), width: 2.5)),
                         fillColor: graySand,
                         filled: true,
                         errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 2.5)),
+                            borderSide: const BorderSide(
+                                color: eerieBlack, width: 2.5)),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Color(0xFF929AAB), width: 2.5)),
                         errorStyle: TextStyle(color: orangeRed, fontSize: 18),
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,
                           color: Color(0xFF393E46)),
@@ -555,8 +394,8 @@ class _InvitePageState extends State<InvitePage> {
               ),
               Padding(
                 padding: Responsive.isBigDesktop(context)
-                    ? EdgeInsets.only(top: 5, left: 350, right: 350)
-                    : EdgeInsets.only(top: 5, left: 350, right: 350),
+                    ? const EdgeInsets.only(top: 5, left: 350, right: 350)
+                    : const EdgeInsets.only(top: 5, left: 350, right: 350),
                 child: Container(
                   // color: Colors.orange,
                   width: Responsive.isBigDesktop(context) ? 650 : 650,
@@ -572,19 +411,19 @@ class _InvitePageState extends State<InvitePage> {
                           children: [
                             Container(
                               // color: Colors.amber,
-                              child: Text(
+                              child: const Text(
                                 'Invite Visitor',
                                 style: TextStyle(
                                     fontSize: 36, fontWeight: FontWeight.w700),
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 10),
+                              padding: const EdgeInsets.only(top: 10),
                               child: Container(
                                 // height: 56,
                                 // color: Colors.green,
                                 child: Wrap(
-                                  children: [
+                                  children: const [
                                     Text(
                                       'Please fill visitor\'s name & email below. We will send them an email to complete their data.',
                                       style: TextStyle(
@@ -605,7 +444,8 @@ class _InvitePageState extends State<InvitePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(top: 0, bottom: 10),
+                              padding:
+                                  const EdgeInsets.only(top: 0, bottom: 10),
                               child: Container(
                                 // color: Colors.amber,
                                 width: 650,
@@ -624,17 +464,17 @@ class _InvitePageState extends State<InvitePage> {
                                         ),
                                       ),
                                       formList.length > 0
-                                          ? Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10),
+                                          ? const Padding(
+                                              padding: EdgeInsets.only(top: 10),
                                               child: Divider(
                                                 thickness: 2,
                                                 color: spanishGray,
                                               ),
                                             )
-                                          : SizedBox(),
+                                          : const SizedBox(),
                                       ListView.builder(
-                                        physics: NeverScrollableScrollPhysics(),
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         shrinkWrap: true,
                                         itemCount: formList.length,
                                         itemBuilder: (context, index) {
@@ -670,7 +510,7 @@ class _InvitePageState extends State<InvitePage> {
                                 ));
                               });
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.add_circle_outline,
                               size: 40,
                             ),
@@ -702,22 +542,12 @@ class _InvitePageState extends State<InvitePage> {
                                     });
                                   });
                                 });
-                              } else {
-                                print('gagal');
                               }
-
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (BuildContext context) =>
-                              //             ConfirmInvitePage()));
-
-                              // print(json);
                             },
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                     ],
@@ -727,7 +557,7 @@ class _InvitePageState extends State<InvitePage> {
             ],
           ),
         ),
-        SliverFillRemaining(
+        const SliverFillRemaining(
           hasScrollBody: false,
           child: Align(
               alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
@@ -743,9 +573,9 @@ class _InvitePageState extends State<InvitePage> {
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: EdgeInsets.only(left: 20),
                   child: Text(
                     'Visitation Start',
                     style: TextStyle(
@@ -768,10 +598,15 @@ class _InvitePageState extends State<InvitePage> {
                   cursorColor: onyxBlack,
                   focusNode: startDateNode,
                   controller: _startDate,
+                  onChanged: (_) {
+                    setState(() {
+                      endDateEnable = true;
+                    });
+                  },
                   onTap: () {
                     // FocusScope.of(context)
                     //     .requestFocus(new FocusNode());
-                    _selectDate(_startDate);
+                    _selectStartDate();
                   },
                   onSaved: (value) {
                     setState(() {
@@ -782,38 +617,40 @@ class _InvitePageState extends State<InvitePage> {
                     isDense: true,
                     isCollapsed: true,
                     hintText: 'Click here to select start date',
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                     ),
-                    contentPadding: EdgeInsets.only(
+                    contentPadding: const EdgeInsets.only(
                         top: 17, bottom: 17, left: 20, right: 20),
                     focusColor: onyxBlack,
                     focusedErrorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(7),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: eerieBlack,
                           width: 2.5,
                         )),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(7),
-                        borderSide: BorderSide(color: eerieBlack, width: 2.5)),
+                        borderSide:
+                            const BorderSide(color: eerieBlack, width: 2.5)),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(7),
-                        borderSide:
-                            BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+                        borderSide: const BorderSide(
+                            color: Color(0xFF929AAB), width: 2.5)),
                     fillColor: graySand,
                     filled: true,
                     errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: eerieBlack, width: 2.5)),
+                        borderSide:
+                            const BorderSide(color: eerieBlack, width: 2.5)),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide:
-                            BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+                        borderSide: const BorderSide(
+                            color: Color(0xFF929AAB), width: 2.5)),
                     errorStyle: TextStyle(color: orangeRed, fontSize: 14),
                   ),
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       color: Color(0xFF393E46)),
@@ -828,9 +665,9 @@ class _InvitePageState extends State<InvitePage> {
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: const [
                   Padding(
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: EdgeInsets.only(left: 20),
                     child: Text(
                       'Visitation End',
                       style: TextStyle(
@@ -847,6 +684,7 @@ class _InvitePageState extends State<InvitePage> {
                   // height: 50,
                   padding: EdgeInsets.zero,
                   child: TextFormField(
+                    enabled: endDateEnable,
                     keyboardType: TextInputType.none,
                     validator: (value) =>
                         value == "" ? "This field is required" : null,
@@ -856,7 +694,7 @@ class _InvitePageState extends State<InvitePage> {
                     onTap: () {
                       // FocusScope.of(context)
                       //     .requestFocus(new FocusNode());
-                      _selectDate(_endDate);
+                      _selectDate(_endDate, startDateOriginal!);
                     },
                     onSaved: (value) {
                       endDate = _endDate.text;
@@ -865,40 +703,40 @@ class _InvitePageState extends State<InvitePage> {
                       isDense: true,
                       isCollapsed: true,
                       hintText: 'Click here to select end date',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                       ),
-                      contentPadding: EdgeInsets.only(
+                      contentPadding: const EdgeInsets.only(
                           top: 17, bottom: 17, left: 20, right: 20),
                       focusColor: onyxBlack,
                       focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: eerieBlack,
                             width: 2.5,
                           )),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(7),
                           borderSide:
-                              BorderSide(color: eerieBlack, width: 2.5)),
+                              const BorderSide(color: eerieBlack, width: 2.5)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(7),
-                          borderSide:
-                              BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+                          borderSide: const BorderSide(
+                              color: Color(0xFF929AAB), width: 2.5)),
                       fillColor: graySand,
                       filled: true,
                       errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(7),
                           borderSide:
-                              BorderSide(color: eerieBlack, width: 2.5)),
+                              const BorderSide(color: eerieBlack, width: 2.5)),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(7),
-                          borderSide:
-                              BorderSide(color: Color(0xFF929AAB), width: 2.5)),
+                          borderSide: const BorderSide(
+                              color: Color(0xFF929AAB), width: 2.5)),
                       errorStyle: TextStyle(color: orangeRed, fontSize: 14),
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: Color(0xFF393E46)),
@@ -920,23 +758,23 @@ class _InvitePageState extends State<InvitePage> {
             [
               NavigationBarMobile(),
               Padding(
-                padding: EdgeInsets.only(top: 10, left: 35, right: 35),
+                padding: const EdgeInsets.only(top: 10, left: 35, right: 35),
                 child: Container(
                   // color: Colors.red,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Invite Visitor',
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.w700),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Container(
                           height: 40,
                           child: Wrap(
-                            children: [
+                            children: const [
                               Text(
                                 'Please fill visitor\'s name & email below. We will send them an email to complete their data.',
                                 style: TextStyle(
@@ -953,18 +791,18 @@ class _InvitePageState extends State<InvitePage> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(top: 10),
+                              padding: const EdgeInsets.only(top: 10),
                               child: inputDateContainerMobile(),
                             ),
                             formList.length > 0
-                                ? Padding(
+                                ? const Padding(
                                     padding: const EdgeInsets.only(top: 15),
                                     child: Divider(
                                       thickness: 2,
                                       color: spanishGray,
                                     ),
                                   )
-                                : SizedBox(),
+                                : const SizedBox(),
                             ListView.builder(
                               padding: EdgeInsets.zero,
                               physics: NeverScrollableScrollPhysics(),
@@ -996,7 +834,7 @@ class _InvitePageState extends State<InvitePage> {
                                 ));
                               });
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.add_circle_outline,
                               size: 35,
                             ),
@@ -1036,22 +874,12 @@ class _InvitePageState extends State<InvitePage> {
                                     });
                                   });
                                 });
-                              } else {
-                                print('gagal');
                               }
-
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (BuildContext context) =>
-                              //             ConfirmInvitePage()));
-
-                              // print(json);
                             },
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                     ],
@@ -1061,7 +889,7 @@ class _InvitePageState extends State<InvitePage> {
             ],
           ),
         ),
-        SliverFillRemaining(
+        const SliverFillRemaining(
           hasScrollBody: false,
           child: Align(
               alignment: Alignment.bottomCenter, child: FooterInviteWeb()),

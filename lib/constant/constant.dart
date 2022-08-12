@@ -33,11 +33,13 @@ final double textSizeButton =
 final TextStyle kPageTitleStyle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.w700,
+  color: eerieBlack,
 );
 
 final TextStyle myInviteMenu = TextStyle(
   fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 24 : 14,
   fontWeight: FontWeight.w700,
+  color: eerieBlack,
 );
 
 final TextStyle myInviteMenuMobile = TextStyle(
@@ -64,7 +66,7 @@ final TextStyle tableBody = TextStyle(
 final TextStyle tableBodyCode = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 22 : 18,
     fontWeight: FontWeight.w700,
-    color: onyxBlack);
+    color: eerieBlack);
 
 final TextStyle tableHeader =
     TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: onyxBlack);
@@ -72,7 +74,7 @@ final TextStyle tableHeader =
 final TextStyle textButton = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 20 : 18,
     fontWeight: FontWeight.w300,
-    color: eerieBlack,
+    color: onyxBlack,
     fontFamily: 'Helvetica',
     decoration: TextDecoration.underline);
 

@@ -12,29 +12,29 @@ Future<bool> confirmDialog(
   return await showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => AlertDialog(
-            // contentPadding: Responsive.isDesktop(context)
-            //     ? EdgeInsets.only(left: 7, right: 7)
-            //     : EdgeInsets.zero,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            // title:
-            title: Padding(
-              padding: Responsive.isDesktop(context)
-                  ? EdgeInsets.only(top: 5, left: 15, right: 15)
-                  : EdgeInsets.zero,
-              child: Text(
-                'Confirmation',
-                style: TextStyle(
-                  fontSize: Responsive.isDesktop(context) ? 40 : 24,
-                  fontWeight: FontWeight.w700,
-                  color: isDark ? scaffoldBg : eerieBlack,
+      builder: (context) => StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              // contentPadding: Responsive.isDesktop(context)
+              //     ? EdgeInsets.only(left: 7, right: 7)
+              //     : EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              // title:
+              title: Padding(
+                padding: Responsive.isDesktop(context)
+                    ? EdgeInsets.only(top: 25, left: 15, right: 15)
+                    : EdgeInsets.zero,
+                child: Text(
+                  'Confirmation',
+                  style: TextStyle(
+                    fontSize: Responsive.isDesktop(context) ? 40 : 24,
+                    fontWeight: FontWeight.w700,
+                    color: isDark ? scaffoldBg : eerieBlack,
+                  ),
                 ),
               ),
-            ),
-            backgroundColor: eerieBlack, //scaffoldBg,
-            content: StatefulBuilder(builder: (context, setState) {
-              return Container(
+              backgroundColor: eerieBlack, //scaffoldBg,
+              content: Container(
                 padding: Responsive.isDesktop(context)
                     ? EdgeInsets.symmetric(horizontal: 15)
                     : EdgeInsets.symmetric(horizontal: 7),
@@ -42,21 +42,6 @@ Future<bool> confirmDialog(
                 width: 400,
                 child: Column(
                   children: [
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.end,
-                    //   children: [
-                    //     TextButton.icon(
-                    //       onPressed: () {
-                    //         Navigator.of(context).pop(false);
-                    //       },
-                    //       icon: Icon(
-                    //         Icons.close,
-                    //         color: scaffoldBg,
-                    //       ),
-                    //       label: Text(''),
-                    //     ),
-                    //   ],
-                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [],
@@ -91,8 +76,6 @@ Future<bool> confirmDialog(
                           title: 'Confirm',
                           onTap: () {
                             Navigator.of(context).pop(true);
-                            // Navigator.pushReplacementNamed(
-                            //     context, routeInvite);
                           },
                         ),
                       ),
@@ -114,43 +97,7 @@ Future<bool> confirmDialog(
                     ),
                   ],
                 ),
-
-                // height: 500,
-                // child: Column(
-                //   children: [
-                //     Text(
-                //       'Message here ....',
-                //     ),
-                //     // SizedBox(
-                //     //   height: 50,
-                //     //   width: 250,
-                //     //   child: RegularButton(
-                //     //     title: 'Confirm',
-                //     //     onTap: () {
-                //     //       Navigator.pop(context);
-                //     //     },
-                //     //   ),
-                //     // )
-                //   ],
-                // ),
-              );
-            }),
-            // children: [
-            //   Column(
-            //     children: [
-            //       Text(
-            //         'Message here ....',
-            //       ),
-            //       SizedBox(
-            //         height: 50,
-            //         width: 250,
-            //         child: RegularButton(
-            //           title: 'Confirm',
-            //           onTap: () {},
-            //         ),
-            //       )
-            //     ],
-            //   )
-            // ],
-          ));
+              ),
+            );
+          }));
 }

@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/constant/functions.dart';
+import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/add_visitor_dialog.dart';
@@ -17,15 +19,18 @@ import 'package:navigation_example/widgets/dialogs/visitor_data.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class DetailVisitorOverlay extends ModalRoute<void> {
-  DetailVisitorOverlay(
-      {this.visitorList,
-      this.eventID,
-      this.visitDate,
-      this.employeeName,
-      this.inviteCode,
-      this.totalPerson});
+  DetailVisitorOverlay({
+    this.visitorList,
+    this.eventID,
+    this.visitDate,
+    this.employeeName,
+    this.inviteCode,
+    this.totalPerson,
+    this.statusEvent,
+  });
   List? visitorList;
   String? eventID;
   String? visitDate;
@@ -34,9 +39,16 @@ class DetailVisitorOverlay extends ModalRoute<void> {
   String? employeeName;
   bool? isHover = false;
   String? isVerified = 'AAA';
+  String? statusEvent;
   bool? cancelButtonLoading = false;
 
   bool isLoading = false;
+  refresh() {
+    // if (mounted) {
+    setState(() {});
+    // }
+  }
+
   Widget listVisitorDetailDialog(
     bool isHover,
     String name,
@@ -45,173 +57,262 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     String visitorId,
     int index,
     int length,
+    List visitors,
+    ValueNotifier _list,
+    // VoidCallback refresh,
+    StateSetter setter,
   ) {
-    return Container(
-      child: Column(
-        children: [
-          StatefulBuilder(builder: (context, StateSetter setState) {
-            bool removeVisible = false;
-            return InkWell(
-              onHover: (value) {
-                setState(() {
-                  isHover = value;
-                });
-              },
-              onTap: () {
-                if (verified == "APPROVED" || verified == "CHECKED IN") {
-                  getVisitorData(visitorId).then((value) {
-                    // print(value["Status"]);
-                    dynamic listDetail = json.encode(value);
-                    // print("list Detail Approved -> " + listDetail.toString());
-                    Navigator.of(context)
-                        .push(VisitorDataOverlay(listDetail: listDetail));
-                    // }).onError((error, stackTrace) {
-                    //   Navigator.of(context)
-                    //       .push(VisitorDataOverlay(listDetail: ""));
-                  }).onError((error, stackTrace) {
-                    print(error);
+    return Consumer<MainModel>(builder: (context, model, child) {
+      return Container(
+        child: Column(
+          children: [
+            StatefulBuilder(builder: (context, StateSetter setState) {
+              bool removeVisible = false;
+              List list = visitors;
+              return InkWell(
+                onHover: (value) {
+                  setState(() {
+                    isHover = value;
                   });
-                } else {
-                  getVisitorData(visitorId).then((value) {
-                    dynamic listDetail = json.encode(value);
-                    print(
-                        "list Detail not approved -> " + listDetail.toString());
-                    Navigator.of(context).push(
-                      VisitorConfirmationOverlay(listDetail: listDetail),
-                    );
-                  });
-                }
+                },
+                onTap: () {
+                  if (verified == "APPROVED" ||
+                      verified == "CHECKED IN" ||
+                      verified == "INVITED") {
+                    getVisitorData(visitorId).then((value) {
+                      // print(value["Status"]);
+                      dynamic listDetail = json.encode(value);
+                      // print("list Detail Approved -> " + listDetail.toString());
+                      Navigator.of(context)
+                          .push(VisitorDataOverlay(listDetail: listDetail));
+                      // }).onError((error, stackTrace) {
+                      //   Navigator.of(context)
+                      //       .push(VisitorDataOverlay(listDetail: ""));
+                    }).onError((error, stackTrace) {
+                      print(error);
+                    });
+                  }
+                  // else if (verified == "RESERVED") {
+                  //   getVisitorData(visitorId).then((value) {
+                  //     dynamic listDetail = json.encode(value);
 
-                // Navigator.of(context).push(VisitorDataOverlay());
-                // getVisitorData(visitorId);
-                // verified == "APPROVED"
-                //     ? Navigator.of(context).push(VisitorDataOverlay())
-                //     : Navigator.of(context).push(VisitorConfirmationOverlay());
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: Responsive.isDesktop(context) ? 10 : 9,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '$name',
-                          style: TextStyle(
-                            fontSize: Responsive.isDesktop(context) ? 20 : 16,
-                            fontWeight: FontWeight.w700,
-                            color: onyxBlack,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 7),
-                          child: Text(
-                            '$email',
+                  //     Navigator.of(context)
+                  //         .push(
+                  //       VisitorDataOverlay(listDetail: listDetail),
+                  //     )
+                  //         .then((value) {
+                  //       getInvitationDetail(visitorId).then((v) {
+                  //         setter(() {
+                  //           model.setListDetailVisitor(
+                  //               v['Visitors'].toString());
+
+                  //           // _listListener.value = v['Visitors'];
+                  //           navKey.currentState!.setState(() {
+                  //             list = v['Visitors'];
+                  //             // _list.value = v['Visitors'];
+                  //             totalPerson = list.length.toString();
+                  //             visitorList = v['Visitors'];
+                  //             totalPerson =
+                  //                 visitorList!.length.toString();
+                  //             setState(
+                  //               () {},
+                  //             );
+                  //             // refresh;
+                  //             // setter(
+                  //             //   () {},
+                  //             // );
+                  //           });
+                  //         });
+                  //       });
+                  //     });
+                  //   });
+                  // }
+                  else {
+                    if (statusEvent == "CANCELED" || statusEvent == "EXPIRED") {
+                      getVisitorData(visitorId).then((value) {
+                        // print(value["Status"]);
+                        dynamic listDetail = json.encode(value);
+                        // print("list Detail Approved -> " + listDetail.toString());
+                        Navigator.of(context)
+                            .push(VisitorDataOverlay(listDetail: listDetail));
+                        // }).onError((error, stackTrace) {
+                        //   Navigator.of(context)
+                        //       .push(VisitorDataOverlay(listDetail: ""));
+                      }).onError((error, stackTrace) {
+                        print(error);
+                      });
+                    } else {
+                      getVisitorData(visitorId).then((value) {
+                        dynamic listDetail = json.encode(value);
+
+                        Navigator.of(context).push(
+                          VisitorConfirmationOverlay(listDetail: listDetail),
+                        );
+                      });
+                    }
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: Responsive.isDesktop(context) ? 10 : 9,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
                             style: TextStyle(
                               fontSize: Responsive.isDesktop(context) ? 20 : 16,
-                              fontWeight: FontWeight.w300,
-                              color: onyxBlack,
+                              fontWeight: FontWeight.w700,
+                              color: eerieBlack,
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text(
-                            verified == "INVITED"
-                                ? 'Visitor data not submitted'
-                                : verified == "RESERVED"
-                                    ? 'Visitor not yet Verified'
-                                    : verified == "APPROVED" ||
-                                            verified == "CHECKED IN"
-                                        ? 'Visitor Verified'
-                                        : "",
-                            style: TextStyle(
-                              fontSize: Responsive.isDesktop(context) ? 16 : 14,
-                              fontWeight: FontWeight.w300,
-                              color: verified == "APPROVED" ||
-                                      verified == "CHECKED IN"
-                                  ? Color(0xFF0DB14B)
-                                  : Color(0xFFF26529),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: Responsive.isDesktop(context) ? 2 : 3,
-                    child: Row(
-                      children: [
-                        // Icon(Icons.check),
-                        verified == "APPROVED" || verified == "CHECKED IN"
-                            ? SizedBox(
-                                width: Responsive.isDesktop(context) ? 30 : 20,
-                                child: ImageIcon(
-                                  AssetImage('assets/icon_verified.png'),
-                                ),
-                              )
-                            : SizedBox(
-                                width: Responsive.isDesktop(context) ? 30 : 20,
+                          Padding(
+                            padding: const EdgeInsets.only(top: 7),
+                            child: Text(
+                              email,
+                              style: TextStyle(
+                                fontSize:
+                                    Responsive.isDesktop(context) ? 20 : 16,
+                                fontWeight: FontWeight.w300,
+                                color: onyxBlack,
                               ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Visibility(
-                            visible: Responsive.isMobile(context)
-                                ? true
-                                : isHover
-                                    ? true
-                                    : false,
-                            child: GestureDetector(
-                              onTap: () {
-                                removeVisitorConfirmDialog(context, visitorId)
-                                    .then((value) {
-                                  getInvitationDetail(eventID!).then(
-                                    (value) {
-                                      setState(
-                                        () {
-                                          visitorList = value['Visitors'];
-                                          totalPerson =
-                                              visitorList!.length.toString();
-                                        },
-                                      );
-                                    },
-                                  );
-                                });
-                                setState(
-                                  () {},
-                                );
-                              },
-                              child: Icon(Icons.close),
                             ),
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Text(
+                              verified == "INVITED"
+                                  ? 'Visitor data not submitted'
+                                  : verified == "RESERVED"
+                                      ? 'Visitor not yet Verified'
+                                      : verified == "APPROVED" ||
+                                              verified == "CHECKED IN"
+                                          ? 'Visitor Verified'
+                                          : "",
+                              style: TextStyle(
+                                fontSize:
+                                    Responsive.isDesktop(context) ? 16 : 14,
+                                fontWeight: FontWeight.w300,
+                                color: verified == "APPROVED" ||
+                                        verified == "CHECKED IN"
+                                    ? Color(0xFF0DB14B)
+                                    : Color(0xFFF26529),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          }),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 7.5),
-            child: index == length - 1
-                ? SizedBox()
-                : Divider(
-                    thickness: 1,
-                    color: spanishGray,
-                  ),
-          ),
-        ],
-      ),
-    );
+                    Expanded(
+                      flex: Responsive.isDesktop(context) ? 2 : 3,
+                      child: Row(
+                        children: [
+                          // Icon(Icons.check),
+                          verified == "APPROVED" || verified == "CHECKED IN"
+                              ? SizedBox(
+                                  width:
+                                      Responsive.isDesktop(context) ? 30 : 20,
+                                  child: ImageIcon(
+                                    AssetImage('assets/icon_verified.png'),
+                                  ),
+                                )
+                              : SizedBox(
+                                  width:
+                                      Responsive.isDesktop(context) ? 30 : 20,
+                                ),
+                          statusEvent == "CANCELED" || statusEvent == "EXPIRED"
+                              ? SizedBox()
+                              : Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Visibility(
+                                    visible: Responsive.isMobile(context)
+                                        ? true
+                                        : isHover && list.length > 1
+                                            ? true
+                                            : false,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        removeVisitorConfirmDialog(
+                                          context,
+                                          visitorId,
+                                          list,
+                                          model,
+                                          _list,
+                                          //          () {
+                                          //   refresh;
+                                          // },
+                                          setter,
+                                        ).then((_) {
+                                          // refresh;
+                                          setter(
+                                            () {},
+                                          );
+                                          // navKey.currentState!.setState(() {
+                                          // list = v['Visitors'];
+                                          // _list.value = v['Visitors'];
+                                          // totalPerson =
+                                          //     list.length.toString();
+                                          // visitorList = v['Visitors'];
+                                          // totalPerson =
+                                          //     visitorList!.length.toString();
+                                          // });
+                                          // print(json
+                                          //     .decode(model.listDetailVisitor)
+                                          //     .toString());
+                                          // list = json
+                                          //     .decode(model.listDetailVisitor);
+                                          // totalPerson = list.length.toString();
+                                          // getInvitationDetail(eventID!).then(
+                                          //   (value) {
+                                          //     setState(
+                                          //       () {
+                                          //         list = value['Visitors'];
+                                          //         totalPerson =
+                                          //             list.length.toString();
+                                          //         visitorList = value['Visitors'];
+                                          //         totalPerson = visitorList!
+                                          //             .length
+                                          //             .toString();
+                                          //       },
+                                          //     );
+                                          //   },
+                                          // );
+                                        });
+                                        setState(
+                                          () {},
+                                        );
+                                      },
+                                      child: Icon(Icons.close),
+                                    ),
+                                  ),
+                                ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 7.5),
+              child: index == length - 1
+                  ? SizedBox()
+                  : Divider(
+                      thickness: 1,
+                      color: spanishGray,
+                    ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Future getInvitationDetail(String eventId) async {
-    print('hahaha');
     var box = await Hive.openBox('userLogin');
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
-    // print(jwt);
 
     final url = Uri.https(apiUrl,
         '/VisitorManagementBackend/public/api/invitation/get-invitation-detail');
@@ -228,43 +329,63 @@ class DetailVisitorOverlay extends ModalRoute<void> {
 
     var response = await http.post(url, headers: requestHeader, body: bodySend);
     var data = json.decode(response.body);
-    // print('data->' + data['Data'].toString());
-
-    // final response = await http.get(requestUri);
     if (data['Status'] == '200') {
       setState(() {
         visitorList = [data['Data']];
-        // contohData = data['Data']['Invitations'];
       });
       return data['Data'];
     } else {}
   }
 
-  Future removeVisitorConfirmDialog(BuildContext context, String visitorId) {
-    return confirmDialog(
-            context, 'Are you sure want to remove this guest?', true)
+  Future removeVisitorConfirmDialog(
+      BuildContext context,
+      String visitorId,
+      List list,
+      MainModel model,
+      ValueNotifier _list,
+      // Function refresh,
+      StateSetter setter) async {
+    confirmDialog(context, 'Are you sure want to remove this guest?', true)
         .then((value) {
       if (value) {
         removeVisitor(visitorId).then((value) {
-          print(value);
           if (value['Status'] == "200") {
-            Navigator.of(context)
-                .push(NotifProcessDialog(
-                    message: '${value['Message']}', isSuccess: true))
-                .then((value) {});
+            getInvitationDetail(eventID!).then((v) {
+              print("value -> " + v.toString());
+              setState(() {
+                model.setListDetailVisitor(v['Visitors'].toString());
+
+                // _listListener.value = v['Visitors'];
+                navKey.currentState!.setState(() {
+                  list = v['Visitors'];
+                  // _list.value = v['Visitors'];
+                  totalPerson = list.length.toString();
+                  visitorList = v['Visitors'];
+                  totalPerson = visitorList!.length.toString();
+                  // refresh;
+                  setter(
+                    () {},
+                  );
+                });
+              });
+              if (value['Status'] == "200") {
+                Navigator.of(context)
+                    .push(NotifProcessDialog(
+                        message: '${value['Message']}', isSuccess: true))
+                    .then((x) {
+                  refresh;
+                });
+              }
+            });
           } else {
             Navigator.of(context)
                 .push(NotifProcessDialog(
                     message: '${value['Message']}', isSuccess: false))
-                .then((value) {
-              setState(
-                () {},
-              );
-            });
+                .then((value) {});
           }
         });
       } else {
-        // Navigator.of(context).pop();
+        setState(() {});
       }
     });
   }
@@ -362,11 +483,11 @@ class DetailVisitorOverlay extends ModalRoute<void> {
     // print('data->' + data['Data'].toString());
 
     // final response = await http.get(requestUri);
-    if (data['Status'] == '200') {
-      isLoading = false;
-    } else {
-      isLoading = false;
-    }
+    // if (data['Status'] == '200') {
+    //   isLoading = false;
+    // } else {
+    //   isLoading = false;
+    // }
     return data;
   }
 
@@ -406,30 +527,27 @@ class DetailVisitorOverlay extends ModalRoute<void> {
   // }
 
   @override
-  // TODO: implement barrierColor
   Color? get barrierColor => Colors.black.withOpacity(0.5);
 
   @override
-  // TODO: implement barrierDismissible
   bool get barrierDismissible => true;
 
   @override
-  // TODO: implement barrierLabel
   String? get barrierLabel => null;
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    // TODO: implement buildPage
     return StatefulBuilder(
       builder: (context, setState) {
-        // getInvitationDetail(eventID!).then((value) => setState(
-        //       () {},
-        //     ));
+        List list = visitorList!;
+        ValueNotifier _list = ValueNotifier<List>(list);
+        _list.value = visitorList!;
+        list = _list.value;
         return Padding(
           padding: Responsive.isDesktop(context)
-              ? EdgeInsets.all(15.0)
-              : EdgeInsets.only(top: 15, bottom: 15),
+              ? const EdgeInsets.all(15.0)
+              : const EdgeInsets.only(top: 15, bottom: 15),
           child: Center(
             child: Container(
               width: 500,
@@ -450,36 +568,17 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                       child: Padding(
                         padding:
                             Responsive.isDesktop(navKey.currentState!.context)
-                                ? EdgeInsets.only(left: 50, right: 50, top: 30)
-                                : EdgeInsets.only(left: 25, right: 25, top: 25),
+                                ? const EdgeInsets.only(
+                                    left: 50, right: 50, top: 30)
+                                : const EdgeInsets.only(
+                                    left: 25, right: 25, top: 25),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.end,
-                            //   children: [
-                            //     Icon(
-                            //       Icons.close,
-                            //       size: 30,
-                            //     )
-                            //     // TextButton.icon(
-                            //     //   onPressed: () {
-                            //     //     Navigator.of(context).pop(false);
-                            //     //   },
-                            //     //   icon: Icon(
-                            //     //     Icons.close,
-                            //     //     color: eerieBlack,
-                            //     //     size: 30,
-                            //     //   ),
-                            //     //   label: Text(''),
-                            //     // ),
-                            //   ],
-                            // ),
-
                             Padding(
                               padding: Responsive.isDesktop(context)
-                                  ? EdgeInsets.only(top: 10, bottom: 30)
-                                  : EdgeInsets.only(top: 0, bottom: 20),
+                                  ? const EdgeInsets.only(top: 10, bottom: 30)
+                                  : const EdgeInsets.only(top: 0, bottom: 20),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -504,8 +603,8 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                             ),
                             Container(
                               padding: Responsive.isDesktop(context)
-                                  ? EdgeInsets.only(top: 12)
-                                  : EdgeInsets.only(top: 7),
+                                  ? const EdgeInsets.only(top: 12)
+                                  : const EdgeInsets.only(top: 7),
                               child: Text(
                                 '$inviteCode',
                                 style: TextStyle(
@@ -513,7 +612,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                     fontSize: Responsive.isBigDesktop(context)
                                         ? 32
                                         : 20,
-                                    color: onyxBlack),
+                                    color: eerieBlack),
                               ),
                             ),
                             Container(
@@ -540,7 +639,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                                 context)
                                                             ? 18
                                                             : 18,
-                                                    color: onyxBlack,
+                                                    color: eerieBlack,
                                                   ),
                                                 ),
                                               ),
@@ -582,15 +681,17 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                                                 context)
                                                             ? 18
                                                             : 18,
-                                                    color: onyxBlack,
+                                                    color: eerieBlack,
                                                   ),
                                                 ),
                                               ),
                                               Container(
                                                 padding: Responsive.isDesktop(
                                                         context)
-                                                    ? EdgeInsets.only(top: 12)
-                                                    : EdgeInsets.only(top: 7),
+                                                    ? const EdgeInsets.only(
+                                                        top: 12)
+                                                    : const EdgeInsets.only(
+                                                        top: 7),
                                                 child: Text(
                                                   '$totalPerson Person',
                                                   style: TextStyle(
@@ -688,7 +789,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                   fontSize:
                                       Responsive.isDesktop(context) ? 18 : 14,
                                   fontWeight: FontWeight.w700,
-                                  color: onyxBlack,
+                                  color: eerieBlack,
                                 ),
                               ),
                             ),
@@ -707,7 +808,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.only(top: 20),
+                              padding: const EdgeInsets.only(top: 20),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -719,7 +820,7 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                       fontSize: Responsive.isDesktop(context)
                                           ? 18
                                           : 14,
-                                      color: onyxBlack,
+                                      color: eerieBlack,
                                     ),
                                   ),
                                   TextButton(
@@ -735,9 +836,9 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                           setState(
                                             () {
                                               isLoading = false;
-                                              // print('value ->' +
-                                              //     value['Visitors']
-                                              //         .toString());
+                                              list = value['Visitors'];
+                                              totalPerson = visitorList!.length
+                                                  .toString();
                                               visitorList = value['Visitors'];
                                               totalPerson = visitorList!.length
                                                   .toString();
@@ -746,53 +847,56 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                         });
                                       });
                                     },
-                                    child: Text(
-                                      'Add Visitor',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize:
-                                              Responsive.isDesktop(context)
-                                                  ? 18
-                                                  : 14,
-                                          color: onyxBlack),
-                                    ),
+                                    child: statusEvent == "CANCELED" ||
+                                            statusEvent == "EXPIRED"
+                                        ? SizedBox()
+                                        : Text(
+                                            'Add Visitor',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: Responsive.isDesktop(
+                                                        context)
+                                                    ? 18
+                                                    : 14,
+                                                color: eerieBlack),
+                                          ),
                                   ),
-                                  // GestureDetector(
-                                  //   onTap: () {
-                                  // Navigator.of(context)
-                                  //     .push(AddVisitorOverlay());
-                                  //   },
-                                  //   child: Text(
-                                  //     'Add Visitor',
-                                  // style: TextStyle(
-                                  //   fontWeight: FontWeight.w300,
-                                  //   fontSize: 20,
-                                  // ),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),
                             SizedBox(
                               height: Responsive.isDesktop(context) ? 15 : 10,
                             ),
-                            ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: visitorList!.length,
-                              itemBuilder: (context, index) {
-                                return listVisitorDetailDialog(
-                                  isHover!,
-                                  visitorList![index]['VisitorName'],
-                                  visitorList![index]['Email'],
-                                  visitorList![index]['Status'],
-                                  visitorList![index]['VisitorID'],
-                                  index,
-                                  visitorList!.length,
-                                );
-                              },
-                            ),
+                            ValueListenableBuilder(
+                                valueListenable: _list,
+                                builder: (context, value, child) {
+                                  // list = [value];
+                                  return ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: list.length,
+                                    itemBuilder: (context, index) {
+                                      return listVisitorDetailDialog(
+                                        isHover!,
+                                        list[index]['VisitorName'],
+                                        list[index]['Email'],
+                                        list[index]['Status'],
+                                        list[index]['VisitorID'],
+                                        index,
+                                        list.length,
+                                        list,
+                                        _list,
+                                        // () {
+                                        //   setState(
+                                        //     () {},
+                                        //   );
+                                        // },
+                                        setState,
+                                      );
+                                    },
+                                  );
+                                }),
                             Padding(
                               padding: Responsive.isDesktop(context)
                                   ? EdgeInsets.only(top: 50)
@@ -800,86 +904,104 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                               child: Center(
                                 child: Column(
                                   children: [
-                                    SizedBox(
-                                      height: Responsive.isDesktop(context)
-                                          ? 50
-                                          : 40,
-                                      width: Responsive.isDesktop(context)
-                                          ? 250
-                                          : null,
-                                      child: CustTextButon(
-                                        fontSize: Responsive.isDesktop(context)
-                                            ? 20
-                                            : 16,
-                                        label: 'Change Visit Time',
-                                        onTap: () {
-                                          // changeVisitDialog(context)
-                                          //     .then((value) {});
-                                          print(eventID);
-                                          Navigator.of(context)
-                                              .push(ChangeVisitDialog(
-                                                  eventID: eventID))
-                                              .then(
-                                            (value) {
-                                              getInvitationDetail(eventID!)
-                                                  .then((value) {
-                                                // print(value);
-                                                setState(() {
-                                                  visitDate =
-                                                      value['VisitTime'];
-                                                  isLoading = false;
-                                                  visitorList =
-                                                      value['Visitors'];
-                                                  totalPerson = visitorList!
-                                                      .length
-                                                      .toString();
-                                                });
-                                              });
-                                            },
-                                          );
-                                          // Navigator.of(context).pop(false);
-                                        },
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: cancelButtonLoading!
-                                          ? CircularProgressIndicator(
-                                              color: eerieBlack,
-                                            )
-                                          : SizedBox(
-                                              height:
+                                    statusEvent == "CANCELED" ||
+                                            statusEvent == "EXPIRED"
+                                        ? SizedBox()
+                                        : SizedBox(
+                                            height:
+                                                Responsive.isDesktop(context)
+                                                    ? 50
+                                                    : 40,
+                                            width: Responsive.isDesktop(context)
+                                                ? 250
+                                                : null,
+                                            child: CustTextButon(
+                                              fontSize:
                                                   Responsive.isDesktop(context)
-                                                      ? 50
-                                                      : 40,
-                                              width:
-                                                  Responsive.isDesktop(context)
-                                                      ? 250
-                                                      : null,
-                                              child: CustTextButon(
-                                                fontSize: Responsive.isDesktop(
-                                                        context)
-                                                    ? 20
-                                                    : 16,
-                                                label: 'Cancel Invitation',
-                                                onTap: () {
-                                                  setState(
-                                                    () {},
-                                                  );
-                                                  cancelButtonLoading = true;
-                                                  showConfirmDialog(context)
-                                                      .then((value) {
-                                                    setState(
-                                                      () {
-                                                        cancelButtonLoading =
-                                                            false;
-                                                      },
-                                                    );
-                                                  });
-                                                },
-                                              ),
+                                                      ? 20
+                                                      : 16,
+                                              label: 'Change Visit Time',
+                                              onTap: () {
+                                                print(eventID);
+                                                Navigator.of(context)
+                                                    .push(ChangeVisitDialog(
+                                                        eventID: eventID))
+                                                    .then(
+                                                  (value) {
+                                                    getInvitationDetail(
+                                                            eventID!)
+                                                        .then((value) {
+                                                      // print(value);
+                                                      setState(() {
+                                                        visitDate =
+                                                            value['VisitTime'];
+                                                        isLoading = false;
+                                                        list =
+                                                            value['Visitors'];
+                                                        totalPerson = list
+                                                            .length
+                                                            .toString();
+                                                        visitorList =
+                                                            value['Visitors'];
+                                                        totalPerson =
+                                                            visitorList!.length
+                                                                .toString();
+                                                      });
+                                                    });
+                                                  },
+                                                );
+                                                // Navigator.of(context).pop(false);
+                                              },
                                             ),
-                                    ),
+                                          ),
+                                    statusEvent == "CANCELED" ||
+                                            statusEvent == "EXPIRED"
+                                        ? SizedBox()
+                                        : Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 10),
+                                            child: cancelButtonLoading!
+                                                ? CircularProgressIndicator(
+                                                    color: eerieBlack,
+                                                  )
+                                                : SizedBox(
+                                                    height:
+                                                        Responsive.isDesktop(
+                                                                context)
+                                                            ? 50
+                                                            : 40,
+                                                    width: Responsive.isDesktop(
+                                                            context)
+                                                        ? 250
+                                                        : null,
+                                                    child: CustTextButon(
+                                                      fontSize:
+                                                          Responsive.isDesktop(
+                                                                  context)
+                                                              ? 20
+                                                              : 16,
+                                                      label:
+                                                          'Cancel Invitation',
+                                                      onTap: () {
+                                                        setState(
+                                                          () {},
+                                                        );
+                                                        cancelButtonLoading =
+                                                            true;
+                                                        showConfirmDialog(
+                                                                context)
+                                                            .then((value) {
+                                                          setState(
+                                                            () {
+                                                              cancelButtonLoading =
+                                                                  false;
+                                                            },
+                                                          );
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
+                                          ),
                                     Padding(
                                       padding: const EdgeInsets.only(
                                         top: 10,
@@ -940,21 +1062,17 @@ class DetailVisitorOverlay extends ModalRoute<void> {
   }
 
   @override
-  // TODO: implement maintainState
   bool get maintainState => true;
 
   @override
-  // TODO: implement opaque
   bool get opaque => false;
 
   @override
-  // TODO: implement transitionDuration
   Duration get transitionDuration => Duration(milliseconds: 500);
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
-    // You can add your own animations for the overlay content
     return FadeTransition(
       opacity: animation,
       child: ScaleTransition(

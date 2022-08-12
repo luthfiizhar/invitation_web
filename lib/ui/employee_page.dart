@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/responsive.dart';
+import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/footer.dart';
 import 'package:navigation_example/widgets/input_field.dart';
@@ -27,7 +29,7 @@ class _EmployeePageState extends State<EmployeePage> {
   late String phoneCode;
   late String phoneNumber;
   late String email;
-  late bool firstLogin;
+  late String firstLogin;
 
   late String name = "";
   late String nip = "";
@@ -50,9 +52,10 @@ class _EmployeePageState extends State<EmployeePage> {
       phoneCode = "62";
       phoneNumber = box.get('phoneNumber') != "" ? box.get('phoneNumber') : "";
       email = box.get('email') != "" ? box.get('email') : "";
-      firstLogin = box.get('firstLogin') != "" ? box.get('firstLogin') : "";
+      firstLogin =
+          box.get('firstLogin') != "" ? box.get('firstLogin').toString() : "";
     });
-    if (firstLogin) {
+    if (firstLogin == 'true') {
       _phoneNumberCode.text = phoneCode;
       _phoneNumber.text = phoneNumber.substring(1);
       _email.text = email;
@@ -141,19 +144,6 @@ class _EmployeePageState extends State<EmployeePage> {
     return Responsive.isDesktop(context)
         ? desktopLayoutEmployeePage(context)
         : mobileLayoutEmployeePage(context);
-    return Column(
-      children: [
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              NavigationBarWeb(
-                index: 2,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 
   desktopLayoutEmployeePage(BuildContext context) {
@@ -176,14 +166,14 @@ class _EmployeePageState extends State<EmployeePage> {
                       Container(
                         width: Responsive.isBigDesktop(context) ? 575 : 575,
                         padding: Responsive.isBigDesktop(context)
-                            ? EdgeInsets.only(top: 0, left: 0, right: 0)
-                            : EdgeInsets.only(top: 0, left: 0, right: 0),
+                            ? const EdgeInsets.only(top: 0, left: 0, right: 0)
+                            : const EdgeInsets.only(top: 0, left: 0, right: 0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               // color: Colors.blue,
-                              child: Text(
+                              child: const Text(
                                 'Employee Data',
                                 style: TextStyle(
                                     fontSize: 36, fontWeight: FontWeight.w700),
@@ -196,7 +186,7 @@ class _EmployeePageState extends State<EmployeePage> {
                                 // color: Colors.green,
                                 child: Wrap(
                                   alignment: WrapAlignment.start,
-                                  children: [
+                                  children: const [
                                     Text(
                                       'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
                                       style: TextStyle(
@@ -266,7 +256,7 @@ class _EmployeePageState extends State<EmployeePage> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 20,
                               ),
                               child: SizedBox(
@@ -284,7 +274,7 @@ class _EmployeePageState extends State<EmployeePage> {
                             Padding(
                               padding: EdgeInsets.only(top: 80, bottom: 30),
                               child: isLoading
-                                  ? CircularProgressIndicator(
+                                  ? const CircularProgressIndicator(
                                       color: eerieBlack,
                                     )
                                   : SizedBox(
@@ -310,17 +300,28 @@ class _EmployeePageState extends State<EmployeePage> {
                                                 var box = await Hive.openBox(
                                                     'userLogin');
                                                 box.put('firstLogin', "false");
-                                                Navigator.of(context).push(
-                                                    NotifProcessDialog(
+                                                Navigator.of(context)
+                                                    .push(NotifProcessDialog(
                                                         isSuccess: true,
                                                         message:
-                                                            "Data has been updated!"));
+                                                            "Data has been updated!"))
+                                                    .then((value) {
+                                                  if (firstLogin == 'true') {
+                                                    navKey.currentState!
+                                                        .pushReplacementNamed(
+                                                            routeInvite);
+                                                  } else {
+                                                    navKey.currentState!
+                                                        .pushReplacementNamed(
+                                                            routeInvite);
+                                                  }
+                                                });
                                               } else {
                                                 Navigator.of(context).push(
                                                     NotifProcessDialog(
                                                         isSuccess: false,
                                                         message:
-                                                            "Somethin wrong!"));
+                                                            value['Message']));
                                               }
                                             });
                                           }
@@ -338,7 +339,7 @@ class _EmployeePageState extends State<EmployeePage> {
             ],
           ),
         ),
-        SliverFillRemaining(
+        const SliverFillRemaining(
           hasScrollBody: false,
           child: Align(
               alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
@@ -357,7 +358,7 @@ class _EmployeePageState extends State<EmployeePage> {
                 index: 2,
               ),
               Padding(
-                padding: EdgeInsets.only(top: 10, left: 35, right: 35),
+                padding: const EdgeInsets.only(top: 10, left: 35, right: 35),
                 child: Form(
                   key: _formKey,
                   child: Container(
@@ -366,7 +367,7 @@ class _EmployeePageState extends State<EmployeePage> {
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
+                          children: const [
                             Text(
                               'Employee Data',
                               style: TextStyle(
@@ -375,8 +376,8 @@ class _EmployeePageState extends State<EmployeePage> {
                           ],
                         ),
                         Container(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Align(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: const Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
@@ -398,7 +399,7 @@ class _EmployeePageState extends State<EmployeePage> {
                                   nameField(),
                                   phoneNoFieldMobile(),
                                   Padding(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       top: 20,
                                     ),
                                     child: InputVisitor(
@@ -411,8 +412,8 @@ class _EmployeePageState extends State<EmployeePage> {
                                     ),
                                   ),
                                   Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 30, bottom: 30),
+                                    padding: const EdgeInsets.only(
+                                        top: 30, bottom: 30),
                                     child: SizedBox(
                                       // width: 200,
                                       height: 40,
@@ -478,7 +479,7 @@ class _EmployeePageState extends State<EmployeePage> {
                     name,
                     style: TextStyle(
                       fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w300,
                       color: onyxBlack,
                     ),
                   ),
@@ -516,7 +517,7 @@ class _EmployeePageState extends State<EmployeePage> {
                     nip,
                     style: TextStyle(
                       fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w300,
                       color: onyxBlack,
                     ),
                   ),
@@ -628,6 +629,7 @@ class _EmployeePageState extends State<EmployeePage> {
       focusNode: phoneNumberNode,
       controller: _phoneNumber,
       keyboardType: TextInputType.phone,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       validator: (value) => value!.isEmpty ? 'This field is required' : null,
       onSaved: (value) {
         setState(() {
@@ -697,6 +699,7 @@ class _EmployeePageState extends State<EmployeePage> {
         focusNode: phoneNumberNode,
         controller: _phoneNumber,
         keyboardType: TextInputType.phone,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         validator: (value) => value!.isEmpty ? 'This field is required' : null,
         onSaved: (value) {
           setState(() {
@@ -767,6 +770,7 @@ class _EmployeePageState extends State<EmployeePage> {
       onSaved: (value) {
         phoneCode = _phoneNumberCode.text;
       },
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         prefixStyle: TextStyle(

@@ -16,7 +16,8 @@ class RegularButton extends StatelessWidget {
       this.height,
       this.width,
       this.elevation,
-      this.isDark});
+      this.isDark,
+      this.radiusBorder});
 
   final String title;
   final String? routeName;
@@ -25,6 +26,7 @@ class RegularButton extends StatelessWidget {
   final double? width;
   final double? height;
   final double? elevation;
+  final double? radiusBorder;
   bool? isDark;
 
   @override
@@ -99,11 +101,11 @@ class RegularButton extends StatelessWidget {
             (Set<MaterialState> states) {
           if (states.contains(MaterialState.pressed))
             return RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(radiusBorder ?? 10),
                 side: BorderSide(
                     color: isDark! ? scaffoldBg : eerieBlack, width: 5));
           return RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10));
+              borderRadius: BorderRadius.circular(radiusBorder ?? 10));
         }),
         overlayColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {

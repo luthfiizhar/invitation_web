@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/constant/functions.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
@@ -81,7 +82,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
         // contohData = data['Data']['Invitations'];
       });
     } else {}
-    return data['Status'];
+    return data;
   }
 
   @override
@@ -257,7 +258,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
         .then((value) {
       if (value) {
         saveInvitation().then((value) {
-          if (value == "200") {
+          if (value['Status'] == "200") {
             setState(() {
               isLoading = false;
             });
@@ -267,11 +268,15 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                 .then((value) {
               Navigator.pushReplacementNamed(context, routeInvite);
             });
-          } else {
+          } else if (value['Status'] == "401") {
             Navigator.of(context)
                 .push(NotifProcessDialog(
-                    isSuccess: false, message: "Something wrong!"))
+                    isSuccess: false, message: value['Message']))
                 .then((value) {
+              logout().then((value) {
+                Navigator.pushReplacementNamed(
+                    navKey.currentState!.context, routeLogin);
+              });
               // Navigator.of(context).pop
             });
           }

@@ -2,19 +2,19 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:navigation_example/app_view.dart';
+// import 'package:navigation_example/app_view.dart';
 import 'package:navigation_example/constant/constant.dart';
-import 'package:navigation_example/login.dart';
+// import 'package:navigation_example/login.dart';
 import 'package:navigation_example/my_app.dart';
-import 'package:navigation_example/routes/router_generator.dart';
-import 'package:navigation_example/routes/routes.dart';
-import 'package:navigation_example/ui/home.dart';
+// import 'package:navigation_example/routes/router_generator.dart';
+// import 'package:navigation_example/routes/routes.dart';
 import 'package:http/http.dart' as http;
 
 String? nip;
 String? name;
 String? jwtToken;
 bool? isExpired = true;
+bool? isLoggedIn = false;
 loginCheck() async {
   var box = await Hive.openBox('userLogin');
 

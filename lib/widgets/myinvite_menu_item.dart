@@ -52,7 +52,7 @@ class MyInviteMenuMobile extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(),
-        padding: EdgeInsets.all(0),
+        padding: EdgeInsets.all(7),
         child: InteractiveMyInviteMenuItemMobile(
             text: menuName, selected: selected),
       ),

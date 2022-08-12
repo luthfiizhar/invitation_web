@@ -27,33 +27,26 @@ class VisitorDataOverlay extends ModalRoute<void> {
   ];
 
   @override
-  // TODO: implement barrierColor
   Color? get barrierColor => Colors.black.withOpacity(0.5);
 
   @override
-  // TODO: implement barrierDismissible
   bool get barrierDismissible => false;
 
   @override
-  // TODO: implement barrierLabel
   String? get barrierLabel => null;
 
   @override
-  // TODO: implement maintainState
   bool get maintainState => true;
 
   @override
-  // TODO: implement opaque
   bool get opaque => false;
 
   @override
-  // TODO: implement transitionDuration
   Duration get transitionDuration => Duration(milliseconds: 500);
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
-    // You can add your own animations for the overlay content
     return FadeTransition(
       opacity: animation,
       child: ScaleTransition(
@@ -68,8 +61,8 @@ class VisitorDataOverlay extends ModalRoute<void> {
       Animation<double> secondaryAnimation) {
     return Padding(
       padding: Responsive.isDesktop(context)
-          ? EdgeInsets.all(15.0)
-          : EdgeInsets.only(top: 15, bottom: 50),
+          ? const EdgeInsets.all(15.0)
+          : const EdgeInsets.only(top: 15, bottom: 50),
       child: LayoutBuilder(
         builder: (context, constraints) {
           var detailList = json.decode(listDetail!);
@@ -94,14 +87,15 @@ class VisitorDataOverlay extends ModalRoute<void> {
                                 left: paddingSampingDialog,
                                 right: paddingSampingDialog,
                                 top: paddingAtasDialog)
-                            : EdgeInsets.only(left: 25, right: 25, top: 25),
+                            : const EdgeInsets.only(
+                                left: 25, right: 25, top: 25),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
                               padding: Responsive.isDesktop(context)
-                                  ? EdgeInsets.only(bottom: 25)
-                                  : EdgeInsets.only(bottom: 15),
+                                  ? const EdgeInsets.only(bottom: 25)
+                                  : const EdgeInsets.only(bottom: 15),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -113,30 +107,31 @@ class VisitorDataOverlay extends ModalRoute<void> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 0),
+                              padding: const EdgeInsets.only(top: 0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  detailList["VisitorPhoto"] == ""
+                                  detailList["VisitorPhoto"] == null
                                       ? Container(
                                           height: Responsive.isDesktop(
                                                   navKey.currentState!.context)
                                               ? 125
-                                              : 75,
+                                              : 85,
                                           width: Responsive.isDesktop(
                                                   navKey.currentState!.context)
                                               ? 125
-                                              : 75,
+                                              : 85,
                                           child: Image.asset(
                                               'assets/avatar_male.png'),
                                         )
                                       : CircleAvatar(
+                                          backgroundColor: scaffoldBg,
                                           radius: Responsive.isDesktop(
                                                   navKey.currentState!.context)
                                               ? 100
-                                              : 60,
+                                              : 75,
                                           backgroundImage: MemoryImage(
-                                            Base64Decoder().convert(
+                                            const Base64Decoder().convert(
                                                 detailList['VisitorPhoto']!
                                                     .toString()
                                                     .split(',')
@@ -163,7 +158,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
                         Navigator.of(context).pop(false);
                       },
                       child: Container(
-                        child: Icon(
+                        child: const Icon(
                           Icons.close,
                           size: 30,
                         ),
@@ -190,7 +185,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 25),
+                padding: const EdgeInsets.only(top: 25),
                 child: detailInfo(
                   'First Name',
                   detailList!["FirstName"],
@@ -200,7 +195,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 25),
+                padding: const EdgeInsets.only(top: 25),
                 child: detailInfo(
                   'Last Name',
                   detailList!["LastName"] == null
@@ -212,27 +207,27 @@ class VisitorDataOverlay extends ModalRoute<void> {
           ],
         ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: const EdgeInsets.only(top: 30),
           child: detailInfo(
             'Gender',
-            detailList!["Gender"].toString(),
+            detailList!["Gender"] ?? "",
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: const EdgeInsets.only(top: 30),
           child: detailInfo(
             'Email',
             detailList!["Email"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: const EdgeInsets.only(top: 30),
           child: detailInfo(
             'Phone Number',
-            detailList!["PhoneNumber"].toString(),
+            detailList!["PhoneNumber"] ?? "",
           ),
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.symmetric(vertical: 15),
           child: Divider(
             thickness: 2,
@@ -245,20 +240,20 @@ class VisitorDataOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 0),
+                padding: const EdgeInsets.only(top: 0),
                 child: detailInfo(
                   'Origin Company',
-                  detailList!["CompanyName"],
+                  detailList!["CompanyName"] ?? "",
                 ),
               ),
             ),
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 0),
+                padding: const EdgeInsets.only(top: 0),
                 child: detailInfo(
                   'Visit Reason',
-                  detailList!["VisitReason"],
+                  detailList!["VisitReason"] ?? "",
                 ),
               ),
             ),
@@ -270,7 +265,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 30,
                 ),
                 child: detailInfo(
@@ -282,7 +277,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: EdgeInsets.only(top: 30),
+                padding: const EdgeInsets.only(top: 30),
                 child: detailInfo(
                   'Meeting With',
                   detailList!["MeetingWith"],
@@ -312,7 +307,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 40,
         ),
       ],
@@ -325,41 +320,41 @@ class VisitorDataOverlay extends ModalRoute<void> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 20),
           child: detailInfo(
             'First Name',
             detailList["FirstName"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 15),
+          padding: const EdgeInsets.only(top: 15),
           child: detailInfo(
             'Last Name',
-            detailList["LastName"],
+            detailList["LastName"] ?? "",
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 15),
+          padding: const EdgeInsets.only(top: 15),
           child: detailInfo(
             'Gender',
-            detailList["Gender"],
+            detailList["Gender"] ?? "",
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 15),
+          padding: const EdgeInsets.only(top: 15),
           child: detailInfo(
             'Email',
-            detailList["Email"],
+            detailList["Email"] ?? "",
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 15),
+          padding: const EdgeInsets.only(top: 15),
           child: detailInfo(
             'Phone Number',
-            detailList["PhoneNumber"].toString(),
+            detailList["PhoneNumber"] ?? "",
           ),
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(top: 10),
           child: Divider(
             thickness: 2,
@@ -367,35 +362,35 @@ class VisitorDataOverlay extends ModalRoute<void> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 10),
           child: detailInfo(
             'Origin Company',
-            detailList["CompanyName"],
+            detailList["CompanyName"] ?? "",
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 15),
+          padding: const EdgeInsets.only(top: 15),
           child: detailInfo(
             'Visit Reason',
-            detailList["VisitReason"],
+            detailList["VisitReason"] ?? "",
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 15),
+          padding: const EdgeInsets.only(top: 15),
           child: detailInfo(
             'Visit Date',
             detailList["VisitTime"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 15),
+          padding: const EdgeInsets.only(top: 15),
           child: detailInfo(
             'Meeting With',
             detailList["MeetingWith"],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 40),
+          padding: const EdgeInsets.only(top: 40),
           child: Center(
             child: SizedBox(
               // width: 400,
@@ -410,7 +405,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 40,
         ),
       ],
@@ -423,7 +418,7 @@ class VisitorDataOverlay extends ModalRoute<void> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '$label',
+            label,
             style: TextStyle(
               fontSize: textSizeTitleContent,
               fontWeight: FontWeight.w300,
@@ -432,10 +427,10 @@ class VisitorDataOverlay extends ModalRoute<void> {
           ),
           Padding(
             padding: Responsive.isDesktop(navKey.currentState!.context)
-                ? EdgeInsets.only(top: 10)
-                : EdgeInsets.only(top: 7),
+                ? const EdgeInsets.only(top: 10)
+                : const EdgeInsets.only(top: 7),
             child: Text(
-              '$content',
+              content,
               style: TextStyle(
                 fontSize: textSizeContent,
                 fontWeight: FontWeight.w700,

@@ -31,13 +31,7 @@ Future getVisitorData(String visitorId) async {
 
   var response = await http.post(url, headers: requestHeader, body: bodySend);
   var data = json.decode(response.body);
-
-  // if (data['Status'] == '200') {
-  //   isLoading = false;
-  // } else {
-  //   isLoading = false;
-  // }
-  // setState(() {});
+  // print(data);
   return data['Data'];
 }
 

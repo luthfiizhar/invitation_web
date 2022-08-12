@@ -29,7 +29,8 @@ class InteractiveTextState extends State<InteractiveText> {
         child: Align(
           alignment: Alignment.center,
           child: Container(
-            padding: EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 8),
+            padding:
+                const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 8),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: _hovering

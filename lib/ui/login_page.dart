@@ -80,6 +80,9 @@ class _WelcomePageState extends State<WelcomePage> {
           value['Data']['FirstLogin']
               ? Navigator.of(context).pushReplacementNamed(routeEmployee)
               : Navigator.of(context).pushReplacementNamed(routeInvite);
+        } else {
+          Navigator.of(context).push(
+              NotifProcessDialog(message: value['Message'], isSuccess: false));
         }
       });
       // print(userName);
