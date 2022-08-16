@@ -114,6 +114,10 @@ class ChangeVisitDialog extends ModalRoute<void> {
   String? startDate;
   String? endDate;
 
+  bool endDateEnable = false;
+
+  DateTime? startDateOriginal;
+
   Future changeVisitTime(String eventId, String start, String end) async {
     print('$start');
     print('$end');
@@ -272,8 +276,8 @@ class ChangeVisitDialog extends ModalRoute<void> {
                             child: Padding(
                               padding: EdgeInsets.only(top: 30),
                               child: Responsive.isDesktop(context)
-                                  ? inputDateContainer()
-                                  : inputDateContainerMobile(),
+                                  ? inputDateContainer(setState)
+                                  : inputDateContainerMobile(setState),
                             ),
                           ),
                           Padding(
@@ -343,16 +347,16 @@ class ChangeVisitDialog extends ModalRoute<void> {
     );
   }
 
-  Future _selectDate(TextEditingController controller) async {
+  Future _selectStartDate() async {
     DateTime? picked = await showDatePicker(
       context: navKey.currentState!.context,
-      initialDate: new DateTime.now(),
-      firstDate: new DateTime.now(),
-      lastDate: new DateTime(2100),
+      initialDate: startDate != "" ? DateTime.now() : DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: eerieBlack, // <-- SEE HERE
               onPrimary: silver, // <-- SEE HERE
               onSurface: eerieBlack, // <-- SEE HERE
@@ -368,10 +372,81 @@ class ChangeVisitDialog extends ModalRoute<void> {
       },
     );
     String formattedDate = DateFormat('d MMMM yyyy').format(picked!);
-    if (picked != null) setState(() => controller.text = formattedDate);
+    if (picked != null)
+      setState(() {
+        _startDate.text = formattedDate;
+        startDateOriginal = picked;
+      });
   }
 
-  Widget inputDateContainerMobile() {
+  Future _selectDate(
+      TextEditingController controller, DateTime startDate) async {
+    // if (startDate != "") {
+    // DateFormat format = DateFormat();
+    // var start = DateTime.tryParse(startDate);
+    print(startDate.toString());
+    // }
+
+    DateTime? picked = await showDatePicker(
+      context: navKey.currentState!.context,
+      initialDate: startDate,
+      firstDate: startDate,
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: eerieBlack, // <-- SEE HERE
+              onPrimary: silver, // <-- SEE HERE
+              onSurface: eerieBlack, // <-- SEE HERE
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: eerieBlack, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    String formattedDate = DateFormat('d MMMM yyyy').format(picked!);
+    if (picked != null)
+      setState(() {
+        controller.text = formattedDate;
+      });
+    // if (startDate == "") String startDateOriginal = picked.toString();
+  }
+
+  // Future _selectDate(TextEditingController controller) async {
+  //   DateTime? picked = await showDatePicker(
+  //     context: navKey.currentState!.context,
+  //     initialDate: new DateTime.now(),
+  //     firstDate: new DateTime.now(),
+  //     lastDate: new DateTime(2100),
+  //     builder: (context, child) {
+  //       return Theme(
+  //         data: Theme.of(context).copyWith(
+  //           colorScheme: ColorScheme.light(
+  //             primary: eerieBlack, // <-- SEE HERE
+  //             onPrimary: silver, // <-- SEE HERE
+  //             onSurface: eerieBlack, // <-- SEE HERE
+  //           ),
+  //           textButtonTheme: TextButtonThemeData(
+  //             style: TextButton.styleFrom(
+  //               primary: eerieBlack, // button text color
+  //             ),
+  //           ),
+  //         ),
+  //         child: child!,
+  //       );
+  //     },
+  //   );
+  //   String formattedDate = DateFormat('d MMMM yyyy').format(picked!);
+  //   if (picked != null) setState(() => controller.text = formattedDate);
+  // }
+
+  Widget inputDateContainerMobile(StateSetter setter) {
     return Container(
       padding: EdgeInsets.only(top: 0),
       child: Column(
@@ -410,7 +485,10 @@ class ChangeVisitDialog extends ModalRoute<void> {
                       onTap: () {
                         FocusScope.of(navKey.currentState!.context)
                             .requestFocus(new FocusNode());
-                        _selectDate(_startDate);
+                        _selectStartDate().then((value) {
+                          endDateEnable = true;
+                          setter(() {});
+                        });
                       },
                       onSaved: (value) {
                         setState(() {
@@ -493,12 +571,13 @@ class ChangeVisitDialog extends ModalRoute<void> {
                       cursorColor: onyxBlack,
                       focusNode: endDateNode,
                       controller: _endDate,
+                      enabled: endDateEnable,
                       validator: (value) =>
                           value == "" ? "This field is required" : null,
                       onTap: () {
                         FocusScope.of(navKey.currentState!.context)
                             .requestFocus(new FocusNode());
-                        _selectDate(_endDate);
+                        _selectDate(_endDate, startDateOriginal!);
                       },
                       onSaved: (value) {
                         endDate = _endDate.text;
@@ -555,7 +634,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
     );
   }
 
-  Widget inputDateContainer() {
+  Widget inputDateContainer(StateSetter setter) {
     return Container(
       padding: EdgeInsets.only(top: 0),
       // width: 700,
@@ -598,7 +677,10 @@ class ChangeVisitDialog extends ModalRoute<void> {
                         onTap: () {
                           FocusScope.of(navKey.currentState!.context)
                               .requestFocus(new FocusNode());
-                          _selectDate(_startDate);
+                          _selectStartDate().then((value) {
+                            endDateEnable = true;
+                            setter(() {});
+                          });
                         },
                         onSaved: (value) {
                           setState(() {
@@ -681,6 +763,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                       padding: EdgeInsets.zero,
                       child: TextFormField(
                         keyboardType: TextInputType.none,
+                        enabled: endDateEnable,
                         cursorColor: onyxBlack,
                         focusNode: endDateNode,
                         controller: _endDate,
@@ -689,7 +772,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                         onTap: () {
                           FocusScope.of(navKey.currentState!.context)
                               .requestFocus(new FocusNode());
-                          _selectDate(_endDate);
+                          _selectDate(_endDate, startDateOriginal!);
                         },
                         onSaved: (value) {
                           endDate = _endDate.text;
@@ -699,7 +782,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                           isCollapsed: true,
                           hintText: '',
                           hintStyle: TextStyle(
-                            fontSize: 24,
+                            fontSize: 20,
                             fontWeight: FontWeight.w400,
                           ),
                           contentPadding: EdgeInsets.only(

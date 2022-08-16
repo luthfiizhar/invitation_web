@@ -7,6 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
 import 'package:navigation_example/constant/functions.dart';
+import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
@@ -16,6 +17,7 @@ import 'package:navigation_example/widgets/navigation_bar.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class ConfirmInvitePage extends StatefulWidget {
   const ConfirmInvitePage({Key? key}) : super(key: key);
@@ -81,7 +83,19 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
       setState(() {
         // contohData = data['Data']['Invitations'];
       });
-    } else {}
+    }
+    if (data['Status'] == '401') {
+      // Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+      //     .setIsExpired(false);
+      Navigator.of(context)
+          .push(NotifProcessDialog(isSuccess: false, message: data['Message']))
+          .then((value) {
+        logout().then((value) {
+          Navigator.pushReplacementNamed(
+              navKey.currentState!.context, routeLogin);
+        });
+      });
+    }
     return data;
   }
 
@@ -296,8 +310,8 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
   Widget desktopLayoutConfirmPage(BuildContext context) {
     return Padding(
       padding: Responsive.isBigDesktop(context)
-          ? EdgeInsets.only(top: 5, left: 500, right: 500, bottom: 20)
-          : EdgeInsets.only(top: 5, left: 350, right: 350, bottom: 20),
+          ? EdgeInsets.only(top: 25, left: 500, right: 500, bottom: 20)
+          : EdgeInsets.only(top: 25, left: 350, right: 350, bottom: 20),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15), color: eerieBlack),
@@ -435,7 +449,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
 
   Widget mobileLayoutConfirmPage(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 20),
+      padding: EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 20),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15), color: eerieBlack),

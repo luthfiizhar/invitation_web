@@ -90,14 +90,19 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
     var box = await Hive.openBox('userLogin');
     box.delete('name');
     box.delete('nip');
-    box.delete('jwtToken');
+    // box.delete('jwtToken');
+    box.put('jwtToken', "");
+    Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+        .setIsExpired(true);
+    Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+        .setJwt("");
   }
 
   Widget build(BuildContext context) {
     return Container(
       // padding: const EdgeInsets.only(right: 30, bottom: 25),
       color: scaffoldBg,
-      height: 100.0,
+      // height: 90.0,
       child: Column(
         children: [
           Padding(
@@ -171,21 +176,6 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
               ),
             ),
           ),
-          notif == 0
-              ? Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.94,
-                    height: 1,
-                    decoration: BoxDecoration(
-                      // color: Colors.blue,
-                      border: Border(
-                        bottom: BorderSide(color: eerieBlack, width: 1),
-                      ),
-                    ),
-                  ),
-                )
-              : SizedBox(),
           notif! > 0
               ? Container(
                   height: 30,
@@ -214,6 +204,21 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
                                     onHighlight(routeMyInvite);
                                   })
                           ]),
+                    ),
+                  ),
+                )
+              : SizedBox(),
+          notif == 0
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.94,
+                    height: 1,
+                    decoration: BoxDecoration(
+                      // color: Colors.blue,
+                      border: Border(
+                        bottom: BorderSide(color: eerieBlack, width: 1),
+                      ),
                     ),
                   ),
                 )

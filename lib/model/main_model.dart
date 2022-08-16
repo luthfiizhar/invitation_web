@@ -5,9 +5,23 @@ class MainModel extends ChangeNotifier {
   int? _indexDrawer = 0;
   String? _listVisitor = "";
   String _listDetailVisitor = "";
+  bool _isExpired = true;
+  String _jwt = "";
 
   String get listInvite => _listInvite!;
   String get listDetailVisitor => _listDetailVisitor;
+  bool get isExpired => _isExpired;
+  String get jwt => _jwt;
+
+  void setIsExpired(bool value) {
+    _isExpired = value;
+    notifyListeners();
+  }
+
+  void setJwt(String value) {
+    _jwt = value;
+    notifyListeners();
+  }
 
   void setListDetailVisitor(String value) {
     _listDetailVisitor = value;

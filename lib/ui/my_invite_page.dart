@@ -392,8 +392,8 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
               ),
               Padding(
                 padding: Responsive.isBigDesktop(context)
-                    ? EdgeInsets.only(top: 5, left: 300, right: 300)
-                    : EdgeInsets.only(top: 5, left: 100, right: 100),
+                    ? EdgeInsets.only(top: 25, left: 300, right: 300)
+                    : EdgeInsets.only(top: 25, left: 100, right: 100),
                 child: Container(
                   // color: Colors.blue,
                   child: Column(
@@ -573,7 +573,7 @@ class _MyInvitationPageState extends State<MyInvitationPage> {
             [
               NavigationBarMobile(),
               Padding(
-                padding: EdgeInsets.only(top: 10, left: 30, right: 30),
+                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
                 child: Container(
                   // color: Colors.blue,
                   child: Column(

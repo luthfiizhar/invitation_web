@@ -3,9 +3,11 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/drawer_item.dart';
 import 'package:navigation_example/widgets/navigation_item.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatefulWidget {
   // const CustomDrawer({Key? key}) : super(key: key);
@@ -50,7 +52,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
     var box = await Hive.openBox('userLogin');
     box.delete('name');
     box.delete('nip');
-    box.delete('jwtToken');
+    // box.delete('jwtToken');
+    box.put('jwtToken', "");
+    Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+        .setIsExpired(true);
+    Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+        .setJwt("");
   }
 
   @override

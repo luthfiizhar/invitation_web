@@ -166,8 +166,8 @@ class _EmployeePageState extends State<EmployeePage> {
                       Container(
                         width: Responsive.isBigDesktop(context) ? 575 : 575,
                         padding: Responsive.isBigDesktop(context)
-                            ? const EdgeInsets.only(top: 0, left: 0, right: 0)
-                            : const EdgeInsets.only(top: 0, left: 0, right: 0),
+                            ? const EdgeInsets.only(top: 25, left: 0, right: 0)
+                            : const EdgeInsets.only(top: 25, left: 0, right: 0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -358,7 +358,7 @@ class _EmployeePageState extends State<EmployeePage> {
                 index: 2,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10, left: 35, right: 35),
+                padding: const EdgeInsets.only(top: 20, left: 35, right: 35),
                 child: Form(
                   key: _formKey,
                   child: Container(

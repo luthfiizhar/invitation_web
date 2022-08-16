@@ -3,12 +3,20 @@ import 'dart:convert';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/model/main_model.dart';
+import 'package:navigation_example/routes/routes.dart';
+import 'package:provider/provider.dart';
 
 Future logout() async {
   var box = await Hive.openBox('userLogin');
   box.delete('name');
   box.delete('nip');
-  box.delete('jwtToken');
+  // box.delete('jwtToken');
+  box.put('jwtToken', "");
+  Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+      .setIsExpired(true);
+  Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+      .setJwt("");
 }
 
 Future getVisitorData(String visitorId) async {

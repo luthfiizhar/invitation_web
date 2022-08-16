@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 // import 'package:navigation_example/app_view.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/model/main_model.dart';
 // import 'package:navigation_example/login.dart';
 import 'package:navigation_example/my_app.dart';
 // import 'package:navigation_example/routes/router_generator.dart';
 // import 'package:navigation_example/routes/routes.dart';
 import 'package:http/http.dart' as http;
+import 'package:navigation_example/routes/routes.dart';
+import 'package:provider/provider.dart';
 
 String? nip;
 String? name;
@@ -20,7 +23,7 @@ loginCheck() async {
 
   name = box.get('name') != "" ? box.get('name') : "";
   nip = box.get('nip') != "" ? box.get('nip') : "";
-  jwtToken = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
+  jwtToken = box.get('jwTtoken') != "" ? box.get('jwtToken') : null;
 
   print("jwt: " + jwtToken.toString());
 }
@@ -51,18 +54,24 @@ jwtCheck() async {
   print(data);
 
   if (data['Status'] == "200") {
+    // Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+    //     .setIsExpired(false);
     isExpired = false;
+    jwtToken = jwt;
   } else {
+    // Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+    //     .setIsExpired(true);
     isExpired = true;
+    jwtToken = null;
     // Navigator.of(navKey.currentState!.context).pushReplacementNamed(routeLogin);
   }
 }
 
 void main() async {
   await Hive.initFlutter();
-  loginCheck().then((_) {
-    jwtCheck().then((_) {
-      runApp(MyApp());
-    });
-  });
+  // loginCheck().then((_) {
+  // jwtCheck().then((_) {
+  runApp(MyApp());
+  // });
+  // });
 }
