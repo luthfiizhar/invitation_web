@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 
 String? nip;
 String? name;
-String? jwtToken;
+String? jwtToken = "";
 bool? isExpired = true;
 bool? isLoggedIn = false;
 loginCheck() async {
@@ -23,7 +23,9 @@ loginCheck() async {
 
   name = box.get('name') != "" ? box.get('name') : "";
   nip = box.get('nip') != "" ? box.get('nip') : "";
-  jwtToken = box.get('jwTtoken') != "" ? box.get('jwtToken') : null;
+  jwtToken = box.get('jwTtoken') != "" || box.get('jwTtoken') != null
+      ? box.get('jwtToken')
+      : "";
 
   print("jwt: " + jwtToken.toString());
 }
@@ -44,7 +46,7 @@ jwtCheck() async {
     'AppToken': 'mDMgDh4Eq9B0KRJLSOFI',
     'Content-Type': 'application/json'
   };
-  var bodySend = """ 
+  var bodySend = """
     """;
 
   print(bodySend);
@@ -56,22 +58,25 @@ jwtCheck() async {
   if (data['Status'] == "200") {
     // Provider.of<MainModel>(navKey.currentState!.context, listen: false)
     //     .setIsExpired(false);
+    // Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+    //     .setJwt(jwtToken!);
     isExpired = false;
     jwtToken = jwt;
   } else {
     // Provider.of<MainModel>(navKey.currentState!.context, listen: false)
-    //     .setIsExpired(true);
+    //     .setJwt(jwtToken!);
     isExpired = true;
-    jwtToken = null;
+    jwtToken = "";
     // Navigator.of(navKey.currentState!.context).pushReplacementNamed(routeLogin);
   }
 }
 
 void main() async {
   await Hive.initFlutter();
-  // loginCheck().then((_) {
-  // jwtCheck().then((_) {
-  runApp(MyApp());
-  // });
-  // });
+  loginCheck().then((_) {
+    jwtCheck().then((_) {
+      runApp(ChangeNotifierProvider<MainModel>(
+          create: (context) => MainModel(), child: MyApp()));
+    });
+  });
 }

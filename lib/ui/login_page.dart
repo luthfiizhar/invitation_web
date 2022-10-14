@@ -9,6 +9,7 @@ import 'dart:html';
 import 'package:http/http.dart' as http;
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/main.dart';
 import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/my_app.dart';
 import 'package:navigation_example/responsive.dart';
@@ -80,11 +81,13 @@ class _WelcomePageState extends State<WelcomePage> {
         isLoading = false;
         setState(() {});
         if (value['Status'] == '200') {
+          jwtToken = value['Data']['Token'];
           model.setJwt(value['Data']['Token']);
           value['Data']['FirstLogin']
               ? Navigator.of(context).pushReplacementNamed(routeEmployee)
               : Navigator.of(context).pushReplacementNamed(routeInvite);
         } else {
+          jwtToken = "";
           Navigator.of(context).push(
               NotifProcessDialog(message: value['Message'], isSuccess: false));
         }
@@ -114,7 +117,23 @@ class _WelcomePageState extends State<WelcomePage> {
 
   FocusNode passNode = FocusNode();
 
-  final _formKey = new GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userNameNode.addListener(() {});
+    passNode.addListener(() {});
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    userNameNode.dispose();
+    passNode.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -290,10 +309,11 @@ class _WelcomePageState extends State<WelcomePage> {
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: 50, left: 15),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 50, left: 15),
                                                   child: Container(
-                                                    child: Text(
+                                                    child: const Text(
                                                       'Please login using HC Plus for using the site',
                                                       style: TextStyle(
                                                         fontSize: 22,

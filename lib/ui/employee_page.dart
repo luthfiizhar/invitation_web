@@ -316,7 +316,8 @@ class _EmployeePageState extends State<EmployeePage> {
                                                             routeInvite);
                                                   }
                                                 });
-                                              } else {
+                                              }
+                                              if (value['Status'] == "401") {
                                                 Navigator.of(context).push(
                                                     NotifProcessDialog(
                                                         isSuccess: false,

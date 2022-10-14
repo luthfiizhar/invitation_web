@@ -254,7 +254,12 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
                                                   isLoading = true;
                                                 },
                                               );
-                                              showConfirmDialog(context);
+                                              showConfirmDialog(context)
+                                                  .then((value) {
+                                                setState(() {
+                                                  isLoading = false;
+                                                });
+                                              });
                                               // print('aaa');
                                               // confirmDialog(context,
                                               //         'Are you sure the data is correct?', true)
@@ -431,7 +436,7 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
     } else {}
   }
 
-  showConfirmDialog(BuildContext context) {
+  Future showConfirmDialog(BuildContext context) {
     return confirmDialog(context, 'Are you sure the data is correct?', true)
         .then((value) {
       if (value) {
@@ -458,6 +463,8 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
       } else {
         clearVisitorData();
         print('cancel');
+        isLoading = false;
+        setState(() {});
       }
     });
   }

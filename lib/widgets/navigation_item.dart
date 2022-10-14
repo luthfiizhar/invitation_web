@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/interactive_drawer_item.dart';
 import 'package:navigation_example/widgets/interactive_nav_item.dart';
+import 'package:provider/provider.dart';
 
 class NavigationItem extends StatelessWidget {
   final String? title;
@@ -17,6 +19,7 @@ class NavigationItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Navigator.pushNamed(context, '$routeName');
+        Provider.of<MainModel>(context, listen: false).setPageRoute(routeName!);
         navKey.currentState!.pushReplacementNamed(routeName!);
         onHighlight!(routeName);
       },

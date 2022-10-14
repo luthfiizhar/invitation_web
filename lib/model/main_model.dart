@@ -7,11 +7,25 @@ class MainModel extends ChangeNotifier {
   String _listDetailVisitor = "";
   bool _isExpired = true;
   String _jwt = "";
+  String _pageRoute = "/";
+  bool _isLoggedIn = false;
 
   String get listInvite => _listInvite!;
   String get listDetailVisitor => _listDetailVisitor;
   bool get isExpired => _isExpired;
   String get jwt => _jwt;
+  String get pageRoute => _pageRoute;
+  bool get isLoggedIn => _isLoggedIn;
+
+  void setIsLoggedIn(bool value) {
+    _isLoggedIn = value;
+    notifyListeners();
+  }
+
+  void setPageRoute(String value) {
+    _pageRoute = value;
+    notifyListeners();
+  }
 
   void setIsExpired(bool value) {
     _isExpired = value;

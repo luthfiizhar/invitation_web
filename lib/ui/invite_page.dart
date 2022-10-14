@@ -135,6 +135,7 @@ class _InvitePageState extends State<InvitePage> {
       setState(() {
         _startDate.text = formattedDate;
         startDateOriginal = picked;
+        endDateEnable = true;
       });
   }
 

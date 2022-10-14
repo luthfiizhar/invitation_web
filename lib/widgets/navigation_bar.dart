@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/main.dart';
 import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/notification_dialog.dart';
@@ -88,6 +89,7 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
 
   Future logout() async {
     var box = await Hive.openBox('userLogin');
+    jwtToken = "";
     box.delete('name');
     box.delete('nip');
     // box.delete('jwtToken');
@@ -162,6 +164,7 @@ class _NavigationBarWebState extends State<NavigationBarWeb> {
                               onHighlight: onHighlight,
                               onTap: () {
                                 logout().then((value) {
+                                  // jwtToken = "";
                                   Navigator.pushReplacementNamed(
                                       navKey.currentState!.context, routeLogin);
                                 });

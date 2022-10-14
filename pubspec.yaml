@@ -40,7 +40,7 @@ dependencies:
   hive_flutter: ^1.1.0
   intl: ^0.17.0
   flutter_svg: ^1.1.1+1
-  advanced_datatable: ^0.0.8
+  # advanced_datatable: ^0.0.8
   provider: ^6.0.3
 
 dev_dependencies:

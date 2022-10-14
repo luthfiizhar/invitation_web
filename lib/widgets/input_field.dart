@@ -86,11 +86,11 @@ class _InputFieldState extends State<InputField> {
             focusNode: widget.focusNode,
             controller: widget.controller,
             onTap: () {
-              if (widget.focusNode!.hasFocus) {
-                widget.focusNode!.unfocus();
-              } else {
-                FocusScope.of(context).requestFocus(widget.focusNode);
-              }
+              // if (widget.focusNode!.hasFocus) {
+              //   widget.focusNode!.unfocus();
+              // } else {
+              //   FocusScope.of(context).requestFocus(widget.focusNode);
+              // }
             },
             onSaved: widget.onSaved,
             validator: widget.validator,

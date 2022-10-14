@@ -3,6 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/main.dart';
 import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/drawer_item.dart';
@@ -49,6 +50,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   Future logout() async {
+    jwtToken = "";
     var box = await Hive.openBox('userLogin');
     box.delete('name');
     box.delete('nip');
