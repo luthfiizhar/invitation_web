@@ -145,9 +145,23 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                       getVisitorData(visitorId).then((value) {
                         dynamic listDetail = json.encode(value);
 
-                        Navigator.of(context).push(
+                        Navigator.of(context)
+                            .push(
                           VisitorConfirmationOverlay(listDetail: listDetail),
-                        );
+                        )
+                            .then((value) {
+                          getInvitationDetail(eventID!).then((value) {
+                            setter(
+                              () {
+                                isLoading = false;
+                                list = value['Visitors'];
+                                totalPerson = list.length.toString();
+                                visitorList = value['Visitors'];
+                                totalPerson = visitorList!.length.toString();
+                              },
+                            );
+                          });
+                        });
                       });
                     }
                   }
