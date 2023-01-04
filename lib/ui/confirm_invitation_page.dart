@@ -74,29 +74,35 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
 
     print(bodySend);
 
-    var response = await http.post(url, headers: requestHeader, body: bodySend);
-    var data = json.decode(response.body);
-    print(data);
+    try {
+      var response =
+          await http.post(url, headers: requestHeader, body: bodySend);
+      var data = json.decode(response.body);
+      print(data);
 
-    // final response = await http.get(requestUri);
-    if (data['Status'] == '200') {
-      setState(() {
-        // contohData = data['Data']['Invitations'];
-      });
+      // final response = await http.get(requestUri);
+      // if (data['Status'] == '200') {
+      //   setState(() {
+      //     // contohData = data['Data']['Invitations'];
+      //   });
+      // }
+      // if (data['Status'] == '401') {
+      //   // Provider.of<MainModel>(navKey.currentState!.context, listen: false)
+      //   //     .setIsExpired(false);
+      //   Navigator.of(context)
+      //       .push(
+      //           NotifProcessDialog(isSuccess: false, message: data['Message']))
+      //       .then((value) {
+      //     logout().then((value) {
+      //       Navigator.pushReplacementNamed(
+      //           navKey.currentState!.context, routeLogin);
+      //     });
+      //   });
+      // }
+      return data;
+    } on Error catch (e) {
+      return e;
     }
-    if (data['Status'] == '401') {
-      // Provider.of<MainModel>(navKey.currentState!.context, listen: false)
-      //     .setIsExpired(false);
-      Navigator.of(context)
-          .push(NotifProcessDialog(isSuccess: false, message: data['Message']))
-          .then((value) {
-        logout().then((value) {
-          Navigator.pushReplacementNamed(
-              navKey.currentState!.context, routeLogin);
-        });
-      });
-    }
-    return data;
   }
 
   @override
@@ -116,27 +122,29 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
   Widget build(BuildContext context) {
     return Container(
       color: Responsive.isDesktop(context) ? null : eerieBlack,
-      child: CustomScrollView(slivers: [
-        SliverList(
-          delegate: SliverChildListDelegate([
-            Responsive.isDesktop(context)
-                ? NavigationBarWeb(
-                    index: 0,
-                  )
-                : NavigationBarMobile(
-                    index: 0,
-                  ),
-            Responsive.isDesktop(context)
-                ? desktopLayoutConfirmPage(context)
-                : mobileLayoutConfirmPage(context),
-          ]),
-        ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Align(
-              alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
-        )
-      ]),
+      child: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Responsive.isDesktop(context)
+                  ? NavigationBarWeb(
+                      index: 0,
+                    )
+                  : NavigationBarMobile(
+                      index: 0,
+                    ),
+              Responsive.isDesktop(context)
+                  ? desktopLayoutConfirmPage(context)
+                  : mobileLayoutConfirmPage(context),
+            ]),
+          ),
+          const SliverFillRemaining(
+            hasScrollBody: false,
+            child: Align(
+                alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
+          )
+        ],
+      ),
     );
     // return SingleChildScrollView(
     //   child: Column(
@@ -283,6 +291,9 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
               Navigator.pushReplacementNamed(context, routeInvite);
             });
           } else if (value['Status'] == "401") {
+            setState(() {
+              isLoading = false;
+            });
             Navigator.of(context)
                 .push(NotifProcessDialog(
                     isSuccess: false, message: value['Message']))
@@ -292,6 +303,20 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                     navKey.currentState!.context, routeLogin);
               });
               // Navigator.of(context).pop
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+            Navigator.of(context)
+                .push(NotifProcessDialog(
+                    isSuccess: false, message: value['Message']))
+                .then((value) {
+              // logout().then((value) {
+              //   Navigator.pushReplacementNamed(
+              //       navKey.currentState!.context, routeLogin);
+              // });
+              Navigator.of(context).pop(false);
             });
           }
 
@@ -304,6 +329,15 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
         // clearVisitorData();
         // print('cancel');
       }
+    }).onError((error, stackTrace) {
+      Navigator.of(context)
+          .push(
+            NotifProcessDialog(
+              isSuccess: true,
+              message: error.toString(),
+            ),
+          )
+          .then((value) {});
     });
   }
 
@@ -323,6 +357,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
               child: Text(
                 'Confirm Invitation',
                 style: TextStyle(
+                    fontFamily: 'Helvetica',
                     fontSize: 36,
                     fontWeight: FontWeight.w700,
                     color: scaffoldBg),
