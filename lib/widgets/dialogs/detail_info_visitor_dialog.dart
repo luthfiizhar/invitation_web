@@ -97,134 +97,137 @@ class VisitorConfirmationOverlay extends ModalRoute<void> {
       Animation<double> secondaryAnimation) {
     // dynamic detail = listDetail;
     // print(detail);
-    return Padding(
-      padding: Responsive.isDesktop(context)
-          ? const EdgeInsets.all(15.0)
-          : const EdgeInsets.only(top: 15, bottom: 50),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          var detailList = json.decode(listDetail!);
-          return Center(
-            child: Container(
-              width: Responsive.isDesktop(context) ? 600 : null,
-              decoration: BoxDecoration(
-                borderRadius: Responsive.isDesktop(context)
-                    ? BorderRadius.circular(15)
-                    : BorderRadius.circular(10),
-                color: scaffoldBg,
-              ),
-              child: Stack(
-                children: [
-                  ScrollConfiguration(
-                    behavior: ScrollConfiguration.of(context)
-                        .copyWith(scrollbars: false),
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: Responsive.isDesktop(context)
-                            ? EdgeInsets.only(
-                                left: paddingSampingDialog,
-                                right: paddingSampingDialog,
-                                top: paddingAtasDialog)
-                            : const EdgeInsets.only(
-                                left: 25, right: 25, top: 25),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: Responsive.isDesktop(context)
-                                  ? const EdgeInsets.only(bottom: 25)
-                                  : const EdgeInsets.only(bottom: 15),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Visitor Verification',
-                                    style: dialogTitle,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Wrap(
-                              children: [
-                                Row(
+    return Material(
+      color: Colors.transparent,
+      child: Padding(
+        padding: Responsive.isDesktop(context)
+            ? const EdgeInsets.all(15.0)
+            : const EdgeInsets.only(top: 15, bottom: 50),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            var detailList = json.decode(listDetail!);
+            return Center(
+              child: Container(
+                width: Responsive.isDesktop(context) ? 600 : null,
+                decoration: BoxDecoration(
+                  borderRadius: Responsive.isDesktop(context)
+                      ? BorderRadius.circular(15)
+                      : BorderRadius.circular(10),
+                  color: white,
+                ),
+                child: Stack(
+                  children: [
+                    ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(scrollbars: false),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: Responsive.isDesktop(context)
+                              ? EdgeInsets.only(
+                                  left: paddingSampingDialog,
+                                  right: paddingSampingDialog,
+                                  top: paddingAtasDialog)
+                              : const EdgeInsets.only(
+                                  left: 25, right: 25, top: 25),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: Responsive.isDesktop(context)
+                                    ? const EdgeInsets.only(bottom: 25)
+                                    : const EdgeInsets.only(bottom: 15),
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Flexible(
-                                      child: Text(
-                                        'Please confirm your visitor data before they comes into Head Office.',
-                                        style: pageSubtitle,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.clip,
-                                      ),
+                                    Text(
+                                      'Visitor Verification',
+                                      style: dialogTitle,
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 25),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              ),
+                              Wrap(
                                 children: [
-                                  detailList!["VisitorPhoto"] == null
-                                      ? Container(
-                                          height: Responsive.isDesktop(
-                                                  navKey.currentState!.context)
-                                              ? 125
-                                              : 85,
-                                          width: Responsive.isDesktop(
-                                                  navKey.currentState!.context)
-                                              ? 125
-                                              : 85,
-                                          child: Image.asset(
-                                              'assets/avatar_male.png'),
-                                        )
-                                      : CircleAvatar(
-                                          backgroundColor: scaffoldBg,
-                                          radius: Responsive.isDesktop(
-                                                  navKey.currentState!.context)
-                                              ? 100
-                                              : 75,
-                                          backgroundImage: MemoryImage(
-                                            const Base64Decoder().convert(
-                                                detailList['VisitorPhoto']!
-                                                    .toString()
-                                                    .split(',')
-                                                    .last),
-                                          ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          'Please confirm your visitor data before they comes into Head Office.',
+                                          style: pageSubtitle,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.clip,
                                         ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ),
-                            //Content
-                            Responsive.isDesktop(context)
-                                ? desktopLayout(context, listDetail!)
-                                : mobileLayout(context, listDetail!),
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.only(top: 25),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    detailList!["VisitorPhoto"] == null
+                                        ? Container(
+                                            height: Responsive.isDesktop(navKey
+                                                    .currentState!.context)
+                                                ? 125
+                                                : 85,
+                                            width: Responsive.isDesktop(navKey
+                                                    .currentState!.context)
+                                                ? 125
+                                                : 85,
+                                            child: Image.asset(
+                                                'assets/avatar_male.png'),
+                                          )
+                                        : CircleAvatar(
+                                            backgroundColor: scaffoldBg,
+                                            radius: Responsive.isDesktop(navKey
+                                                    .currentState!.context)
+                                                ? 100
+                                                : 75,
+                                            backgroundImage: MemoryImage(
+                                              const Base64Decoder().convert(
+                                                  detailList['VisitorPhoto']!
+                                                      .toString()
+                                                      .split(',')
+                                                      .last),
+                                            ),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                              //Content
+                              Responsive.isDesktop(context)
+                                  ? desktopLayout(context, listDetail!)
+                                  : mobileLayout(context, listDetail!),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    right: 20,
-                    top: 20,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop(false);
-                      },
-                      child: Container(
-                        child: const Icon(
-                          Icons.close,
-                          size: 30,
+                    Positioned(
+                      right: 20,
+                      top: 20,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop(false);
+                        },
+                        child: Container(
+                          child: const Icon(
+                            Icons.close,
+                            size: 30,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

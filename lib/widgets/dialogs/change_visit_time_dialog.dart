@@ -6,10 +6,12 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/constant/text_style.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
 import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
+import 'package:navigation_example/widgets/input_field.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
 import 'package:universal_html/html.dart' as html;
@@ -147,7 +149,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
     return data['Status'];
   }
 
-  final _formKey = new GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   @override
   // TODO: implement barrierColor
   Color? get barrierColor => Colors.black.withOpacity(0.1);
@@ -219,130 +221,120 @@ class ChangeVisitDialog extends ModalRoute<void> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    // TODO: implement buildPage
-
-    return Padding(
-      padding: Responsive.isDesktop(context)
-          ? EdgeInsets.all(15.0)
-          : EdgeInsets.only(top: 15, bottom: 15),
-      child: StatefulBuilder(
-        builder: (context, setState) {
-          return Center(
-            child: SingleChildScrollView(
-              child: Container(
-                width: 650,
-                decoration: BoxDecoration(
-                  borderRadius: Responsive.isDesktop(context)
-                      ? BorderRadius.circular(15)
-                      : BorderRadius.circular(10),
-                  color: scaffoldBg,
-                ),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: Responsive.isDesktop(context)
-                          ? EdgeInsets.only(left: 50, right: 50, top: 40)
-                          : EdgeInsets.only(left: 25, right: 25, top: 25),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        // mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.end,
-                          //   children: [
-                          //     TextButton.icon(
-                          //       onPressed: () {
-                          //         Navigator.of(context).pop(false);
-                          //       },
-                          //       icon: Icon(
-                          //         Icons.close,
-                          //         color: eerieBlack,
-                          //       ),
-                          //       label: Text(''),
-                          //     ),
-                          //   ],
-                          // ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Change Visit Time',
-                                style: dialogTitle,
+    return Material(
+      color: Colors.transparent,
+      child: Padding(
+        padding: Responsive.isDesktop(context)
+            ? const EdgeInsets.all(15.0)
+            : const EdgeInsets.only(top: 15, bottom: 15),
+        child: StatefulBuilder(
+          builder: (context, setState) {
+            return Center(
+              child: SingleChildScrollView(
+                child: Container(
+                  width: 650,
+                  decoration: BoxDecoration(
+                    borderRadius: Responsive.isDesktop(context)
+                        ? BorderRadius.circular(15)
+                        : BorderRadius.circular(10),
+                    color: white,
+                  ),
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: Responsive.isDesktop(context)
+                            ? const EdgeInsets.only(
+                                left: 50, right: 50, top: 40)
+                            : const EdgeInsets.only(
+                                left: 25, right: 25, top: 25),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Change Visit Time',
+                                  style: dialogTitle,
+                                ),
+                              ],
+                            ),
+                            Form(
+                              key: _formKey,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 30),
+                                child: Responsive.isDesktop(context)
+                                    ? inputDateContainer(setState)
+                                    : inputDateContainerMobile(setState),
                               ),
-                            ],
-                          ),
-                          Form(
-                            key: _formKey,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 30),
-                              child: Responsive.isDesktop(context)
-                                  ? inputDateContainer(setState)
-                                  : inputDateContainerMobile(setState),
                             ),
-                          ),
-                          Padding(
-                            padding: Responsive.isDesktop(context)
-                                ? EdgeInsets.only(top: 60, bottom: 40)
-                                : EdgeInsets.only(top: 30, bottom: 25),
-                            child: Center(
-                              child: isLoading
-                                  ? CircularProgressIndicator(
-                                      color: eerieBlack,
-                                    )
-                                  : SizedBox(
-                                      width: Responsive.isBigDesktop(context)
-                                          ? 250
-                                          : null,
-                                      height: 50,
-                                      child: RegularButton(
-                                        onTap: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            _formKey.currentState!.save();
-                                            setState(
-                                              () {
-                                                isLoading = true;
-                                              },
-                                            );
-                                            print(startDate);
-                                            print(endDate);
-                                            print(eventID);
-                                            showConfirmDialog(eventID!,
-                                                _startDate.text, _endDate.text);
-                                          }
-                                        },
-                                        title: 'Confirm',
-                                        sizeFont: Responsive.isDesktop(context)
-                                            ? 24
-                                            : 16,
+                            Padding(
+                              padding: Responsive.isDesktop(context)
+                                  ? const EdgeInsets.only(top: 60, bottom: 40)
+                                  : const EdgeInsets.only(top: 30, bottom: 25),
+                              child: Center(
+                                child: isLoading
+                                    ? const CircularProgressIndicator(
+                                        color: eerieBlack,
+                                      )
+                                    : SizedBox(
+                                        width: Responsive.isBigDesktop(context)
+                                            ? 250
+                                            : null,
+                                        height: 50,
+                                        child: RegularButton(
+                                          onTap: () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              _formKey.currentState!.save();
+                                              setState(
+                                                () {
+                                                  isLoading = true;
+                                                },
+                                              );
+                                              print(startDate);
+                                              print(endDate);
+                                              print(eventID);
+                                              showConfirmDialog(
+                                                  eventID!,
+                                                  _startDate.text,
+                                                  _endDate.text);
+                                            }
+                                          },
+                                          title: 'Confirm',
+                                          sizeFont:
+                                              Responsive.isDesktop(context)
+                                                  ? 24
+                                                  : 16,
+                                        ),
                                       ),
-                                    ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      right: 20,
-                      top: 20,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        child: Container(
-                          child: Icon(
-                            Icons.close,
-                            size: 30,
+                      Positioned(
+                        right: 20,
+                        top: 20,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop(false);
+                          },
+                          child: Container(
+                            child: const Icon(
+                              Icons.close,
+                              size: 30,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -402,7 +394,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                primary: eerieBlack, // button text color
+                foregroundColor: eerieBlack, // button text color
               ),
             ),
           ),
@@ -462,7 +454,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                       padding: const EdgeInsets.only(left: 20),
                       child: Text(
                         'Visitation Start',
-                        style: TextStyle(
+                        style: helveticaText.copyWith(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: eerieBlack),
@@ -475,9 +467,8 @@ class ChangeVisitDialog extends ModalRoute<void> {
                   child: Container(
                     // height: 50,
                     padding: EdgeInsets.zero,
-                    child: TextFormField(
-                      keyboardType: TextInputType.none,
-                      cursorColor: onyxBlack,
+                    child: BlackInputField(
+                      enabled: true,
                       focusNode: startDateNode,
                       controller: _startDate,
                       validator: (value) =>
@@ -490,52 +481,12 @@ class ChangeVisitDialog extends ModalRoute<void> {
                           setter(() {});
                         });
                       },
+                      hintText: 'Click to select start date',
                       onSaved: (value) {
                         setState(() {
                           startDate = _startDate.text;
                         });
                       },
-                      decoration: InputDecoration(
-                        isDense: true,
-                        isCollapsed: true,
-                        hintText: '',
-                        hintStyle: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        contentPadding: EdgeInsets.only(
-                            top: 17, bottom: 16, left: 20, right: 20),
-                        focusColor: onyxBlack,
-                        focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: eerieBlack,
-                              width: 2.5,
-                            )),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 2.5)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: Color(0xFF929AAB), width: 2.5)),
-                        fillColor: graySand,
-                        filled: true,
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 2.5)),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: Color(0xFF929AAB), width: 2.5)),
-                        errorStyle: TextStyle(color: orangeRed, fontSize: 14),
-                      ),
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF393E46)),
                     ),
                   ),
                 ),
@@ -553,7 +504,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                       padding: const EdgeInsets.only(left: 20),
                       child: Text(
                         'Visitation End',
-                        style: TextStyle(
+                        style: helveticaText.copyWith(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: eerieBlack),
@@ -566,9 +517,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                   child: Container(
                     height: 50,
                     padding: EdgeInsets.zero,
-                    child: TextFormField(
-                      keyboardType: TextInputType.none,
-                      cursorColor: onyxBlack,
+                    child: BlackInputField(
                       focusNode: endDateNode,
                       controller: _endDate,
                       enabled: endDateEnable,
@@ -582,47 +531,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                       onSaved: (value) {
                         endDate = _endDate.text;
                       },
-                      decoration: InputDecoration(
-                        isDense: true,
-                        isCollapsed: true,
-                        hintText: '',
-                        hintStyle: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        contentPadding: EdgeInsets.only(
-                            top: 17, bottom: 16, left: 20, right: 20),
-                        focusColor: onyxBlack,
-                        focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: eerieBlack,
-                              width: 2.5,
-                            )),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 2.5)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: Color(0xFF929AAB), width: 2.5)),
-                        fillColor: graySand,
-                        filled: true,
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                BorderSide(color: eerieBlack, width: 2.5)),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: Color(0xFF929AAB), width: 2.5)),
-                        errorStyle: TextStyle(color: silver, fontSize: 14),
-                      ),
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF393E46)),
+                      hintText: 'Click to select end date',
                     ),
                   ),
                 ),
@@ -654,7 +563,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                         padding: const EdgeInsets.only(left: 20),
                         child: Text(
                           'Visitation Start',
-                          style: TextStyle(
+                          style: helveticaText.copyWith(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
                               color: eerieBlack),
@@ -667,9 +576,8 @@ class ChangeVisitDialog extends ModalRoute<void> {
                     child: Container(
                       // height: 50,
                       padding: EdgeInsets.zero,
-                      child: TextFormField(
-                        keyboardType: TextInputType.none,
-                        cursorColor: onyxBlack,
+                      child: BlackInputField(
+                        enabled: true,
                         focusNode: startDateNode,
                         controller: _startDate,
                         validator: (value) =>
@@ -687,47 +595,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                             startDate = _startDate.text;
                           });
                         },
-                        decoration: InputDecoration(
-                          isDense: true,
-                          isCollapsed: true,
-                          hintText: '',
-                          hintStyle: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          contentPadding: EdgeInsets.only(
-                              top: 17, bottom: 17, left: 20, right: 20),
-                          focusColor: onyxBlack,
-                          focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: eerieBlack,
-                                width: 2.5,
-                              )),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: eerieBlack, width: 2.5)),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: Color(0xFF929AAB), width: 2.5)),
-                          fillColor: graySand,
-                          filled: true,
-                          errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: eerieBlack, width: 2.5)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: Color(0xFF929AAB), width: 2.5)),
-                          errorStyle: TextStyle(color: silver, fontSize: 18),
-                        ),
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF393E46)),
+                        hintText: 'Click to select start date',
                       ),
                     ),
                   ),
@@ -748,7 +616,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                         padding: const EdgeInsets.only(left: 20),
                         child: Text(
                           'Visitation End',
-                          style: TextStyle(
+                          style: helveticaText.copyWith(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
                               color: eerieBlack),
@@ -761,10 +629,8 @@ class ChangeVisitDialog extends ModalRoute<void> {
                     child: Container(
                       // height: 50,
                       padding: EdgeInsets.zero,
-                      child: TextFormField(
-                        keyboardType: TextInputType.none,
+                      child: BlackInputField(
                         enabled: endDateEnable,
-                        cursorColor: onyxBlack,
                         focusNode: endDateNode,
                         controller: _endDate,
                         validator: (value) =>
@@ -777,47 +643,7 @@ class ChangeVisitDialog extends ModalRoute<void> {
                         onSaved: (value) {
                           endDate = _endDate.text;
                         },
-                        decoration: InputDecoration(
-                          isDense: true,
-                          isCollapsed: true,
-                          hintText: '',
-                          hintStyle: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          contentPadding: EdgeInsets.only(
-                              top: 17, bottom: 17, left: 20, right: 20),
-                          focusColor: onyxBlack,
-                          focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: eerieBlack,
-                                width: 2.5,
-                              )),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: eerieBlack, width: 2.5)),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: Color(0xFF929AAB), width: 2.5)),
-                          fillColor: graySand,
-                          filled: true,
-                          errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: eerieBlack, width: 2.5)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: Color(0xFF929AAB), width: 2.5)),
-                          errorStyle: TextStyle(color: silver, fontSize: 18),
-                        ),
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF393E46)),
+                        hintText: 'Click to select end date',
                       ),
                     ),
                   ),

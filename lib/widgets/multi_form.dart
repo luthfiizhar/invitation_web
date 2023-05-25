@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/constant/text_style.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/visitor.dart';
 import 'package:navigation_example/widgets/input_visitor.dart';
@@ -150,14 +151,14 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
     return Column(
       children: [
         widget.index != 0
-            ? Padding(
-                padding: const EdgeInsets.only(top: 15),
+            ? const Padding(
+                padding: EdgeInsets.only(top: 15),
                 child: Divider(
                   thickness: 2,
                   color: spanishGray,
                 ),
               )
-            : SizedBox(),
+            : const SizedBox(),
         Padding(
           padding: const EdgeInsets.only(top: 15),
           child: Row(
@@ -166,17 +167,21 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
-                  'Visitor Detail ' + number.toString(),
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
+                  'Visitor Detail $number',
+                  style: helveticaText.copyWith(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w700,
+                    color: eerieBlack,
+                  ),
                 ),
               ),
               number == 1
-                  ? SizedBox()
+                  ? const SizedBox()
                   : TextButton.icon(
                       onPressed: () {
                         widget.onRemove!();
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
                         color: onyxBlack,
                       ),
@@ -194,7 +199,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(top: 20),
                     child: Row(
                       // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -214,6 +219,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                                 widget.visitorModel!.FirstName =
                                     value.toString();
                               },
+                              hintText: 'Name here ...',
                               // focusNode: firstNameNode,
                             ),
                           ),
@@ -236,6 +242,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                               validator: (value) {
                                 return widget._firstName.text == "" ? "" : null;
                               },
+                              hintText: 'Name here ...',
                               // focusNode: lastNameNode,
                             ),
                           ),
@@ -259,6 +266,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                             onSaved: (value) {
                               widget.visitorModel!.Email = value.toString();
                             },
+                            hintText: 'Your email here ...',
                             // focusNode: emailNode,
                           ),
                         ),
@@ -286,11 +294,11 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                   // color: Colors.red,
                   child: Padding(
                     padding: Responsive.isDesktop(context)
-                        ? EdgeInsets.only(top: 30)
-                        : EdgeInsets.only(top: 5, bottom: 10),
+                        ? const EdgeInsets.only(top: 30)
+                        : const EdgeInsets.only(top: 5, bottom: 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: const [
                         Divider(
                           thickness: 2,
                           color: spanishGray,
@@ -299,14 +307,14 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                     ),
                   ),
                 )
-              : Padding(
+              : const Padding(
                   padding: EdgeInsets.zero,
                   child: SizedBox(),
                 ),
           Padding(
             padding: Responsive.isDesktop(context)
-                ? EdgeInsets.only(top: 30)
-                : EdgeInsets.only(top: 0),
+                ? const EdgeInsets.only(top: 30)
+                : const EdgeInsets.only(top: 0),
             child: Container(
               // color: Colors.amber,
               child: Row(
@@ -314,8 +322,11 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Visitor Detail ' + number.toString(),
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    'Visitor Detail $number',
+                    style: helveticaText.copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: eerieBlack),
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 0),
@@ -359,6 +370,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
               onSaved: (value) {
                 widget.visitorModel!.FirstName = value.toString();
               },
+              hintText: 'Name here ...',
               // focusNode: firstNameNode,
             ),
           ),
@@ -374,6 +386,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
               onSaved: (value) {
                 widget.visitorModel!.LastName = value.toString();
               },
+              hintText: 'Name here ...',
               // focusNode: lastNameNode,
             ),
           ),
@@ -395,6 +408,7 @@ class _MultiVisitorFOrmState extends State<MultiVisitorFOrm> {
                       onSaved: (value) {
                         widget.visitorModel!.Email = value.toString();
                       },
+                      hintText: 'Your email here ...',
                       // focusNode: emailNode,
                     ),
                   ),
@@ -493,6 +507,7 @@ class _MultiVisitorFOrmMobileState extends State<MultiVisitorFOrmMobile> {
                 onSaved: (value) {
                   widget.visitorModel!.FirstName = value.toString();
                 },
+                hintText: 'Name here ...',
                 // focusNode: firstNameNode,
               ),
             ),
@@ -509,6 +524,7 @@ class _MultiVisitorFOrmMobileState extends State<MultiVisitorFOrmMobile> {
               onSaved: (value) {
                 widget.visitorModel!.LastName = value.toString();
               },
+              hintText: 'Name here ...',
               // focusNode: lastNameNode,
             ),
           ),
@@ -529,6 +545,7 @@ class _MultiVisitorFOrmMobileState extends State<MultiVisitorFOrmMobile> {
                         onSaved: (value) {
                           widget.visitorModel!.Email = value.toString();
                         },
+                        hintText: 'Email here ...',
                         // focusNode: emailNode,
                       ),
                     ),

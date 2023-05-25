@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/constant/text_style.dart';
 import 'package:navigation_example/responsive.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
@@ -58,14 +59,12 @@ class _InputVisitorState extends State<InputVisitor> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  '${widget.label}',
-                  style: TextStyle(
-                      fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                      fontWeight: FontWeight.w700,
-                      color: eerieBlack),
+              Text(
+                '${widget.label}',
+                style: helveticaText.copyWith(
+                  fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                  fontWeight: FontWeight.w700,
+                  color: eerieBlack,
                 ),
               ),
             ],
@@ -109,59 +108,74 @@ class _InputVisitorState extends State<InputVisitor> {
                 isDense: true,
                 isCollapsed: true,
                 hintText: widget.hintText,
-                hintStyle: TextStyle(
-                  fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                hintStyle: helveticaText.copyWith(
+                  fontSize: Responsive.isDesktop(context) ? 16 : 14,
                   fontWeight: FontWeight.w400,
                 ),
                 contentPadding: Responsive.isDesktop(context)
-                    ? EdgeInsets.only(
+                    ? const EdgeInsets.only(
                         top: 17,
                         bottom: 15,
                         left: 20,
                         right: 20,
                       )
-                    : EdgeInsets.only(
+                    : const EdgeInsets.only(
                         top: 16,
                         bottom: 17,
                         left: 20,
                         right: 20,
                       ),
-                focusColor: onyxBlack,
-                focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                        Responsive.isDesktop(context) ? 10 : 7),
-                    borderSide: BorderSide(
-                      color: eerieBlack,
-                      width: 2.5,
-                    )),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                        Responsive.isDesktop(context) ? 10 : 7),
-                    borderSide: BorderSide(color: eerieBlack, width: 2.5)),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                        Responsive.isDesktop(context) ? 10 : 7),
-                    borderSide:
-                        BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-                fillColor: graySand,
-                filled: true,
-                errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                        Responsive.isDesktop(context) ? 10 : 7),
-                    borderSide: BorderSide(color: eerieBlack, width: 2.5)),
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                        Responsive.isDesktop(context) ? 10 : 7),
-                    borderSide:
-                        BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-                errorStyle: TextStyle(
-                    color: orangeRed,
-                    fontSize: Responsive.isDesktop(context) ? 18 : 14),
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: const BorderSide(
+                    color: grayx11,
+                    width: 1,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: const BorderSide(
+                    color: davysGray,
+                    width: 1,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: const BorderSide(
+                    color: davysGray,
+                    width: 2,
+                  ),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: const BorderSide(
+                    color: grayx11,
+                    width: 1,
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: const BorderSide(
+                    color: orangeAccent,
+                    width: 1,
+                  ),
+                ),
+                errorStyle: const TextStyle(
+                  color: orangeAccent,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w300,
+                  overflow: TextOverflow.clip,
+                ),
+                fillColor: white,
+                filled: true,
+                // isDense: true
+                focusColor: culturedWhite,
               ),
-              style: TextStyle(
-                  fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF393E46)),
+              style: helveticaText.copyWith(
+                fontSize: Responsive.isDesktop(context) ? 16 : 14,
+                fontWeight: FontWeight.w400,
+                color: davysGray,
+              ),
             ),
             // ),
           ),

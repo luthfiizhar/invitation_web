@@ -96,266 +96,270 @@ class AddNewInviteConfirmDialog extends ModalRoute<void> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    return Consumer<MainModel>(builder: (context, model, child) {
-      // print("main model ->" + model.listInvite);
-      visitorList = model.listInvite;
-      list = json.decode(visitorList.toString());
+    return Material(
+      color: Colors.transparent,
+      child: Consumer<MainModel>(builder: (context, model, child) {
+        // print("main model ->" + model.listInvite);
+        visitorList = model.listInvite;
+        list = json.decode(visitorList.toString());
 
-      return Padding(
-        padding: Responsive.isDesktop(context)
-            ? EdgeInsets.all(15.0)
-            : EdgeInsets.only(top: 15, bottom: 15),
-        child: StatefulBuilder(
-          builder: (context, setState) {
-            return Center(
-                child: Container(
-              decoration: BoxDecoration(
-                borderRadius: Responsive.isDesktop(context)
-                    ? BorderRadius.circular(15)
-                    : BorderRadius.circular(10),
-                color: eerieBlack,
-              ),
-              width: 600,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 50, right: 50, top: 40),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Text(
-                          'Confirm Invitation',
-                          style: TextStyle(
-                              fontSize: Responsive.isDesktop(context) ? 36 : 24,
-                              fontWeight: FontWeight.w700,
-                              color: scaffoldBg),
+        return Padding(
+          padding: Responsive.isDesktop(context)
+              ? EdgeInsets.all(15.0)
+              : EdgeInsets.only(top: 15, bottom: 15),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Center(
+                  child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: Responsive.isDesktop(context)
+                      ? BorderRadius.circular(15)
+                      : BorderRadius.circular(10),
+                  color: eerieBlack,
+                ),
+                width: 600,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 50, right: 50, top: 40),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Confirm Invitation',
+                            style: TextStyle(
+                                fontSize:
+                                    Responsive.isDesktop(context) ? 36 : 24,
+                                fontWeight: FontWeight.w700,
+                                color: scaffoldBg),
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 20),
-                        child: Text(
-                          'Please confirm visitor data before send invitation.',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w300,
-                              color: scaffoldBg),
+                        Container(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Text(
+                            'Please confirm visitor data before send invitation.',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w300,
+                                color: scaffoldBg),
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 30),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Visit Date: ',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: scaffoldBg),
-                            ),
-                            Text(
-                              '$visitDate',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w300,
-                                  color: scaffoldBg),
-                            ),
-                          ],
+                        Container(
+                          padding: EdgeInsets.only(top: 30),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Visit Date: ',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    color: scaffoldBg),
+                              ),
+                              Text(
+                                '$visitDate',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w300,
+                                    color: scaffoldBg),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        // color: Colors.blue,
-                        // height: 450,
-                        padding: EdgeInsets.only(top: 30),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: list!.length,
-                          itemBuilder: (context, index) {
-                            var no = index + 1;
-                            return Column(
-                              children: [
-                                confirmList(
-                                    no,
-                                    list![index]['FirstName'],
-                                    list![index]['LastName'],
-                                    list![index]['Email']),
-                                index != list!.length - 1
-                                    ? Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 10, bottom: 10),
-                                        child: Divider(
-                                          thickness: 1,
-                                          color: scaffoldBg,
-                                        ),
-                                      )
-                                    : SizedBox(),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 50, bottom: 30),
-                        child: Responsive.isDesktop(context)
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                        Container(
+                          // color: Colors.blue,
+                          // height: 450,
+                          padding: EdgeInsets.only(top: 30),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: list!.length,
+                            itemBuilder: (context, index) {
+                              var no = index + 1;
+                              return Column(
                                 children: [
-                                  SizedBox(
-                                    width: Responsive.isDesktop(
-                                            navKey.currentState!.context)
-                                        ? 220
-                                        : null,
-                                    height: Responsive.isDesktop(
-                                            navKey.currentState!.context)
-                                        ? 50
-                                        : 40,
-                                    child: CustTextButon(
-                                      fontSize: Responsive.isDesktop(
-                                              navKey.currentState!.context)
-                                          ? 16
-                                          : 14,
-                                      isDark: true,
-                                      label: 'Cancel',
-                                      onTap: () {
-                                        // setState(() {
-                                        // list!.clear();
-                                        // model.listInvite = "";
-                                        // clearVisitorData();
-                                        // });
-
-                                        Navigator.of(context).pop(false);
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(width: 20, height: 60),
-                                  isLoading
-                                      ? CircularProgressIndicator(
-                                          color: scaffoldBg,
-                                        )
-                                      : SizedBox(
-                                          width: Responsive.isDesktop(
-                                                  navKey.currentState!.context)
-                                              ? 220
-                                              : null,
-                                          height: Responsive.isDesktop(
-                                                  navKey.currentState!.context)
-                                              ? 50
-                                              : 40,
-                                          child: RegularButton(
-                                            title: 'Confirm',
-                                            sizeFont: Responsive.isDesktop(
-                                                    navKey
-                                                        .currentState!.context)
-                                                ? 16
-                                                : 14,
-                                            onTap: () {
-                                              setState(
-                                                () {
-                                                  isLoading = true;
-                                                },
-                                              );
-                                              showConfirmDialog(context)
-                                                  .then((value) {
-                                                setState(() {
-                                                  isLoading = false;
-                                                });
-                                              });
-                                              // print('aaa');
-                                              // confirmDialog(context,
-                                              //         'Are you sure the data is correct?', true)
-                                              //     .then((value) {
-                                              //   if (value) {
-                                              //     saveInvitation().then((value) {
-                                              //       // Navigator.pushReplacementNamed(
-                                              //       //   context, routeInvite);
-                                              //     });
-                                              //   } else {
-                                              //     print('cancel');
-                                              //   }
-                                              // });
-                                            },
-                                            isDark: true,
+                                  confirmList(
+                                      no,
+                                      list![index]['FirstName'],
+                                      list![index]['LastName'],
+                                      list![index]['Email']),
+                                  index != list!.length - 1
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10, bottom: 10),
+                                          child: Divider(
+                                            thickness: 1,
+                                            color: scaffoldBg,
                                           ),
                                         )
+                                      : SizedBox(),
                                 ],
-                              )
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: Responsive.isDesktop(
-                                            navKey.currentState!.context)
-                                        ? 100
-                                        : null,
-                                    height: Responsive.isDesktop(
-                                            navKey.currentState!.context)
-                                        ? 50
-                                        : 40,
-                                    child: RegularButton(
-                                      title: 'Confirm',
-                                      sizeFont: Responsive.isDesktop(
+                              );
+                            },
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 50, bottom: 30),
+                          child: Responsive.isDesktop(context)
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: Responsive.isDesktop(
                                               navKey.currentState!.context)
-                                          ? 16
-                                          : 14,
-                                      onTap: () {
-                                        showConfirmDialog(context);
-                                        // print('aaa');
-                                        // confirmDialog(context,
-                                        //         'Are you sure the data is correct?', true)
-                                        //     .then((value) {
-                                        //   if (value) {
-                                        //     saveInvitation().then((value) {
-                                        //       // Navigator.pushReplacementNamed(
-                                        //       //   context, routeInvite);
-                                        //     });
-                                        //   } else {
-                                        //     print('cancel');
-                                        //   }
-                                        // });
-                                      },
-                                      isDark: true,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20, height: 20),
-                                  SizedBox(
-                                    width: Responsive.isDesktop(
-                                            navKey.currentState!.context)
-                                        ? 100
-                                        : null,
-                                    height: Responsive.isDesktop(
-                                            navKey.currentState!.context)
-                                        ? 50
-                                        : 40,
-                                    child: CustTextButon(
-                                      fontSize: Responsive.isDesktop(
+                                          ? 220
+                                          : null,
+                                      height: Responsive.isDesktop(
                                               navKey.currentState!.context)
-                                          ? 16
-                                          : 14,
-                                      isDark: true,
-                                      label: 'Cancel',
-                                      onTap: () {
-                                        // setState(() {
-                                        // list!.clear();
-                                        // model.listInvite = "";
-                                        // clearVisitorData();
-                                        // });
+                                          ? 50
+                                          : 40,
+                                      child: CustTextButon(
+                                        fontSize: Responsive.isDesktop(
+                                                navKey.currentState!.context)
+                                            ? 16
+                                            : 14,
+                                        isDark: true,
+                                        label: 'Cancel',
+                                        onTap: () {
+                                          // setState(() {
+                                          // list!.clear();
+                                          // model.listInvite = "";
+                                          // clearVisitorData();
+                                          // });
 
-                                        Navigator.of(context).pop(false);
-                                      },
+                                          Navigator.of(context).pop(false);
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                      ),
-                    ],
+                                    SizedBox(width: 20, height: 60),
+                                    isLoading
+                                        ? CircularProgressIndicator(
+                                            color: scaffoldBg,
+                                          )
+                                        : SizedBox(
+                                            width: Responsive.isDesktop(navKey
+                                                    .currentState!.context)
+                                                ? 220
+                                                : null,
+                                            height: Responsive.isDesktop(navKey
+                                                    .currentState!.context)
+                                                ? 50
+                                                : 40,
+                                            child: RegularButton(
+                                              title: 'Confirm',
+                                              sizeFont: Responsive.isDesktop(
+                                                      navKey.currentState!
+                                                          .context)
+                                                  ? 16
+                                                  : 14,
+                                              onTap: () {
+                                                setState(
+                                                  () {
+                                                    isLoading = true;
+                                                  },
+                                                );
+                                                showConfirmDialog(context)
+                                                    .then((value) {
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
+                                                });
+                                                // print('aaa');
+                                                // confirmDialog(context,
+                                                //         'Are you sure the data is correct?', true)
+                                                //     .then((value) {
+                                                //   if (value) {
+                                                //     saveInvitation().then((value) {
+                                                //       // Navigator.pushReplacementNamed(
+                                                //       //   context, routeInvite);
+                                                //     });
+                                                //   } else {
+                                                //     print('cancel');
+                                                //   }
+                                                // });
+                                              },
+                                              isDark: true,
+                                            ),
+                                          )
+                                  ],
+                                )
+                              : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 100
+                                          : null,
+                                      height: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 50
+                                          : 40,
+                                      child: RegularButton(
+                                        title: 'Confirm',
+                                        sizeFont: Responsive.isDesktop(
+                                                navKey.currentState!.context)
+                                            ? 16
+                                            : 14,
+                                        onTap: () {
+                                          showConfirmDialog(context);
+                                          // print('aaa');
+                                          // confirmDialog(context,
+                                          //         'Are you sure the data is correct?', true)
+                                          //     .then((value) {
+                                          //   if (value) {
+                                          //     saveInvitation().then((value) {
+                                          //       // Navigator.pushReplacementNamed(
+                                          //       //   context, routeInvite);
+                                          //     });
+                                          //   } else {
+                                          //     print('cancel');
+                                          //   }
+                                          // });
+                                        },
+                                        isDark: true,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20, height: 20),
+                                    SizedBox(
+                                      width: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 100
+                                          : null,
+                                      height: Responsive.isDesktop(
+                                              navKey.currentState!.context)
+                                          ? 50
+                                          : 40,
+                                      child: CustTextButon(
+                                        fontSize: Responsive.isDesktop(
+                                                navKey.currentState!.context)
+                                            ? 16
+                                            : 14,
+                                        isDark: true,
+                                        label: 'Cancel',
+                                        onTap: () {
+                                          // setState(() {
+                                          // list!.clear();
+                                          // model.listInvite = "";
+                                          // clearVisitorData();
+                                          // });
+
+                                          Navigator.of(context).pop(false);
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ));
-          },
-        ),
-      );
-    });
+              ));
+            },
+          ),
+        );
+      }),
+    );
   }
 
   Widget confirmList(int no, String firstName, String lastName, String email) {

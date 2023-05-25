@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,12 +8,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/constant/text_style.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/footer.dart';
 import 'package:navigation_example/widgets/input_field.dart';
 import 'package:navigation_example/widgets/input_visitor.dart';
+import 'package:navigation_example/widgets/layout_page.dart';
 import 'package:navigation_example/widgets/navigation_bar.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:http/http.dart' as http;
@@ -147,303 +150,229 @@ class _EmployeePageState extends State<EmployeePage> {
   }
 
   desktopLayoutEmployeePage(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              NavigationBarWeb(
-                index: 2,
-              ),
-              Form(
-                key: _formKey,
-                child: Container(
-                  // width: Responsive.isBigDesktop(context) ? 575 : 575,
-                  // color: Colors.amber,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: Responsive.isBigDesktop(context) ? 575 : 575,
-                        padding: Responsive.isBigDesktop(context)
-                            ? const EdgeInsets.only(top: 25, left: 0, right: 0)
-                            : const EdgeInsets.only(top: 25, left: 0, right: 0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              // color: Colors.blue,
-                              child: const Text(
-                                'Employee Data',
-                                style: TextStyle(
-                                    fontSize: 36, fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: Container(
-                                // height: 56,
-                                // color: Colors.green,
-                                child: Wrap(
-                                  alignment: WrapAlignment.start,
-                                  children: const [
-                                    Text(
-                                      'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w300,
-                                          color: onyxBlack),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Container(
-                      //   color: Colors.blue,
-                      //   child: Text(
-                      //     'Employee',
-                      //     style: pageTitle,
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding: EdgeInsets.only(top: 20),
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     children: [
-                      //       Container(
-                      //         color: Colors.green,
-                      //         child: Wrap(
-                      //           alignment: WrapAlignment.start,
-                      //           // runAlignment: WrapAlignment.start,
-                      //           // crossAxisAlignment: WrapCrossAlignment.start,
-                      //           children: [
-                      //             Text(
-                      //               'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
-                      //               style: pageSubtitle,
-                      //             ),
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 30, left: 100, right: 100),
-                        child: Column(
-                          // crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 450,
-                              // color: Colors.amber,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  nameField(),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              // color: Colors.green,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  phoneNoField(),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                top: 20,
-                              ),
-                              child: SizedBox(
-                                width: 450,
-                                child: InputVisitor(
-                                  controller: _email,
-                                  label: 'Email',
-                                  focusNode: emailNode,
-                                  onSaved: (value) {
-                                    email = value!;
-                                  },
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 80, bottom: 30),
-                              child: isLoading
-                                  ? const CircularProgressIndicator(
-                                      color: eerieBlack,
-                                    )
-                                  : SizedBox(
-                                      width: 200,
-                                      height: 50,
-                                      child: RegularButton(
-                                        title: 'Confirm',
-                                        sizeFont: 24,
-                                        onTap: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            _formKey.currentState!.save();
-                                            setState(() {
-                                              isLoading = true;
-                                            });
-                                            updateDataEmployee(phoneCode,
-                                                    phoneNumber, email)
-                                                .then((value) async {
-                                              print(value);
-                                              setState(() {});
-                                              isLoading = false;
-                                              if (value['Status'] == "200") {
-                                                var box = await Hive.openBox(
-                                                    'userLogin');
-                                                box.put('firstLogin', "false");
-                                                Navigator.of(context)
-                                                    .push(NotifProcessDialog(
-                                                        isSuccess: true,
-                                                        message:
-                                                            "Data has been updated!"))
-                                                    .then((value) {
-                                                  if (firstLogin == 'true') {
-                                                    navKey.currentState!
-                                                        .pushReplacementNamed(
-                                                            routeInvite);
-                                                  } else {
-                                                    navKey.currentState!
-                                                        .pushReplacementNamed(
-                                                            routeInvite);
-                                                  }
-                                                });
-                                              }
-                                              if (value['Status'] == "401") {
-                                                Navigator.of(context).push(
-                                                    NotifProcessDialog(
-                                                        isSuccess: false,
-                                                        message:
-                                                            value['Message']));
-                                              }
-                                            });
-                                          }
-                                        },
-                                      ),
-                                    ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+    return LayoutPageWeb(
+      index: 2,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: Responsive.isBigDesktop(context) ? 575 : 575,
+              padding: Responsive.isBigDesktop(context)
+                  ? const EdgeInsets.only(top: 25, left: 0, right: 0)
+                  : const EdgeInsets.only(top: 25, left: 0, right: 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Employee Data',
+                    style: helveticaText.copyWith(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SliverFillRemaining(
-          hasScrollBody: false,
-          child: Align(
-              alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
-        )
-      ],
-    );
-  }
-
-  mobileLayoutEmployeePage(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              NavigationBarMobile(
-                index: 2,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20, left: 35, right: 35),
-                child: Form(
-                  key: _formKey,
-                  child: Container(
-                    child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Wrap(
+                      alignment: WrapAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Employee Data',
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.w700),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                  color: onyxBlack),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(top: 20, left: 0, right: 0),
-                          child: Center(
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  nameField(),
-                                  phoneNoFieldMobile(),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 20,
-                                    ),
-                                    child: InputVisitor(
-                                      controller: _email,
-                                      label: 'Email',
-                                      focusNode: emailNode,
-                                      onSaved: (value) {
-                                        email = value!;
-                                      },
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 30, bottom: 30),
-                                    child: SizedBox(
-                                      // width: 200,
-                                      height: 40,
-                                      child: RegularButton(
-                                        title: 'Confirm',
-                                        sizeFont: 16,
-                                        onTap: () {},
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
+                        Text(
+                          'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
+                          style: helveticaText.copyWith(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w300,
+                              color: onyxBlack),
                         ),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30, left: 100, right: 100),
+              child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 450,
+                    // color: Colors.amber,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        nameField(),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    // color: Colors.green,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        phoneNoField(),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                    ),
+                    child: SizedBox(
+                      width: 450,
+                      child: InputVisitor(
+                        controller: _email,
+                        label: 'Email',
+                        focusNode: emailNode,
+                        onSaved: (value) {
+                          email = value!;
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 80, bottom: 30),
+                    child: isLoading
+                        ? const CircularProgressIndicator(
+                            color: eerieBlack,
+                          )
+                        : SizedBox(
+                            width: 270,
+                            height: 50,
+                            child: RegularButton(
+                              title: 'Confirm',
+                              sizeFont: 20,
+                              onTap: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  updateDataEmployee(
+                                          phoneCode, phoneNumber, email)
+                                      .then((value) async {
+                                    print(value);
+                                    setState(() {});
+                                    isLoading = false;
+                                    if (value['Status'] == "200") {
+                                      var box = await Hive.openBox('userLogin');
+                                      box.put('firstLogin', "false");
+                                      Navigator.of(context)
+                                          .push(NotifProcessDialog(
+                                              isSuccess: true,
+                                              message:
+                                                  "Data has been updated!"))
+                                          .then((value) {
+                                        if (firstLogin == 'true') {
+                                          navKey.currentState!
+                                              .pushReplacementNamed(
+                                                  routeInvite);
+                                        } else {
+                                          navKey.currentState!
+                                              .pushReplacementNamed(
+                                                  routeInvite);
+                                        }
+                                      });
+                                    }
+                                    if (value['Status'] == "401") {
+                                      Navigator.of(context).push(
+                                          NotifProcessDialog(
+                                              isSuccess: false,
+                                              message: value['Message']));
+                                    }
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  mobileLayoutEmployeePage(BuildContext context) {
+    return LayoutPageMobile(
+      index: 2,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20, left: 35, right: 35),
+        child: Form(
+          key: _formKey,
+          child: Container(
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Employee Data',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Please confirm your data below. We will send notification when your guest is coming to your phone number.',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w300,
+                          color: onyxBlack),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 0, right: 0),
+                  child: Center(
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          nameField(),
+                          phoneNoFieldMobile(),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 20,
+                            ),
+                            child: InputVisitor(
+                              controller: _email,
+                              label: 'Email',
+                              focusNode: emailNode,
+                              onSaved: (value) {
+                                email = value!;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30, bottom: 30),
+                            child: SizedBox(
+                              // width: 200,
+                              height: 40,
+                              child: RegularButton(
+                                title: 'Confirm',
+                                sizeFont: 16,
+                                onTap: () {},
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Align(
-              alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
-        )
-      ],
+      ),
     );
   }
 
@@ -456,15 +385,12 @@ class _EmployeePageState extends State<EmployeePage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  'Full Name',
-                  style: TextStyle(
-                    fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                    fontWeight: FontWeight.w700,
-                    color: onyxBlack,
-                  ),
+              Text(
+                'Full Name',
+                style: helveticaText.copyWith(
+                  fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                  fontWeight: FontWeight.w700,
+                  color: onyxBlack,
                 ),
               ),
             ],
@@ -474,15 +400,12 @@ class _EmployeePageState extends State<EmployeePage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                      fontWeight: FontWeight.w300,
-                      color: onyxBlack,
-                    ),
+                Text(
+                  name,
+                  style: helveticaText.copyWith(
+                    fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                    fontWeight: FontWeight.w400,
+                    color: onyxBlack,
                   ),
                 ),
               ],
@@ -493,15 +416,12 @@ class _EmployeePageState extends State<EmployeePage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Text(
-                    'Employee Number',
-                    style: TextStyle(
-                      fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                      fontWeight: FontWeight.w700,
-                      color: onyxBlack,
-                    ),
+                Text(
+                  'Employee Number',
+                  style: helveticaText.copyWith(
+                    fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                    fontWeight: FontWeight.w700,
+                    color: onyxBlack,
                   ),
                 ),
               ],
@@ -512,15 +432,12 @@ class _EmployeePageState extends State<EmployeePage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Text(
-                    nip,
-                    style: TextStyle(
-                      fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                      fontWeight: FontWeight.w300,
-                      color: onyxBlack,
-                    ),
+                Text(
+                  nip,
+                  style: helveticaText.copyWith(
+                    fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                    fontWeight: FontWeight.w400,
+                    color: onyxBlack,
                   ),
                 ),
               ],
@@ -542,9 +459,10 @@ class _EmployeePageState extends State<EmployeePage> {
               padding: const EdgeInsets.only(left: 20, top: 20),
               child: Text(
                 'Phone Number',
-                style: TextStyle(
+                style: helveticaText.copyWith(
                     fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                    fontWeight: FontWeight.w700),
+                    fontWeight: FontWeight.w700,
+                    color: eerieBlack),
               ),
             ),
           ],
@@ -587,13 +505,14 @@ class _EmployeePageState extends State<EmployeePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 20, top: 20),
+                padding: const EdgeInsets.only(top: 20),
                 child: Text(
                   'Phone Number',
-                  style: TextStyle(
-                      fontSize: Responsive.isDesktop(context) ? 20 : 14,
-                      fontWeight: FontWeight.w700,
-                      color: onyxBlack),
+                  style: helveticaText.copyWith(
+                    fontSize: Responsive.isDesktop(context) ? 20 : 14,
+                    fontWeight: FontWeight.w700,
+                    color: eerieBlack,
+                  ),
                 ),
               ),
             ],
@@ -641,55 +560,69 @@ class _EmployeePageState extends State<EmployeePage> {
       decoration: InputDecoration(
         isDense: true,
         contentPadding: Responsive.isDesktop(context)
-            ? EdgeInsets.only(
+            ? const EdgeInsets.only(
                 top: 17,
                 bottom: 15,
                 left: 20,
                 right: 20,
               )
-            : EdgeInsets.only(
+            : const EdgeInsets.only(
                 top: 16,
                 bottom: 17,
                 left: 20,
                 right: 20,
               ),
         isCollapsed: true,
-        focusColor: eerieBlack,
-        focusedErrorBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-            borderSide: BorderSide(
-              color: eerieBlack,
-              width: 2.5,
-            )),
-        focusedBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-            borderSide: BorderSide(color: eerieBlack, width: 2.5)),
-        enabledBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-            borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-        fillColor: graySand,
-        filled: true,
-        errorBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-            borderSide: BorderSide(color: eerieBlack, width: 2.5)),
         border: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-            borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-        errorStyle: phoneNumberNode.hasFocus
-            ? TextStyle(fontSize: 0, height: 0)
-            : TextStyle(
-                color: silver,
-                fontSize: Responsive.isDesktop(context) ? 18 : 14),
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(
+            color: grayx11,
+            width: 1,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(
+            color: davysGray,
+            width: 1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(
+            color: davysGray,
+            width: 2,
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(
+            color: grayx11,
+            width: 1,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(
+            color: orangeAccent,
+            width: 1,
+          ),
+        ),
+        errorStyle: const TextStyle(
+          color: orangeAccent,
+          fontSize: 14,
+          fontWeight: FontWeight.w300,
+          overflow: TextOverflow.clip,
+        ),
+        fillColor: white,
+        filled: true,
+        // isDense: true
+        focusColor: culturedWhite,
       ),
-      style: TextStyle(
-        fontSize: Responsive.isDesktop(context) ? 20 : 14,
+      style: helveticaText.copyWith(
+        fontSize: Responsive.isDesktop(context) ? 16 : 14,
         fontWeight: FontWeight.w400,
-        color: Color(0xFF393E46),
+        color: davysGray,
       ),
     );
   }
@@ -711,45 +644,59 @@ class _EmployeePageState extends State<EmployeePage> {
         decoration: InputDecoration(
           isDense: true,
           contentPadding: Responsive.isDesktop(context)
-              ? EdgeInsets.symmetric(vertical: 20, horizontal: 20)
-              : EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              ? const EdgeInsets.symmetric(vertical: 20, horizontal: 20)
+              : const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           isCollapsed: true,
-          focusColor: eerieBlack,
-          focusedErrorBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-              borderSide: BorderSide(
-                color: eerieBlack,
-                width: 2.5,
-              )),
-          focusedBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-              borderSide: BorderSide(color: eerieBlack, width: 2.5)),
-          enabledBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-              borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-          fillColor: graySand,
-          filled: true,
-          errorBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-              borderSide: BorderSide(color: eerieBlack, width: 2.5)),
           border: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-              borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-          errorStyle: phoneNumberNode.hasFocus
-              ? TextStyle(fontSize: 0, height: 0)
-              : TextStyle(
-                  color: silver,
-                  fontSize: Responsive.isDesktop(context) ? 18 : 14),
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(
+              color: grayx11,
+              width: 1,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(
+              color: davysGray,
+              width: 1,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(
+              color: davysGray,
+              width: 2,
+            ),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(
+              color: grayx11,
+              width: 1,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(
+              color: orangeAccent,
+              width: 1,
+            ),
+          ),
+          errorStyle: const TextStyle(
+            color: orangeAccent,
+            fontSize: 14,
+            fontWeight: FontWeight.w300,
+            overflow: TextOverflow.clip,
+          ),
+          fillColor: white,
+          filled: true,
+          // isDense: true
+          focusColor: culturedWhite,
         ),
-        style: TextStyle(
-          fontSize: Responsive.isDesktop(context) ? 20 : 14,
+        style: helveticaText.copyWith(
+          fontSize: Responsive.isDesktop(context) ? 16 : 14,
           fontWeight: FontWeight.w400,
-          color: Color(0xFF393E46),
+          color: davysGray,
         ),
       ),
     );
@@ -795,55 +742,70 @@ class _EmployeePageState extends State<EmployeePage> {
         prefixIconColor: eerieBlack,
         isDense: true,
         contentPadding: Responsive.isDesktop(context)
-            ? EdgeInsets.only(
+            ? const EdgeInsets.only(
                 top: 17,
                 bottom: 15,
                 left: 10,
                 right: 10,
               )
-            : EdgeInsets.only(
+            : const EdgeInsets.only(
                 top: 17,
                 bottom: 0,
                 left: 0,
                 right: 2,
               ),
         isCollapsed: true,
-        focusColor: eerieBlack,
-        focusedErrorBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-            borderSide: BorderSide(
-              color: eerieBlack,
-              width: 2.5,
-            )),
-        focusedBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-            borderSide: BorderSide(color: eerieBlack, width: 2.5)),
-        enabledBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-            borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-        fillColor: graySand,
-        filled: true,
-        errorBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-            borderSide: BorderSide(color: eerieBlack, width: 2.5)),
         border: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Responsive.isDesktop(context) ? 10 : 7),
-            borderSide: BorderSide(color: Color(0xFF929AAB), width: 2.5)),
-        errorStyle: phoneNumberNode.hasFocus
-            ? TextStyle(fontSize: 0, height: 0)
-            : TextStyle(
-                color: silver,
-                fontSize: Responsive.isDesktop(context) ? 18 : 14),
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(
+            color: grayx11,
+            width: 1,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(
+            color: davysGray,
+            width: 1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(
+            color: davysGray,
+            width: 2,
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(
+            color: grayx11,
+            width: 1,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(
+            color: orangeAccent,
+            width: 1,
+          ),
+        ),
+        errorStyle: const TextStyle(
+          color: orangeAccent,
+          fontSize: 14,
+          fontWeight: FontWeight.w300,
+          overflow: TextOverflow.clip,
+        ),
+        fillColor: white,
+        filled: true,
+        // isDense: true
+        focusColor: culturedWhite,
       ),
-      style: TextStyle(
-          fontSize: Responsive.isDesktop(context) ? 20 : 14,
-          fontWeight: FontWeight.w700,
-          color: eerieBlack),
+      style: helveticaText.copyWith(
+        fontSize: Responsive.isDesktop(context) ? 16 : 14,
+        fontWeight: FontWeight.w400,
+        color: davysGray,
+      ),
     );
   }
 }

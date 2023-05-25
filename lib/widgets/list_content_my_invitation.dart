@@ -38,7 +38,6 @@ class _ListItemMyInvititationDesktopState
     extends State<ListItemMyInvititationDesktop> {
   bool detailIsLoading = false;
   Future getInvitationDetail(String inviteCode) async {
-    print('hahaha');
     var box = await Hive.openBox('userLogin');
     var jwt = box.get('jwTtoken') != "" ? box.get('jwtToken') : "";
     // print(jwt);

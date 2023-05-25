@@ -144,177 +144,181 @@ class AddVisitorOverlay extends ModalRoute<void> {
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
     // TODO: implement buildPage
-    return Consumer<MainModel>(builder: (context, model, child) {
-      return Padding(
-        padding: Responsive.isDesktop(context)
-            ? EdgeInsets.all(15.0)
-            : EdgeInsets.only(top: 15, bottom: 15),
-        child: StatefulBuilder(
-          builder: (context, setState) {
-            return Center(
-              child: Container(
-                width: 730,
-                decoration: BoxDecoration(
-                  borderRadius: Responsive.isDesktop(context)
-                      ? BorderRadius.circular(15)
-                      : BorderRadius.circular(10),
-                  color: scaffoldBg,
-                ),
-                child: Stack(
-                  children: [
-                    ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(context)
-                          .copyWith(scrollbars: false),
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: Responsive.isDesktop(context)
-                              ? EdgeInsets.only(left: 50, right: 50, top: 40)
-                              : EdgeInsets.only(left: 25, right: 25, top: 25),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Add Visitor',
-                                      style: dialogTitle,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Form(
-                                key: _formKey,
-                                child: ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: formList.length,
-                                  itemBuilder: (context, index) {
-                                    return formList[index];
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 20, bottom: 30),
-                                child: Center(
-                                  child: IconButton(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () {
-                                      setState(() {
-                                        _visitorModel =
-                                            Visitor(number: formList.length);
-
-                                        formList.add(MultiVisitorFOrm(
-                                          visitorModel: _visitorModel,
-                                          index: formList.length,
-                                          onRemove: () {
-                                            onRemove(_visitorModel!);
-                                            setState(
-                                              () {},
-                                            );
-                                          },
-                                        ));
-                                      });
-                                    },
-                                    icon: Icon(
-                                      Icons.add_circle_outline,
-                                      size: Responsive.isDesktop(context)
-                                          ? 40
-                                          : 35,
-                                    ),
+    return Material(
+      color: Colors.transparent,
+      child: Consumer<MainModel>(builder: (context, model, child) {
+        return Padding(
+          padding: Responsive.isDesktop(context)
+              ? const EdgeInsets.all(15.0)
+              : const EdgeInsets.only(top: 15, bottom: 15),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Center(
+                child: Container(
+                  width: 730,
+                  decoration: BoxDecoration(
+                    borderRadius: Responsive.isDesktop(context)
+                        ? BorderRadius.circular(15)
+                        : BorderRadius.circular(10),
+                    color: white,
+                  ),
+                  child: Stack(
+                    children: [
+                      ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context)
+                            .copyWith(scrollbars: false),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: Responsive.isDesktop(context)
+                                ? EdgeInsets.only(left: 50, right: 50, top: 40)
+                                : EdgeInsets.only(left: 25, right: 25, top: 25),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Add Visitor',
+                                        style: dialogTitle,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              Center(
-                                child: SizedBox(
-                                  height:
-                                      Responsive.isDesktop(context) ? 50 : 40,
-                                  width: Responsive.isDesktop(context)
-                                      ? 275
-                                      : null,
-                                  child: RegularButton(
-                                    title: 'Next',
-                                    sizeFont:
-                                        Responsive.isDesktop(context) ? 24 : 16,
-                                    onTap: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        _formKey.currentState!.save();
-                                        onSave();
+                                Form(
+                                  key: _formKey,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: formList.length,
+                                    itemBuilder: (context, index) {
+                                      return formList[index];
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20, bottom: 30),
+                                  child: Center(
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      onPressed: () {
+                                        setState(() {
+                                          _visitorModel =
+                                              Visitor(number: formList.length);
 
-                                        var json = jsonEncode(visitorList);
-                                        saveInviteVisitorData(json);
-                                        model.listInvite = json;
-                                        print(visitorList.toList());
-
-                                        Navigator.of(context)
-                                            .push(AddNewInviteConfirmDialog(
-                                                eventID: inviteCode,
-                                                visitDate: visitDate))
-                                            .then((_) {
-                                          // model.listInvite = "";
-                                          // setState(
-                                          //   () {
-                                          visitorList.clear();
-                                          clearVisitorData();
-                                          Navigator.of(context).pop(false);
-                                          //   },
-                                          // );
+                                          formList.add(MultiVisitorFOrm(
+                                            visitorModel: _visitorModel,
+                                            index: formList.length,
+                                            onRemove: () {
+                                              onRemove(_visitorModel!);
+                                              setState(
+                                                () {},
+                                              );
+                                            },
+                                          ));
                                         });
-                                      } else {
-                                        print('failed');
-                                      }
-
-                                      // Navigator.pushNamed(context, routeConfiemInvite)
-                                      //     .then((value) {
-                                      //   setState(() {
-                                      //     visitorList.clear();
-                                      //     clearVisitorData();
-                                      //   });
-                                      // });
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (BuildContext context) =>
-                                      //             ConfirmInvitePage()));
-
-                                      // print(json);
-                                    },
+                                      },
+                                      icon: Icon(
+                                        Icons.add_circle_outline,
+                                        size: Responsive.isDesktop(context)
+                                            ? 40
+                                            : 35,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                              ),
-                            ],
+                                Center(
+                                  child: SizedBox(
+                                    height:
+                                        Responsive.isDesktop(context) ? 50 : 40,
+                                    width: Responsive.isDesktop(context)
+                                        ? 275
+                                        : null,
+                                    child: RegularButton(
+                                      title: 'Next',
+                                      sizeFont: Responsive.isDesktop(context)
+                                          ? 24
+                                          : 16,
+                                      onTap: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          _formKey.currentState!.save();
+                                          onSave();
+
+                                          var json = jsonEncode(visitorList);
+                                          saveInviteVisitorData(json);
+                                          model.listInvite = json;
+                                          print(visitorList.toList());
+
+                                          Navigator.of(context)
+                                              .push(AddNewInviteConfirmDialog(
+                                                  eventID: inviteCode,
+                                                  visitDate: visitDate))
+                                              .then((_) {
+                                            // model.listInvite = "";
+                                            // setState(
+                                            //   () {
+                                            visitorList.clear();
+                                            clearVisitorData();
+                                            Navigator.of(context).pop(false);
+                                            //   },
+                                            // );
+                                          });
+                                        } else {
+                                          print('failed');
+                                        }
+
+                                        // Navigator.pushNamed(context, routeConfiemInvite)
+                                        //     .then((value) {
+                                        //   setState(() {
+                                        //     visitorList.clear();
+                                        //     clearVisitorData();
+                                        //   });
+                                        // });
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (BuildContext context) =>
+                                        //             ConfirmInvitePage()));
+
+                                        // print(json);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      right: 20,
-                      top: 20,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        child: Container(
-                          child: Icon(
-                            Icons.close,
-                            size: 30,
+                      Positioned(
+                        right: 20,
+                        top: 20,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop(false);
+                          },
+                          child: Container(
+                            child: Icon(
+                              Icons.close,
+                              size: 30,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
-      );
-    });
+              );
+            },
+          ),
+        );
+      }),
+    );
   }
 }

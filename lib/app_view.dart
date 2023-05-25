@@ -15,12 +15,6 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // key: _scaffoldK,
-      // appBar: PreferredSize(
-      //   preferredSize: Size(MediaQuery.of(context).size.width, 120),
-      //   child: NavigationBarWeb(),
-      // ),
-      // drawer: Responsive.isDesktop(context) ? null : CustomDrawer(),
       endDrawer: Responsive.isDesktop(context)
           ? null
           : Consumer<MainModel>(builder: (context, model, child) {
@@ -29,7 +23,7 @@ class AppView extends StatelessWidget {
                 index: index,
               );
             }),
-      backgroundColor: scaffoldBg,
+      backgroundColor: white,
       body: Column(
         children: [
           Expanded(child: child!),

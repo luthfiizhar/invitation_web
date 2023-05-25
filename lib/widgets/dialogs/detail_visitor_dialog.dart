@@ -552,219 +552,192 @@ class DetailVisitorOverlay extends ModalRoute<void> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    return StatefulBuilder(
-      builder: (context, setState) {
-        List list = visitorList!;
-        ValueNotifier _list = ValueNotifier<List>(list);
-        _list.value = visitorList!;
-        list = _list.value;
-        return Padding(
-          padding: Responsive.isDesktop(context)
-              ? const EdgeInsets.all(15.0)
-              : const EdgeInsets.only(top: 15, bottom: 15),
-          child: Center(
-            child: Container(
-              width: 500,
-              // color: scaffoldBg,
-              decoration: BoxDecoration(
-                borderRadius: Responsive.isDesktop(context)
-                    ? BorderRadius.circular(15)
-                    : BorderRadius.circular(10),
-                color: scaffoldBg,
-              ),
-              child: Stack(
-                // alignment: Alignment.topCenter,
-                children: [
-                  ScrollConfiguration(
-                    behavior: ScrollConfiguration.of(context)
-                        .copyWith(scrollbars: false),
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding:
-                            Responsive.isDesktop(navKey.currentState!.context)
-                                ? const EdgeInsets.only(
-                                    left: 50, right: 50, top: 30)
-                                : const EdgeInsets.only(
-                                    left: 25, right: 25, top: 25),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: Responsive.isDesktop(context)
-                                  ? const EdgeInsets.only(top: 10, bottom: 30)
-                                  : const EdgeInsets.only(top: 0, bottom: 20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Invitation Detail',
-                                    style: dialogTitle,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: 550,
-                              child: Text(
-                                'Invite Code',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize:
-                                      Responsive.isDesktop(context) ? 18 : 14,
-                                  color: onyxBlack,
+    return Material(
+      color: Colors.transparent,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          List list = visitorList!;
+          ValueNotifier _list = ValueNotifier<List>(list);
+          _list.value = visitorList!;
+          list = _list.value;
+          return Padding(
+            padding: Responsive.isDesktop(context)
+                ? const EdgeInsets.all(15.0)
+                : const EdgeInsets.only(top: 15, bottom: 15),
+            child: Center(
+              child: Container(
+                width: 500,
+                // color: scaffoldBg,
+                decoration: BoxDecoration(
+                  borderRadius: Responsive.isDesktop(context)
+                      ? BorderRadius.circular(15)
+                      : BorderRadius.circular(10),
+                  color: white,
+                ),
+                child: Stack(
+                  // alignment: Alignment.topCenter,
+                  children: [
+                    ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(scrollbars: false),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding:
+                              Responsive.isDesktop(navKey.currentState!.context)
+                                  ? const EdgeInsets.only(
+                                      left: 50, right: 50, top: 30)
+                                  : const EdgeInsets.only(
+                                      left: 25, right: 25, top: 25),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: Responsive.isDesktop(context)
+                                    ? const EdgeInsets.only(top: 10, bottom: 30)
+                                    : const EdgeInsets.only(top: 0, bottom: 20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Invitation Detail',
+                                      style: dialogTitle,
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: Responsive.isDesktop(context)
-                                  ? const EdgeInsets.only(top: 12)
-                                  : const EdgeInsets.only(top: 7),
-                              child: Text(
-                                '$inviteCode',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: Responsive.isBigDesktop(context)
-                                        ? 32
-                                        : 20,
-                                    color: eerieBlack),
+                              Container(
+                                width: 550,
+                                child: Text(
+                                  'Invite Code',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize:
+                                        Responsive.isDesktop(context) ? 18 : 14,
+                                    color: onyxBlack,
+                                  ),
+                                ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(top: 20),
-                              child: Responsive.isDesktop(context)
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          flex: 8,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                // padding: EdgeInsets.only(top: 30),
-                                                child: Text(
-                                                  'Visit Time',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize:
-                                                        Responsive.isDesktop(
-                                                                context)
-                                                            ? 18
-                                                            : 18,
-                                                    color: eerieBlack,
+                              Container(
+                                padding: Responsive.isDesktop(context)
+                                    ? const EdgeInsets.only(top: 12)
+                                    : const EdgeInsets.only(top: 7),
+                                child: Text(
+                                  '$inviteCode',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: Responsive.isBigDesktop(context)
+                                          ? 32
+                                          : 20,
+                                      color: eerieBlack),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 20),
+                                child: Responsive.isDesktop(context)
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            flex: 8,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  // padding: EdgeInsets.only(top: 30),
+                                                  child: Text(
+                                                    'Visit Time',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize:
+                                                          Responsive.isDesktop(
+                                                                  context)
+                                                              ? 18
+                                                              : 18,
+                                                      color: eerieBlack,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              Container(
-                                                padding: Responsive.isDesktop(
-                                                        context)
-                                                    ? EdgeInsets.only(top: 12)
-                                                    : EdgeInsets.only(top: 7),
-                                                child: Text(
-                                                  '$visitDate',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w300,
-                                                    fontSize:
-                                                        Responsive.isDesktop(
-                                                                context)
-                                                            ? 20
-                                                            : 20,
-                                                    color: onyxBlack,
+                                                Container(
+                                                  padding: Responsive.isDesktop(
+                                                          context)
+                                                      ? EdgeInsets.only(top: 12)
+                                                      : EdgeInsets.only(top: 7),
+                                                  child: Text(
+                                                    '$visitDate',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      fontSize:
+                                                          Responsive.isDesktop(
+                                                                  context)
+                                                              ? 20
+                                                              : 20,
+                                                      color: onyxBlack,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 4,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                // padding: EdgeInsets.only(top: 30),
-                                                child: Text(
-                                                  'Total Visitor',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize:
-                                                        Responsive.isDesktop(
-                                                                context)
-                                                            ? 18
-                                                            : 18,
-                                                    color: eerieBlack,
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                padding: Responsive.isDesktop(
-                                                        context)
-                                                    ? const EdgeInsets.only(
-                                                        top: 12)
-                                                    : const EdgeInsets.only(
-                                                        top: 7),
-                                                child: Text(
-                                                  '$totalPerson Person',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w300,
-                                                    fontSize:
-                                                        Responsive.isDesktop(
-                                                                context)
-                                                            ? 20
-                                                            : 20,
-                                                    color: onyxBlack,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          // padding: EdgeInsets.only(top: 30),
-                                          child: Text(
-                                            'Visit Time',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize:
-                                                  Responsive.isDesktop(context)
-                                                      ? 18
-                                                      : 14,
-                                              color: eerieBlack,
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                        Container(
-                                          padding: Responsive.isDesktop(context)
-                                              ? EdgeInsets.only(top: 12)
-                                              : EdgeInsets.only(top: 7),
-                                          child: Text(
-                                            '$visitDate',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize:
-                                                  Responsive.isDesktop(context)
-                                                      ? 20
-                                                      : 16,
-                                              color: onyxBlack,
+                                          Expanded(
+                                            flex: 4,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  // padding: EdgeInsets.only(top: 30),
+                                                  child: Text(
+                                                    'Total Visitor',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize:
+                                                          Responsive.isDesktop(
+                                                                  context)
+                                                              ? 18
+                                                              : 18,
+                                                      color: eerieBlack,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: Responsive.isDesktop(
+                                                          context)
+                                                      ? const EdgeInsets.only(
+                                                          top: 12)
+                                                      : const EdgeInsets.only(
+                                                          top: 7),
+                                                  child: Text(
+                                                    '$totalPerson Person',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      fontSize:
+                                                          Responsive.isDesktop(
+                                                                  context)
+                                                              ? 20
+                                                              : 20,
+                                                      color: onyxBlack,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 20),
-                                          child: Container(
+                                        ],
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
                                             // padding: EdgeInsets.only(top: 30),
                                             child: Text(
-                                              'Total Visitor',
+                                              'Visit Time',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: Responsive.isDesktop(
@@ -775,303 +748,346 @@ class DetailVisitorOverlay extends ModalRoute<void> {
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Container(
-                                          padding: Responsive.isDesktop(context)
-                                              ? EdgeInsets.only(top: 12)
-                                              : EdgeInsets.only(top: 7),
-                                          child: Text(
-                                            '$totalPerson Person',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize:
-                                                  Responsive.isDesktop(context)
-                                                      ? 20
-                                                      : 16,
-                                              color: onyxBlack,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: Text(
-                                'Invitation Created By',
-                                style: TextStyle(
-                                  fontSize:
-                                      Responsive.isDesktop(context) ? 18 : 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: eerieBlack,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: Responsive.isDesktop(context)
-                                  ? EdgeInsets.only(top: 12)
-                                  : EdgeInsets.only(top: 7),
-                              child: Text(
-                                '$employeeName',
-                                style: TextStyle(
-                                  fontSize:
-                                      Responsive.isDesktop(context) ? 20 : 16,
-                                  fontWeight: FontWeight.w300,
-                                  color: onyxBlack,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Visitor List',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: Responsive.isDesktop(context)
-                                          ? 18
-                                          : 14,
-                                      color: eerieBlack,
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .push(AddVisitorOverlay(
-                                        inviteCode: eventID,
-                                        visitDate: visitDate,
-                                      ))
-                                          .then((_) {
-                                        getInvitationDetail(eventID!)
-                                            .then((value) {
-                                          setState(
-                                            () {
-                                              isLoading = false;
-                                              list = value['Visitors'];
-                                              totalPerson = visitorList!.length
-                                                  .toString();
-                                              visitorList = value['Visitors'];
-                                              totalPerson = visitorList!.length
-                                                  .toString();
-                                            },
-                                          );
-                                        });
-                                      });
-                                    },
-                                    child: statusEvent == "CANCELED" ||
-                                            statusEvent == "EXPIRED"
-                                        ? SizedBox()
-                                        : Text(
-                                            'Add Visitor',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w700,
+                                          Container(
+                                            padding:
+                                                Responsive.isDesktop(context)
+                                                    ? EdgeInsets.only(top: 12)
+                                                    : EdgeInsets.only(top: 7),
+                                            child: Text(
+                                              '$visitDate',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w300,
                                                 fontSize: Responsive.isDesktop(
                                                         context)
-                                                    ? 18
-                                                    : 14,
-                                                color: eerieBlack),
-                                          ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: Responsive.isDesktop(context) ? 15 : 10,
-                            ),
-                            ValueListenableBuilder(
-                                valueListenable: _list,
-                                builder: (context, value, child) {
-                                  // list = [value];
-                                  return ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: list.length,
-                                    itemBuilder: (context, index) {
-                                      return listVisitorDetailDialog(
-                                        isHover!,
-                                        list[index]['VisitorName'],
-                                        list[index]['Email'],
-                                        list[index]['Status'],
-                                        list[index]['VisitorID'],
-                                        index,
-                                        list.length,
-                                        list,
-                                        _list,
-                                        // () {
-                                        //   setState(
-                                        //     () {},
-                                        //   );
-                                        // },
-                                        setState,
-                                      );
-                                    },
-                                  );
-                                }),
-                            Padding(
-                              padding: Responsive.isDesktop(context)
-                                  ? EdgeInsets.only(top: 50)
-                                  : EdgeInsets.only(top: 20),
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    statusEvent == "CANCELED" ||
-                                            statusEvent == "EXPIRED"
-                                        ? SizedBox()
-                                        : SizedBox(
-                                            height:
-                                                Responsive.isDesktop(context)
-                                                    ? 50
-                                                    : 40,
-                                            width: Responsive.isDesktop(context)
-                                                ? 250
-                                                : null,
-                                            child: CustTextButon(
-                                              fontSize:
-                                                  Responsive.isDesktop(context)
-                                                      ? 20
-                                                      : 16,
-                                              label: 'Change Visit Time',
-                                              onTap: () {
-                                                print(eventID);
-                                                Navigator.of(context)
-                                                    .push(ChangeVisitDialog(
-                                                        eventID: eventID))
-                                                    .then(
-                                                  (value) {
-                                                    getInvitationDetail(
-                                                            eventID!)
-                                                        .then((value) {
-                                                      // print(value);
-                                                      setState(() {
-                                                        visitDate =
-                                                            value['VisitTime'];
-                                                        isLoading = false;
-                                                        list =
-                                                            value['Visitors'];
-                                                        totalPerson = list
-                                                            .length
-                                                            .toString();
-                                                        visitorList =
-                                                            value['Visitors'];
-                                                        totalPerson =
-                                                            visitorList!.length
-                                                                .toString();
-                                                      });
-                                                    });
-                                                  },
-                                                );
-                                                // Navigator.of(context).pop(false);
-                                              },
+                                                    ? 20
+                                                    : 16,
+                                                color: onyxBlack,
+                                              ),
                                             ),
                                           ),
-                                    statusEvent == "CANCELED" ||
-                                            statusEvent == "EXPIRED"
-                                        ? SizedBox()
-                                        : Padding(
+                                          Padding(
                                             padding:
-                                                const EdgeInsets.only(top: 10),
-                                            child: cancelButtonLoading!
-                                                ? CircularProgressIndicator(
-                                                    color: eerieBlack,
-                                                  )
-                                                : SizedBox(
-                                                    height:
-                                                        Responsive.isDesktop(
-                                                                context)
-                                                            ? 50
-                                                            : 40,
-                                                    width: Responsive.isDesktop(
-                                                            context)
-                                                        ? 250
-                                                        : null,
-                                                    child: CustTextButon(
-                                                      fontSize:
-                                                          Responsive.isDesktop(
-                                                                  context)
-                                                              ? 20
-                                                              : 16,
-                                                      label:
-                                                          'Cancel Invitation',
-                                                      onTap: () {
-                                                        setState(
-                                                          () {},
-                                                        );
-                                                        cancelButtonLoading =
-                                                            true;
-                                                        showConfirmDialog(
-                                                                context)
-                                                            .then((value) {
-                                                          setState(
-                                                            () {
-                                                              cancelButtonLoading =
-                                                                  false;
-                                                            },
-                                                          );
-                                                        });
-                                                      },
-                                                    ),
-                                                  ),
+                                                const EdgeInsets.only(top: 20),
+                                            child: Container(
+                                              // padding: EdgeInsets.only(top: 30),
+                                              child: Text(
+                                                'Total Visitor',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize:
+                                                      Responsive.isDesktop(
+                                                              context)
+                                                          ? 18
+                                                          : 14,
+                                                  color: eerieBlack,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 10,
-                                        bottom: 30,
+                                          Container(
+                                            padding:
+                                                Responsive.isDesktop(context)
+                                                    ? EdgeInsets.only(top: 12)
+                                                    : EdgeInsets.only(top: 7),
+                                            child: Text(
+                                              '$totalPerson Person',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: Responsive.isDesktop(
+                                                        context)
+                                                    ? 20
+                                                    : 16,
+                                                color: onyxBlack,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      child: SizedBox(
-                                        height: Responsive.isDesktop(context)
-                                            ? 50
-                                            : 40,
-                                        width: Responsive.isDesktop(context)
-                                            ? null
-                                            : null,
-                                        child: RegularButton(
-                                          sizeFont:
-                                              Responsive.isDesktop(context)
-                                                  ? 20
-                                                  : 16,
-                                          title: 'Confirm',
-                                          onTap: () {
-                                            Navigator.of(context).pop(false);
-                                            // Navigator.pushReplacementNamed(
-                                            //     context, routeInvite);
-                                          },
-                                        ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Text(
+                                  'Invitation Created By',
+                                  style: TextStyle(
+                                    fontSize:
+                                        Responsive.isDesktop(context) ? 18 : 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: eerieBlack,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: Responsive.isDesktop(context)
+                                    ? EdgeInsets.only(top: 12)
+                                    : EdgeInsets.only(top: 7),
+                                child: Text(
+                                  '$employeeName',
+                                  style: TextStyle(
+                                    fontSize:
+                                        Responsive.isDesktop(context) ? 20 : 16,
+                                    fontWeight: FontWeight.w300,
+                                    color: onyxBlack,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Visitor List',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Responsive.isDesktop(context)
+                                            ? 18
+                                            : 14,
+                                        color: eerieBlack,
                                       ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(AddVisitorOverlay(
+                                          inviteCode: eventID,
+                                          visitDate: visitDate,
+                                        ))
+                                            .then((_) {
+                                          getInvitationDetail(eventID!)
+                                              .then((value) {
+                                            setState(
+                                              () {
+                                                isLoading = false;
+                                                list = value['Visitors'];
+                                                totalPerson = visitorList!
+                                                    .length
+                                                    .toString();
+                                                visitorList = value['Visitors'];
+                                                totalPerson = visitorList!
+                                                    .length
+                                                    .toString();
+                                              },
+                                            );
+                                          });
+                                        });
+                                      },
+                                      child: statusEvent == "CANCELED" ||
+                                              statusEvent == "EXPIRED"
+                                          ? SizedBox()
+                                          : Text(
+                                              'Add Visitor',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize:
+                                                      Responsive.isDesktop(
+                                                              context)
+                                                          ? 18
+                                                          : 14,
+                                                  color: eerieBlack),
+                                            ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                height: Responsive.isDesktop(context) ? 15 : 10,
+                              ),
+                              ValueListenableBuilder(
+                                  valueListenable: _list,
+                                  builder: (context, value, child) {
+                                    // list = [value];
+                                    return ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: list.length,
+                                      itemBuilder: (context, index) {
+                                        return listVisitorDetailDialog(
+                                          isHover!,
+                                          list[index]['VisitorName'],
+                                          list[index]['Email'],
+                                          list[index]['Status'],
+                                          list[index]['VisitorID'],
+                                          index,
+                                          list.length,
+                                          list,
+                                          _list,
+                                          // () {
+                                          //   setState(
+                                          //     () {},
+                                          //   );
+                                          // },
+                                          setState,
+                                        );
+                                      },
+                                    );
+                                  }),
+                              Padding(
+                                padding: Responsive.isDesktop(context)
+                                    ? EdgeInsets.only(top: 50)
+                                    : EdgeInsets.only(top: 20),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      statusEvent == "CANCELED" ||
+                                              statusEvent == "EXPIRED"
+                                          ? SizedBox()
+                                          : SizedBox(
+                                              height:
+                                                  Responsive.isDesktop(context)
+                                                      ? 50
+                                                      : 40,
+                                              width:
+                                                  Responsive.isDesktop(context)
+                                                      ? 250
+                                                      : null,
+                                              child: CustTextButon(
+                                                fontSize: Responsive.isDesktop(
+                                                        context)
+                                                    ? 20
+                                                    : 16,
+                                                label: 'Change Visit Time',
+                                                onTap: () {
+                                                  print(eventID);
+                                                  Navigator.of(context)
+                                                      .push(ChangeVisitDialog(
+                                                          eventID: eventID))
+                                                      .then(
+                                                    (value) {
+                                                      getInvitationDetail(
+                                                              eventID!)
+                                                          .then((value) {
+                                                        // print(value);
+                                                        setState(() {
+                                                          visitDate = value[
+                                                              'VisitTime'];
+                                                          isLoading = false;
+                                                          list =
+                                                              value['Visitors'];
+                                                          totalPerson = list
+                                                              .length
+                                                              .toString();
+                                                          visitorList =
+                                                              value['Visitors'];
+                                                          totalPerson =
+                                                              visitorList!
+                                                                  .length
+                                                                  .toString();
+                                                        });
+                                                      });
+                                                    },
+                                                  );
+                                                  // Navigator.of(context).pop(false);
+                                                },
+                                              ),
+                                            ),
+                                      statusEvent == "CANCELED" ||
+                                              statusEvent == "EXPIRED"
+                                          ? SizedBox()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 10),
+                                              child: cancelButtonLoading!
+                                                  ? CircularProgressIndicator(
+                                                      color: eerieBlack,
+                                                    )
+                                                  : SizedBox(
+                                                      height:
+                                                          Responsive.isDesktop(
+                                                                  context)
+                                                              ? 50
+                                                              : 40,
+                                                      width:
+                                                          Responsive.isDesktop(
+                                                                  context)
+                                                              ? 250
+                                                              : null,
+                                                      child: CustTextButon(
+                                                        fontSize: Responsive
+                                                                .isDesktop(
+                                                                    context)
+                                                            ? 20
+                                                            : 16,
+                                                        label:
+                                                            'Cancel Invitation',
+                                                        onTap: () {
+                                                          setState(
+                                                            () {},
+                                                          );
+                                                          cancelButtonLoading =
+                                                              true;
+                                                          showConfirmDialog(
+                                                                  context)
+                                                              .then((value) {
+                                                            setState(
+                                                              () {
+                                                                cancelButtonLoading =
+                                                                    false;
+                                                              },
+                                                            );
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                            ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 30,
+                                        ),
+                                        child: SizedBox(
+                                          height: Responsive.isDesktop(context)
+                                              ? 50
+                                              : 40,
+                                          width: Responsive.isDesktop(context)
+                                              ? null
+                                              : null,
+                                          child: RegularButton(
+                                            sizeFont:
+                                                Responsive.isDesktop(context)
+                                                    ? 20
+                                                    : 16,
+                                            title: 'Confirm',
+                                            onTap: () {
+                                              Navigator.of(context).pop(false);
+                                              // Navigator.pushReplacementNamed(
+                                              //     context, routeInvite);
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    right: 20,
-                    top: 20,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop(false);
-                      },
-                      child: Container(
-                        child: Icon(
-                          Icons.close,
-                          size: 30,
+                    Positioned(
+                      right: 20,
+                      top: 20,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop(false);
+                        },
+                        child: Container(
+                          child: Icon(
+                            Icons.close,
+                            size: 30,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

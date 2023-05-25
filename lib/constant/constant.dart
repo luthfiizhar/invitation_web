@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/constant/text_style.dart';
 import 'package:navigation_example/responsive.dart';
 import 'package:navigation_example/routes/routes.dart';
 
@@ -47,8 +48,8 @@ final TextStyle myInviteMenuMobile = TextStyle(
   fontWeight: FontWeight.w700,
 );
 
-final TextStyle kPageTitleStyleMobile =
-    TextStyle(fontSize: 20, fontWeight: FontWeight.w700);
+final TextStyle kPageTitleStyleMobile = helveticaText.copyWith(
+    fontSize: 18, fontWeight: FontWeight.w400, color: davysGray);
 
 final TextStyle pageTitle =
     TextStyle(fontSize: 36, fontWeight: FontWeight.w700);
@@ -58,18 +59,23 @@ final TextStyle pageSubtitle = TextStyle(
     fontWeight: FontWeight.w300,
     color: onyxBlack);
 
-final TextStyle tableBody = TextStyle(
-    fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 20 : 14,
-    fontWeight: FontWeight.w300,
-    color: onyxBlack);
+final TextStyle tableBody = helveticaText.copyWith(
+  fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 18 : 14,
+  fontWeight: FontWeight.w300,
+  color: davysGray,
+);
 
-final TextStyle tableBodyCode = TextStyle(
-    fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 22 : 18,
-    fontWeight: FontWeight.w700,
-    color: eerieBlack);
+final TextStyle tableBodyCode = helveticaText.copyWith(
+  fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 18 : 18,
+  fontWeight: FontWeight.w700,
+  color: davysGray,
+);
 
-final TextStyle tableHeader =
-    TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: onyxBlack);
+final TextStyle tableHeader = helveticaText.copyWith(
+  fontSize: 20,
+  fontWeight: FontWeight.w700,
+  color: davysGray,
+);
 
 final TextStyle textButton = TextStyle(
     fontSize: Responsive.isDesktop(navKey.currentState!.context) ? 20 : 18,
@@ -88,6 +94,11 @@ final TextStyle textButtonRegular = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.w700,
   color: eerieBlack,
+);
+
+const BoxConstraints pageContstraint = BoxConstraints(
+  minWidth: 1366,
+  maxWidth: 1366,
 );
 
 // String apiUrl = "10.100.206.7:8500";//'172.17.155.37:8500';

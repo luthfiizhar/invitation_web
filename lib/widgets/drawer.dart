@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
+import 'package:navigation_example/constant/text_style.dart';
 import 'package:navigation_example/main.dart';
 import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/routes/routes.dart';
@@ -26,6 +28,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     // TODO: implement initState
     super.initState();
     index = widget.index;
+    print("Drawer Index $index");
   }
 
   @override
@@ -51,6 +54,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   Future logout() async {
     jwtToken = "";
+    isExpired = true;
     var box = await Hive.openBox('userLogin');
     box.delete('name');
     box.delete('nip');
@@ -65,7 +69,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: eerieBlack,
+      shadowColor: Colors.transparent,
+      elevation: 0,
+      backgroundColor: white,
       child: Stack(
         children: [
           ListView(
@@ -79,11 +85,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     Container(
                       width: 235,
                       child: Text(
-                        'Visitor Invitation',
-                        style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white),
+                        'Visitor Management System',
+                        style: helveticaText.copyWith(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          color: davysGray,
+                        ),
+                        textAlign: TextAlign.right,
                       ),
                     ),
                     // Container(
@@ -94,20 +102,23 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     //     ),
                     //   ),
                     // ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: Divider(
-                        color: scaffoldBg,
-                        thickness: 1,
-                      ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 15),
+                    //   child: Divider(
+                    //     color: scaffoldBg,
+                    //     thickness: 1,
+                    //   ),
+                    // ),
+                    const SizedBox(
+                      height: 30,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 0),
+                      padding: const EdgeInsets.only(top: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           CustDrawerItem(
-                              title: 'New Visitor Invite',
+                              title: 'New Invite',
                               onHighlight: onHighlight,
                               routeName: routeInvite,
                               selected: index == 0,
@@ -115,6 +126,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ],
                       ),
                     ),
+                    menuDivider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -129,17 +141,35 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ),
                       ],
                     ),
+                    menuDivider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Padding(
                           padding: EdgeInsets.only(top: 10),
                           child: CustDrawerItem(
-                              title: 'Employee data',
+                              title: 'My Profile',
                               onHighlight: onHighlight,
                               routeName: routeEmployee,
                               selected: index == 2,
                               indexSelected: 2),
+                        ),
+                      ],
+                    ),
+                    menuDivider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        LogoutButtonMobile(
+                          title: 'Logout',
+                          selected: index == 3,
+                          onHighlight: onHighlight,
+                          onTap: () {
+                            logout().then((value) {
+                              Scaffold.of(context).closeEndDrawer();
+                              context.goNamed('login');
+                            });
+                          },
                         ),
                       ],
                     ),
@@ -148,23 +178,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
             ],
           ),
-          Positioned(
-            bottom: 30,
-            right: 25,
-            child: LogoutButtonMobile(
-              title: 'Logout',
-              selected: index == 3,
-              onHighlight: onHighlight,
-              onTap: () {
-                logout().then((value) {
-                  Scaffold.of(context).closeEndDrawer();
-                  Navigator.pushReplacementNamed(
-                      navKey.currentState!.context, routeLogin);
-                });
-              },
-            ),
-          )
+          // Positioned(
+          //   bottom: 30,
+          //   right: 25,
+          //   child: ,
+          // )
         ],
+      ),
+    );
+  }
+
+  Widget menuDivider() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 15),
+      child: Divider(
+        color: spanishGray,
+        thickness: 0.5,
       ),
     );
   }

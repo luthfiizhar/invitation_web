@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:go_router/go_router.dart';
+import 'package:navigation_example/constant/key.dart';
 import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/interactive_drawer_item.dart';
@@ -26,14 +28,11 @@ class CustDrawerItem extends StatelessWidget {
     return Consumer<MainModel>(builder: (context, model, child) {
       return GestureDetector(
         onTap: () {
-          // Navigator.pushNamed(context, '$routeName');
-          Scaffold.of(navKey.currentState!.context).closeEndDrawer();
-          navKey.currentState!.pushReplacementNamed(routeName!);
+          Scaffold.of(context).closeEndDrawer();
           onHighlight!(routeName);
           model.setIndexDrawer(indexSelected!);
           print(model.indexDrawer);
-
-          // Navigator.pop(context);
+          context.goNamed(routeName!);
         },
         child: Padding(
           padding: EdgeInsets.zero,

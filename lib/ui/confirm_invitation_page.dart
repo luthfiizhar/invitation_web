@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
@@ -13,6 +14,7 @@ import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/dialogs/confirm_dialog.dart';
 import 'package:navigation_example/widgets/dialogs/notif_process_dialog.dart';
 import 'package:navigation_example/widgets/footer.dart';
+import 'package:navigation_example/widgets/layout_page.dart';
 import 'package:navigation_example/widgets/navigation_bar.dart';
 import 'package:navigation_example/widgets/regular_button.dart';
 import 'package:navigation_example/widgets/text_button.dart';
@@ -35,7 +37,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
 
   bool isDark = true;
   Future getDataVisitor() async {
-    var box = await Hive.openBox('inputvisitorBox');
+    var box = await Hive.openBox('visitorBox');
     setState(() {
       visitorList = box.get('listInvite');
       startDate = box.get('startDate');
@@ -44,7 +46,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
   }
 
   Future clearVisitorData() async {
-    var box = await Hive.openBox('inputvisitorBox');
+    var box = await Hive.openBox('visitorBox');
     box.delete('listInvite');
     print('deleted');
   }
@@ -122,29 +124,9 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
   Widget build(BuildContext context) {
     return Container(
       color: Responsive.isDesktop(context) ? null : eerieBlack,
-      child: CustomScrollView(
-        slivers: [
-          SliverList(
-            delegate: SliverChildListDelegate([
-              Responsive.isDesktop(context)
-                  ? NavigationBarWeb(
-                      index: 0,
-                    )
-                  : NavigationBarMobile(
-                      index: 0,
-                    ),
-              Responsive.isDesktop(context)
-                  ? desktopLayoutConfirmPage(context)
-                  : mobileLayoutConfirmPage(context),
-            ]),
-          ),
-          const SliverFillRemaining(
-            hasScrollBody: false,
-            child: Align(
-                alignment: Alignment.bottomCenter, child: FooterInviteWeb()),
-          )
-        ],
-      ),
+      child: Responsive.isDesktop(context)
+          ? LayoutPageWeb(index: 0, child: desktopLayoutConfirmPage(context))
+          : LayoutPageMobile(index: 0, child: mobileLayoutConfirmPage(context)),
     );
     // return SingleChildScrollView(
     //   child: Column(
@@ -288,7 +270,7 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                 .push(NotifProcessDialog(
                     isSuccess: true, message: "Visitors has been invited!"))
                 .then((value) {
-              Navigator.pushReplacementNamed(context, routeInvite);
+              context.goNamed('invite');
             });
           } else if (value['Status'] == "401") {
             setState(() {
@@ -343,9 +325,8 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
 
   Widget desktopLayoutConfirmPage(BuildContext context) {
     return Padding(
-      padding: Responsive.isBigDesktop(context)
-          ? EdgeInsets.only(top: 25, left: 500, right: 500, bottom: 20)
-          : EdgeInsets.only(top: 25, left: 350, right: 350, bottom: 20),
+      padding:
+          const EdgeInsets.only(top: 25, left: 350, right: 350, bottom: 20),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15), color: eerieBlack),
@@ -439,7 +420,8 @@ class _ConfirmInvitePageState extends State<ConfirmInvitePage> {
                           clearVisitorData();
                         });
 
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
+                        context.goNamed('invite');
                       },
                     ),
                   ),

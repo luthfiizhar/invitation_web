@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/constant/text_style.dart';
 
 class InteractiveDrawerText extends StatefulWidget {
   final String? text;
@@ -29,24 +30,18 @@ class InteractiveDrawerTextState extends State<InteractiveDrawerText> {
         child: Align(
           alignment: Alignment.center,
           child: Container(
-            padding: EdgeInsets.only(top: 8, bottom: 8, left: 10, right: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: _hovering
-                    ? Colors.white
-                    : (widget.selected!)
-                        ? Colors.white
-                        : Colors.transparent),
+            padding:
+                const EdgeInsets.only(top: 8, bottom: 8, left: 10, right: 10),
             child: Text(
               widget.text!,
               style: _hovering
-                  ? kPageTitleStyleMobile.copyWith(color: eerieBlack)
+                  ? kPageTitleStyleMobile
                   : (widget.selected!)
-                      ? kPageTitleStyleMobile.copyWith(color: eerieBlack)
-                      : TextStyle(
-                          fontSize: 20,
+                      ? kPageTitleStyleMobile
+                      : helveticaText.copyWith(
+                          fontSize: 18,
                           fontWeight: FontWeight.w300,
-                          color: scaffoldBg,
+                          color: spanishGray,
                         ),
             ),
           ),

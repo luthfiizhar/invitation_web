@@ -44,64 +44,67 @@ class NotificationOverlay extends ModalRoute<void> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    return Padding(
-      padding: Responsive.isDesktop(context)
-          ? EdgeInsets.all(15.0)
-          : EdgeInsets.only(top: 15, bottom: 15),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return Center(
-                child: Container(
-                  width: Responsive.isDesktop(context) ? 1000 : 550,
-                  decoration: BoxDecoration(
-                    borderRadius: Responsive.isDesktop(context)
-                        ? BorderRadius.circular(15)
-                        : BorderRadius.circular(10),
-                    color: scaffoldBg,
-                  ),
-                  child: ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(context)
-                          .copyWith(scrollbars: false),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton.icon(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                  icon: Icon(
-                                    Icons.close,
-                                    color: eerieBlack,
-                                  ),
-                                  label: Text(''),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+    return Material(
+      color: Colors.transparent,
+      child: Padding(
+        padding: Responsive.isDesktop(context)
+            ? EdgeInsets.all(15.0)
+            : EdgeInsets.only(top: 15, bottom: 15),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return Center(
+                  child: Container(
+                    width: Responsive.isDesktop(context) ? 1000 : 550,
+                    decoration: BoxDecoration(
+                      borderRadius: Responsive.isDesktop(context)
+                          ? BorderRadius.circular(15)
+                          : BorderRadius.circular(10),
+                      color: scaffoldBg,
+                    ),
+                    child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context)
+                            .copyWith(scrollbars: false),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    'Notification',
-                                    style: dialogTitle,
+                                  TextButton.icon(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(false);
+                                    },
+                                    icon: Icon(
+                                      Icons.close,
+                                      color: eerieBlack,
+                                    ),
+                                    label: Text(''),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                      )),
-                ),
-              );
-            },
-          );
-        },
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Notification',
+                                      style: dialogTitle,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -33,67 +33,6 @@
   <title>Visitor Invitation Web</title>
   <link rel="manifest" href="manifest.json">
 
-  <style>
-    html,
-    body {
-        background-color: #F5F5F5;
-        height: 100%
-    }
-    body{
-        vertical-align: middle;
-        display: initial;
-    }
-    #loader, #loader:after {
-      border-radius: 50%;
-      width: 10em;
-      height: 10em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: -50%;
-    }
-
-    #loader {
-        justify-content: center;
-        top: 30%;
-        margin: 60px auto;
-        font-size: 10px;
-        position: relative;
-        text-indent: -9999em;
-        border-top: 1.1em solid #141414;
-        border-right: 1.1em solid #141414;
-        border-bottom: 1.1em solid #141414;
-        border-left: 1.1em solid #f5f1d8;
-        -webkit-transform: translateZ(0);
-        -ms-transform: translateZ(0);
-        transform: translateZ(0);
-        -webkit-animation: load8 1.1s infinite linear;
-        animation: load8 1.1s infinite linear;
-    }
-
-    @-webkit-keyframes load8 {
-        0% {
-            -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-        }
-        100% {
-            -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-        }
-    }
-
-    @keyframes load8 {
-        0% {
-            -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-        }
-        100% {
-            -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-        }
-    }
-  </style>
-
   <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
@@ -102,7 +41,37 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
-  <div id="loader">Loading...</div>
+  <div id="loading">
+    <style>
+      body {
+        inset: 0; overflow: hidden;
+        margin: 0; padding: 0;
+        position: fixed;
+      }
+      #loading {
+        align-items: center;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
+      #loading img {
+        animation: 1s ease-in-out 0s infinite alternate breathe;
+        opacity: .66;
+        transition: opacity .4s;
+      }
+      #loading.main_done img {
+        opacity: 1;
+      }
+      #loading.init_done img {
+        animation: .33s ease-in-out 0s 1 forwards zooooom;
+        opacity: .05;
+      }
+      @keyframes breathe { from { transform: scale(1) } to { transform: scale(0.95)}}
+      @keyframes zooooom { from { transform: scale(1) } to { transform: scale(10)}}
+      </style>
+    <img src="navbarlogo.png" alt="Loading indicator..." />
+  </div>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -111,8 +80,10 @@
           serviceWorkerVersion: serviceWorkerVersion,
         }
       }).then(function(engineInitializer) {
+        loading.classList.add('main_done');
         return engineInitializer.initializeEngine();
       }).then(function(appRunner) {
+        loading.classList.add('init_done');
         return appRunner.runApp();
       }).then(function(appRunner){
         window.setTimeout(function() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/routes/routes.dart';
 import 'package:navigation_example/widgets/interactive_drawer_item.dart';
@@ -19,8 +20,9 @@ class NavigationItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Navigator.pushNamed(context, '$routeName');
-        Provider.of<MainModel>(context, listen: false).setPageRoute(routeName!);
-        navKey.currentState!.pushReplacementNamed(routeName!);
+        // Provider.of<MainModel>(context, listen: false).setPageRoute(routeName!);
+        // navKey.currentState!.pushReplacementNamed(routeName!);
+        context.goNamed(routeName!);
         onHighlight!(routeName);
       },
       child: Padding(

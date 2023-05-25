@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import 'dart:html';
 import 'package:http/http.dart' as http;
 import 'package:navigation_example/constant/color.dart';
 import 'package:navigation_example/constant/constant.dart';
+import 'package:navigation_example/constant/text_style.dart';
 import 'package:navigation_example/main.dart';
 import 'package:navigation_example/model/main_model.dart';
 import 'package:navigation_example/my_app.dart';
@@ -82,10 +84,13 @@ class _WelcomePageState extends State<WelcomePage> {
         setState(() {});
         if (value['Status'] == '200') {
           jwtToken = value['Data']['Token'];
+          isExpired = false;
           model.setJwt(value['Data']['Token']);
           value['Data']['FirstLogin']
-              ? Navigator.of(context).pushReplacementNamed(routeEmployee)
-              : Navigator.of(context).pushReplacementNamed(routeInvite);
+              ? context.goNamed(
+                  'profile') //Navigator.of(context).pushReplacementNamed(routeEmployee)
+              : context.goNamed(
+                  'invite'); //Navigator.of(context).pushReplacementNamed(routeInvite);
         } else {
           jwtToken = "";
           Navigator.of(context).push(
@@ -147,6 +152,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Widget desktopLayout(BuildContext context) {
     return Scaffold(
+      backgroundColor: white,
       body: Stack(
         children: [
           Positioned(
@@ -177,22 +183,23 @@ class _WelcomePageState extends State<WelcomePage> {
               // ),
               ),
           Positioned(
-              bottom: 20,
-              right: 20,
-              // left: ,
-              child: Text(
-                'Facility Management. 2022.',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  color: spanishGray,
-                ),
-              )),
+            bottom: 20,
+            right: 20,
+            // left: ,
+            child: Text(
+              'Facility Management. 2022.',
+              style: helveticaText.copyWith(
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                color: spanishGray,
+              ),
+            ),
+          ),
           Consumer<MainModel>(builder: (context, model, child) {
             return LayoutBuilder(builder: (context, c) {
               return SingleChildScrollView(
                 child: Center(
-                  child: Container(
+                  child: SizedBox(
                     height: MediaQuery.of(context).size.height,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -204,218 +211,185 @@ class _WelcomePageState extends State<WelcomePage> {
                           children: [
                             Align(
                               alignment: Alignment.center,
-                              child: Container(
-                                  // height: 500,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  decoration: BoxDecoration(
-                                      // color: Colors.grey,
-                                      // image: DecorationImage(
-                                      //     image: AssetImage('assets/welcome_page_image.png')),
+                              child: SizedBox(
+                                // height: 500,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                child: Padding(
+                                  padding: Responsive.isBigDesktop(context)
+                                      ? const EdgeInsets.only(
+                                          top: 0, left: 0, right: 0, bottom: 20)
+                                      : const EdgeInsets.only(
+                                          top: 0,
+                                          left: 0,
+                                          right: 0,
+                                          bottom: 20),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        // color: Colors.amber,
+                                        // padding:
+                                        //     EdgeInsets.only(right: 70, top: 30),
+                                        width: Responsive.isBigDesktop(context)
+                                            ? 600
+                                            : 500,
+                                        height: Responsive.isBigDesktop(context)
+                                            ? 600
+                                            : 500,
+                                        child: SvgPicture.asset(
+                                            'assets/login_ilustrasi.svg',
+                                            fit: BoxFit.contain),
                                       ),
-                                  child: Padding(
-                                    padding: Responsive.isBigDesktop(context)
-                                        ? EdgeInsets.only(
-                                            top: 0,
-                                            left: 0,
-                                            right: 0,
-                                            bottom: 20)
-                                        : EdgeInsets.only(
-                                            top: 0,
-                                            left: 0,
-                                            right: 0,
-                                            bottom: 20),
-                                    child: Container(
-                                      // color: Colors.blue,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                      Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            // color: Colors.amber,
-                                            // padding:
-                                            //     EdgeInsets.only(right: 70, top: 30),
-                                            width:
-                                                Responsive.isBigDesktop(context)
-                                                    ? 600
-                                                    : 500,
-                                            height:
-                                                Responsive.isBigDesktop(context)
-                                                    ? 600
-                                                    : 500,
-                                            child: SvgPicture.asset(
-                                                'assets/login_ilustrasi.svg',
-                                                fit: BoxFit.contain),
-                                          ),
-                                          Container(
-                                            // color: Colors.blue,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 15.0, top: 15),
-                                                  child: Container(
-                                                    // color: Colors.yellow,
-                                                    // height: 200,
-                                                    // width: 620,
-                                                    padding: EdgeInsets.zero,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 15.0, top: 15),
+                                            child: Container(
+                                              // color: Colors.yellow,
+                                              // height: 200,
+                                              // width: 620,
+                                              padding: EdgeInsets.zero,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    width: 600,
+                                                    child: Wrap(
                                                       children: [
-                                                        Container(
-                                                          width: 600,
-                                                          child: Wrap(
-                                                            children: [
-                                                              Text(
-                                                                'Kawan Lama Group',
-                                                                style:
-                                                                    TextStyle(
-                                                                  // letterSpacing: 1,
-                                                                  fontSize: 56,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      eerieBlack,
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                'Visitor Invitation',
-                                                                style:
-                                                                    TextStyle(
-                                                                  // letterSpacing: 1,
-                                                                  fontSize: 56,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      eerieBlack,
-                                                                ),
-                                                              ),
-                                                            ],
+                                                        Text(
+                                                          'Kawan Lama Group',
+                                                          style: helveticaText
+                                                              .copyWith(
+                                                            fontSize: 56,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: eerieBlack,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          'Visitor Invitation',
+                                                          style: helveticaText
+                                                              .copyWith(
+                                                            fontSize: 56,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: eerieBlack,
                                                           ),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                ),
-                                                Padding(
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 50, left: 15),
+                                            child: Text(
+                                              'Please login using HC Plus for using the site',
+                                              style: helveticaText.copyWith(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.w300,
+                                                color: onyxBlack,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 20,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Container(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          top: 50, left: 15),
-                                                  child: Container(
-                                                    child: const Text(
-                                                      'Please login using HC Plus for using the site',
-                                                      style: TextStyle(
-                                                        fontSize: 22,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        color: onyxBlack,
-                                                      ),
-                                                    ),
+                                                          left: 15),
+                                                  width: 300,
+                                                  // height: 70,
+                                                  child: InputField(
+                                                    onSubmitted: (data) {
+                                                      login(context, model);
+                                                    },
+                                                    controller: _username,
+                                                    label: 'Username',
+                                                    focusNode: userNameNode,
+                                                    hintText:
+                                                        'Username here...',
+                                                    onSaved: (value) {
+                                                      userName = value;
+                                                    },
+                                                    obsecureText: false,
+                                                    validator: (value) => value ==
+                                                            ""
+                                                        ? "This field is required"
+                                                        : null,
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                    top: 20,
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      Container(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 15),
-                                                        width: 300,
-                                                        // height: 70,
-                                                        child: InputField(
-                                                          onSubmitted: (data) {
-                                                            login(
-                                                                context, model);
-                                                          },
-                                                          controller: _username,
-                                                          label: 'Username',
-                                                          focusNode:
-                                                              userNameNode,
-                                                          hintText:
-                                                              'Username here...',
-                                                          onSaved: (value) {
-                                                            userName = value;
-                                                          },
-                                                          obsecureText: false,
-                                                          validator: (value) =>
-                                                              value == ""
-                                                                  ? "This field is required"
-                                                                  : null,
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Container(
-                                                        width: 300,
-                                                        child: InputField(
-                                                          onSubmitted: (data) {
-                                                            login(
-                                                                context, model);
-                                                          },
-                                                          controller: _password,
-                                                          label: 'Password',
-                                                          focusNode: passNode,
-                                                          hintText:
-                                                              'Password here...',
-                                                          onSaved: (value) {
-                                                            password = value;
-                                                          },
-                                                          obsecureText: true,
-                                                          validator: (value) =>
-                                                              value == ""
-                                                                  ? "This field is required"
-                                                                  : null,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                const SizedBox(
+                                                  width: 20,
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: 35,
-                                                      left: 15,
-                                                      right: 15,
-                                                      bottom: 40),
-                                                  child: isLoading
-                                                      ? CircularProgressIndicator(
-                                                          color: eerieBlack,
-                                                        )
-                                                      : SizedBox(
-                                                          width: 140,
-                                                          height: 50,
-                                                          //Tombol Login Desktop Layout
-                                                          child: RegularButton(
-                                                            title: 'Login',
-                                                            sizeFont: 20,
-                                                            onTap: () {
-                                                              login(context,
-                                                                  model);
-                                                            },
-                                                          ),
-                                                        ),
+                                                SizedBox(
+                                                  width: 300,
+                                                  child: InputField(
+                                                    onSubmitted: (data) {
+                                                      login(context, model);
+                                                    },
+                                                    controller: _password,
+                                                    label: 'Password',
+                                                    focusNode: passNode,
+                                                    hintText:
+                                                        'Password here...',
+                                                    onSaved: (value) {
+                                                      password = value;
+                                                    },
+                                                    obsecureText: true,
+                                                    validator: (value) => value ==
+                                                            ""
+                                                        ? "This field is required"
+                                                        : null,
+                                                  ),
                                                 ),
                                               ],
                                             ),
-                                          )
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 35,
+                                                left: 15,
+                                                right: 15,
+                                                bottom: 40),
+                                            child: isLoading
+                                                ? const CircularProgressIndicator(
+                                                    color: eerieBlack,
+                                                  )
+                                                : SizedBox(
+                                                    width: 140,
+                                                    height: 50,
+                                                    //Tombol Login Desktop Layout
+                                                    child: RegularButton(
+                                                      title: 'Login',
+                                                      sizeFont: 20,
+                                                      onTap: () {
+                                                        login(context, model);
+                                                      },
+                                                    ),
+                                                  ),
+                                          ),
                                         ],
-                                      ),
-                                    ),
-                                  )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -437,6 +411,7 @@ class _WelcomePageState extends State<WelcomePage> {
       return Stack(
         children: [
           Scaffold(
+            backgroundColor: white,
             body: SingleChildScrollView(
               child: Column(
                 children: [
@@ -461,7 +436,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   Container(
                     // color: Colors.red,
                     child: Padding(
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                         top: 20,
                         left: 50,
                         right: 50,
@@ -503,7 +478,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                           children: [
                                             Text(
                                               'Kawan Lama Group',
-                                              style: TextStyle(
+                                              style: helveticaText.copyWith(
                                                 // letterSpacing: 1,
                                                 fontSize: 26,
                                                 fontWeight: FontWeight.w700,
@@ -512,7 +487,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                             ),
                                             Text(
                                               'Visitor Invitation',
-                                              style: TextStyle(
+                                              style: helveticaText.copyWith(
                                                 // letterSpacing: 1,
                                                 fontSize: 26,
                                                 fontWeight: FontWeight.w700,
@@ -529,7 +504,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             ],
                           ),
                           Padding(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                               top: 45,
                             ),
                             child: Align(
@@ -539,7 +514,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                 children: [
                                   Text(
                                     'Please login using HC Plus for using the site',
-                                    style: TextStyle(
+                                    style: helveticaText.copyWith(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w300,
                                       color: onyxBlack,
@@ -587,7 +562,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           Padding(
                             padding: const EdgeInsets.only(top: 40, bottom: 30),
                             child: isLoading
-                                ? CircularProgressIndicator(
+                                ? const CircularProgressIndicator(
                                     color: eerieBlack,
                                   )
                                 : SizedBox(
@@ -599,7 +574,8 @@ class _WelcomePageState extends State<WelcomePage> {
                                       onTap: () {
                                         login(context, model);
                                       },
-                                    )),
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
@@ -611,14 +587,12 @@ class _WelcomePageState extends State<WelcomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
-                          child: Text(
-                            'Facility Management 2022',
-                            style: TextStyle(
-                              color: spanishGray,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
+                        Text(
+                          'Facility Management 2022',
+                          style: helveticaText.copyWith(
+                            color: spanishGray,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ],
